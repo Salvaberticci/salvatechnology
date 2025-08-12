@@ -1,0 +1,466 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Exo+2:wght@700&display=swap');
+
+:root {
+    --primary-color: #000000;
+    --secondary-color: #FFFFFF;
+    --accent-color: #ff8c00;
+    --glow-color: rgba(255, 140, 0, 0.75);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto Mono', monospace;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    overflow: hidden;
+}
+
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: 9999;
+    overflow: hidden;
+    transition: transform 1s cubic-bezier(0.86, 0, 0.07, 1), opacity 1s ease;
+}
+
+#loader.hidden {
+    transform: scale(2);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(255, 140, 0, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 140, 0, 0.2) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: grid-pan 20s linear infinite;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+@keyframes grid-pan {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 80px 40px;
+    }
+}
+
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.loader-logo {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-shadow: 0 0 20px var(--glow-color);
+    animation: logo-pulse 1.5s infinite;
+}
+
+@keyframes logo-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.loader-text {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--glow-color);
+    margin-top: 2rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: text-glitch 1.5s infinite;
+}
+
+@keyframes text-glitch {
+    0% {
+        transform: skewX(0deg);
+        opacity: 1;
+    }
+    5% {
+        transform: skewX(5deg);
+        opacity: 0.8;
+    }
+    10% {
+        transform: skewX(-5deg);
+        opacity: 1;
+    }
+    15% {
+        transform: skewX(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: skewX(0deg);
+        opacity: 1;
+    }
+}
+
+.loader-bar-container {
+    width: 300px;
+    height: 4px;
+    background-color: rgba(255, 140, 0, 0.2);
+    border-radius: 2px;
+    margin: 2rem auto;
+    overflow: hidden;
+    border: 1px solid var(--accent-color);
+}
+
+.loader-bar {
+    width: 0;
+    height: 100%;
+    background: var(--accent-color);
+    box-shadow: 0 0 15px var(--glow-color);
+    animation: loading 4s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+}
+
+@keyframes loading {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+#start-button {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--glow-color);
+    margin-top: 2rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    padding: 12px 28px;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    animation: button-pulse 2s infinite;
+}
+
+#start-button:hover {
+    background: var(--accent-color);
+    color: var(--primary-color);
+    box-shadow: 0 0 25px var(--glow-color);
+}
+
+#start-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 140, 0, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease;
+    z-index: -1;
+}
+
+#start-button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+@keyframes button-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 10px var(--glow-color);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px var(--glow-color);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px var(--glow-color);
+    }
+}
+
+.background-title {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 10vw;
+    font-weight: 700;
+    color: var(--accent-color);
+    z-index: -2;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    animation: background-hologram 3s infinite linear;
+}
+
+@keyframes background-hologram {
+    0%, 100% {
+        text-shadow: 0 0 10px var(--glow-color), 0 0 30px var(--glow-color), 0 0 50px var(--glow-color);
+        opacity: 0.3;
+    }
+    50% {
+        text-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color), 0 0 60px var(--glow-color);
+        opacity: 0.1;
+    }
+}
+
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem;
+    pointer-events: none;
+}
+
+header {
+    width: 100%;
+    pointer-events: all;
+}
+
+.logo img {
+    height: 50px;
+    filter: drop-shadow(0 0 5px var(--accent-color)) brightness(1.2);
+}
+
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+    pointer-events: all;
+}
+
+.menu {
+    text-align: left;
+}
+
+.menu h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.menu ul {
+    list-style: none;
+}
+
+.menu li {
+    margin-bottom: 1rem;
+}
+
+.menu a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
+    animation: hologram 1.5s infinite linear;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.menu a:before {
+    content: '-> ';
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu a:hover:before {
+    opacity: 1;
+}
+
+.menu a:hover {
+    animation: glitch 1s infinite;
+}
+
+@keyframes glitch {
+    0% {
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em 0 0 rgba(0, 255, 0, 0.75), 0 0 0.05em rgba(0, 0, 255, 0.75);
+    }
+    14% {
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em 0 0 rgba(0, 255, 0, 0.75), 0 0 0.05em rgba(0, 0, 255, 0.75);
+    }
+    15% {
+        text-shadow: -0.05em 0 0 rgba(255, 0, 0, 0.75), 0.025em 0 0 rgba(0, 255, 0, 0.75), 0 0 -0.05em rgba(0, 0, 255, 0.75);
+    }
+    49% {
+        text-shadow: -0.05em 0 0 rgba(255, 0, 0, 0.75), 0.025em 0 0 rgba(0, 255, 0, 0.75), 0 0 -0.05em rgba(0, 0, 255, 0.75);
+    }
+    50% {
+        text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0.025em rgba(0, 0, 255, 0.75);
+    }
+    99% {
+        text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0.025em rgba(0, 0, 255, 0.75);
+    }
+    100% {
+        text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em 0 0 rgba(0, 255, 0, 0.75), 0 0 -0.025em rgba(0, 0, 255, 0.75);
+    }
+}
+
+@keyframes hologram {
+    0%, 100% {
+        text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
+        opacity: 1;
+    }
+    50% {
+        text-shadow: 0 0 5px var(--glow-color), 0 0 10px var(--glow-color), 0 0 15px var(--glow-color);
+        opacity: 0.8;
+    }
+}
+
+.search-bar {
+    width: 300px;
+}
+
+.search-bar input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 0.8rem 1.2rem;
+    color: var(--secondary-color);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--glow-color);
+}
+
+/* Estilos para la página de carga */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: var(--secondary-color);
+    font-family: 'Roboto Mono', monospace;
+}
+
+.loader-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.loader-logo {
+    font-size: 5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    text-shadow: 0 0 10px var(--glow-color);
+    margin-bottom: 1.5rem;
+    font-family: 'Exo 2', sans-serif;
+}
+
+.loader-text {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+    color: var(--secondary-color);
+}
+
+.loader-bar-container {
+    width: 300px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin: 0 auto 2rem;
+    overflow: hidden;
+}
+
+.loader-bar {
+    height: 100%;
+    width: 0;
+    background-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--glow-color);
+    transition: width 0.3s ease;
+}
+
+#start-button {
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--secondary-color);
+    padding: 10px 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 30px;
+    font-family: 'Roboto Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+#start-button:hover {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    box-shadow: 0 0 15px var(--glow-color);
+}
+
+#start-button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+    z-index: -1;
+}
+
+#start-button:hover:before {
+    left: 100%;
+}
+
+/* Additional futuristic animations can be added here if desired */
