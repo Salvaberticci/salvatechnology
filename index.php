@@ -10,7 +10,9 @@
     <div id="loader">
         <div class="loader-grid"></div>
         <div class="loader-content">
-            <div class="loader-logo">S</div>
+            <div class="loader-logo">
+                <img src="img/logo.png" alt="Salva Technology Logo">
+            </div>
             <div class="loader-text">INICIALIZANDO SISTEMA...</div>
             <div class="loader-bar-container">
                 <div class="loader-bar"></div>

@@ -4,25 +4,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('start-button');
     const loaderText = document.querySelector('.loader-text');
     
-    // Inicialmente ocultar el botón
-    startButton.style.display = 'none';
-    startButton.style.opacity = '0';
-    
     // Animación de la barra de carga
     let progress = 0;
     const loadingInterval = setInterval(() => {
         progress += Math.random() * 15;
-        if (progress > 95) {
-            progress = 95; // No llegar al 100% hasta que el usuario haga clic
+        if (progress >= 100) {
+            progress = 100; // Permitir llegar al 100%
             clearInterval(loadingInterval);
             
-            // Mostrar el botón con animación
-            startButton.style.display = 'block';
+            // Mostrar el botón con animación solo cuando llegue al 100%
             setTimeout(() => {
                 startButton.style.opacity = '1';
+                startButton.style.visibility = 'visible';
                 startButton.style.transform = 'translateY(0)';
                 loaderText.textContent = '¡Listo para comenzar!';
-            }, 500);
+            }, 100);
         }
         loaderBar.style.width = `${progress}%`;
     }, 200);
