@@ -1,3 +1,5 @@
+import { openPortal } from './3d-scene.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loader');
     const loaderBar = document.querySelector('.loader-bar');
@@ -34,15 +36,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Ocultar el loader con transición
-        setTimeout(() => {
-            loader.style.opacity = '0';
-            loader.style.visibility = 'hidden';
+        loader.style.opacity = '0';
+        loader.style.pointerEvents = 'none'; // Evita que el loader bloquee los clics
+        openPortal(() => {
             document.body.style.overflow = 'auto';
             
             // Eliminar el loader del DOM después de la animación
             setTimeout(() => {
-                loader.remove();
+                if (loader) {
+                    loader.remove();
+                }
             }, 1000);
-        }, 500);
+        });
     });
 });

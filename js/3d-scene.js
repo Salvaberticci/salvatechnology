@@ -1,17 +1,24 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { createPortal, openPortal as openPortalAnimation } from './portal-animation.js';
 
 // --- SCENE SETUP ---
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({
+export const scene = new THREE.Scene();
+export const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+export const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector('#bg'),
     alpha: true
 });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.z = 5;
+
+createPortal(scene);
+
+export const openPortal = (onComplete) => {
+    openPortalAnimation(onComplete);
+};
 
 // --- LIGHTS ---
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
