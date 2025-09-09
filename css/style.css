@@ -488,3 +488,174 @@ header {
 }
 
 /* Additional futuristic animations can be added here if desired */
+
+/* Estilos para la Modal de Contacto */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: relative;
+    animation: modal-appear 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes modal-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+    z-index: 1001;
+}
+
+.close-modal:hover {
+    color: var(--accent-color);
+    transform: rotate(90deg);
+}
+
+.contact-form {
+    width: 100%;
+    max-width: 600px;
+    padding: 2.5rem;
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    box-shadow: 0 0 25px var(--glow-color);
+    backdrop-filter: blur(10px);
+}
+
+.contact-form h1 {
+    font-family: 'Exo 2', sans-serif;
+    text-align: center;
+    color: var(--accent-color);
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px var(--glow-color);
+    font-size: 2.5rem;
+}
+
+.contact-form .input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    padding: 0.8rem 1.2rem;
+    color: var(--secondary-color);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--glow-color);
+}
+
+.contact-form textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.submit-btn {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--glow-color);
+    width: 100%;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    padding: 12px 28px;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn:hover {
+    background: var(--accent-color);
+    color: var(--primary-color);
+    box-shadow: 0 0 25px var(--glow-color);
+}
+
+.form-response {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    box-shadow: 0 0 25px var(--glow-color);
+}
+
+.form-response h1 {
+    font-family: 'Exo 2', sans-serif;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.form-response p {
+    margin-bottom: 2rem;
+}
+
+.btn-back {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--glow-color);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    padding: 10px 25px;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    text-decoration: none;
+}
+
+.btn-back:hover {
+    background: var(--accent-color);
+    color: var(--primary-color);
+    box-shadow: 0 0 25px var(--glow-color);
+}
