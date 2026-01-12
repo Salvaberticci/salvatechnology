@@ -20,16 +20,27 @@
         }
     </script>
     <script>window.hideModel = true;</script>
+    <style>
+        .page-fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .page-fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body class="text-white bg-black min-h-screen">
 
     <!-- Background Animation -->
     <canvas id="bg"></canvas>
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+    <!-- Main Content Wrapper -->
+    <div id="page-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 page-fade-in">
         <!-- Site Header -->
-        <header class="mb-16 flex justify-between items-center">
+        <header class="mb-16 flex justify-between items-center text-white">
             <div class="flex items-center gap-6">
                 <div class="logo">
                     <a href="index.php">
@@ -63,7 +74,7 @@
                 <div class="glass-panel overflow-hidden rounded-2xl border border-accent/20 card-hover group">
                     <div class="h-48 overflow-hidden relative">
                         <img src="img/project_isp.png" alt="ISP Dashboard" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t FROM-black/80 TO-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                     </div>
                     <div class="p-8">
                         <h3 class="text-xl font-bold text-accent mb-2">TELECOMUNICACIONES (ISP)</h3>
@@ -125,6 +136,14 @@
         }
     </script>
     <script type="module" src="js/3d-scene.js"></script>
-
+    <script>
+        // Animación suave de aparición para toda la página
+        window.addEventListener('load', () => {
+            const content = document.getElementById('page-content');
+            setTimeout(() => {
+                content.classList.add('active');
+            }, 100);
+        });
+    </script>
 </body>
 </html>

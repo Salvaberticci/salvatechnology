@@ -78,6 +78,17 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Page Fade In */
+        .page-fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .page-fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="text-white bg-black min-h-screen">
@@ -85,8 +96,8 @@
     <!-- Background Animation -->
     <canvas id="bg"></canvas>
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+    <!-- Main Content Wrapper -->
+    <div id="page-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 page-fade-in">
         <!-- Site Header -->
         <header class="mb-16 flex justify-between items-center">
             <div class="flex items-center gap-6">
@@ -120,7 +131,7 @@
                 <div class="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-1 h-full roadmap-line z-0"></div>
 
                 <!-- Step 1 -->
-                <div class="relative z-10 mb-20 flex flex-col md:flex-row items-center justify-between group">
+                <div class="relative z-10 mb-20 flex flex-col md:flex-row items-center justify-between group roadmap-step">
                     <div class="md:w-5/12 mb-8 md:mb-0 order-2 md:order-1">
                         <div onclick="openModal(1)" class="glass-panel overflow-hidden rounded-2xl border border-accent/30 hover:border-accent transition-all cursor-pointer">
                             <div class="h-32 overflow-hidden">
@@ -140,7 +151,7 @@
                 </div>
 
                 <!-- Step 2 -->
-                <div class="relative z-10 mb-20 flex flex-col md:flex-row items-center justify-between group">
+                <div class="relative z-10 mb-20 flex flex-col md:flex-row items-center justify-between group roadmap-step">
                     <div class="md:w-5/12 order-3 md:order-1"></div>
                     <div class="w-8 h-8 bg-accent rounded-full glow-dot z-20 order-1 md:order-2"></div>
                     <div class="md:w-5/12 mb-8 md:mb-0 order-2 md:order-3">
@@ -160,7 +171,7 @@
                 </div>
 
                 <!-- Step 3 (Highlight: IA) -->
-                <div class="relative z-10 mb-20 flex flex-col md:flex-row items-center justify-between group">
+                <div class="relative z-10 mb-20 flex flex-col md:flex-row items-center justify-between group roadmap-step">
                     <div class="md:w-5/12 mb-8 md:mb-0 order-2 md:order-1">
                         <div onclick="openModal(3)" class="glass-panel overflow-hidden rounded-2xl border-2 border-accent shadow-[0_0_30px_rgba(255,140,0,0.2)] cursor-pointer">
                             <div class="h-32 overflow-hidden">
@@ -183,7 +194,7 @@
                 </div>
 
                 <!-- Step 4 -->
-                <div class="relative z-10 mb-20 flex flex-col md:flex-row items-center justify-between group">
+                <div class="relative z-10 mb-20 flex flex-col md:flex-row items-center justify-between group roadmap-step">
                     <div class="md:w-5/12 order-3 md:order-1"></div>
                     <div class="w-8 h-8 bg-accent rounded-full glow-dot z-20 order-1 md:order-2"></div>
                     <div class="md:w-5/12 mb-8 md:mb-0 order-2 md:order-3">
@@ -203,7 +214,7 @@
                 </div>
 
                 <!-- Step 5 -->
-                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between group">
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between group roadmap-step">
                     <div class="md:w-5/12 mb-8 md:mb-0 order-2 md:order-1">
                         <div onclick="openModal(5)" class="glass-panel overflow-hidden rounded-2xl border border-accent/30 hover:border-accent transition-all cursor-pointer">
                             <div class="h-32 overflow-hidden">
@@ -412,7 +423,7 @@
         gsap.registerPlugin(ScrollTrigger);
 
         // Animation for steps
-        gsap.utils.toArray('.z-10').forEach((step, i) => {
+        gsap.utils.toArray('.roadmap-step').forEach((step, i) => {
             gsap.from(step, {
                 scrollTrigger: {
                     trigger: step,
@@ -424,6 +435,14 @@
                 duration: 0.8,
                 ease: "power2.out"
             });
+        });
+
+        // Animación suave de aparición para toda la página
+        window.addEventListener('load', () => {
+            const content = document.getElementById('page-content');
+            setTimeout(() => {
+                content.classList.add('active');
+            }, 100);
         });
     </script>
 

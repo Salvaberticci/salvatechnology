@@ -26,6 +26,15 @@
             height: auto !important;
             min-height: 100vh;
         }
+        .page-fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .page-fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
         .service-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 140, 0, 0.1);
@@ -49,8 +58,8 @@
     <!-- Background Animation -->
     <canvas id="bg"></canvas>
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+    <!-- Main Content Wrapper -->
+    <div id="page-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 page-fade-in">
         <!-- Site Header -->
         <header class="mb-16 flex justify-between items-center">
             <div class="flex items-center gap-6">
@@ -144,7 +153,6 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script type="importmap">
         {
             "imports": {
@@ -155,21 +163,12 @@
     </script>
     <script type="module" src="js/3d-scene.js"></script>
     <script>
-        gsap.registerPlugin(ScrollTrigger);
-        
-        // Animación de entrada con stagger para que se sientan fluidas
-        gsap.from(".service-card", {
-            scrollTrigger: {
-                trigger: ".grid",
-                start: "top 95%",
-                toggleActions: "play none none none"
-            },
-            opacity: 0,
-            y: 40,
-            duration: 1,
-            stagger: 0.15,
-            ease: "expo.out",
-            clearProps: "all" // Asegura que no queden estilos residuales que "peguen" la card
+        // Animación suave de aparición para toda la página
+        window.addEventListener('load', () => {
+            const content = document.getElementById('page-content');
+            setTimeout(() => {
+                content.classList.add('active');
+            }, 100);
         });
     </script>
 </body>

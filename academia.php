@@ -20,16 +20,27 @@
         }
     </script>
     <script>window.hideModel = true;</script>
+    <style>
+        .page-fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .page-fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body class="text-white bg-black min-h-screen">
 
     <!-- Background Animation -->
     <canvas id="bg"></canvas>
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+    <!-- Main Content Wrapper -->
+    <div id="page-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 page-fade-in">
         <!-- Site Header -->
-        <header class="mb-16 flex justify-between items-center">
+        <header class="mb-16 flex justify-between items-center text-white">
             <div class="flex items-center gap-6">
                 <div class="logo">
                     <a href="index.php">
@@ -49,7 +60,7 @@
         </header>
 
         <main>
-            <section class="text-center mb-20">
+            <section class="text-center mb-20 text-white">
                 <h1 class="text-5xl md:text-7xl font-black italic futuristic-title mb-6 leading-tight">
                     ACADEMIA <span class="text-white">SALVATECHNOLOGY</span>
                 </h1>
@@ -114,6 +125,14 @@
         }
     </script>
     <script type="module" src="js/3d-scene.js"></script>
-
+    <script>
+        // Animación suave de aparición para toda la página
+        window.addEventListener('load', () => {
+            const content = document.getElementById('page-content');
+            setTimeout(() => {
+                content.classList.add('active');
+            }, 100);
+        });
+    </script>
 </body>
 </html>
