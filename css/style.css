@@ -57,6 +57,7 @@ body {
     0% {
         background-position: 0 0;
     }
+
     100% {
         background-position: 80px 40px;
     }
@@ -89,8 +90,15 @@ body {
 }
 
 @keyframes logo-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
 }
 
 .loader-text {
@@ -102,7 +110,8 @@ body {
     letter-spacing: 2px;
     text-transform: uppercase;
     animation: text-glitch 1.5s infinite;
-    transition: all 0.5s ease; /* Transición suave para cambios de texto */
+    transition: all 0.5s ease;
+    /* Transición suave para cambios de texto */
 }
 
 @keyframes text-glitch {
@@ -110,18 +119,22 @@ body {
         transform: skewX(0deg);
         opacity: 1;
     }
+
     5% {
         transform: skewX(5deg);
         opacity: 0.8;
     }
+
     10% {
         transform: skewX(-5deg);
         opacity: 1;
     }
+
     15% {
         transform: skewX(0deg);
         opacity: 1;
     }
+
     100% {
         transform: skewX(0deg);
         opacity: 1;
@@ -147,8 +160,13 @@ body {
 }
 
 @keyframes loading {
-    0% { width: 0%; }
-    100% { width: 100%; }
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
 }
 
 #start-button {
@@ -199,10 +217,12 @@ body {
         transform: scale(1);
         box-shadow: 0 0 10px var(--glow-color);
     }
+
     50% {
         transform: scale(1.05);
         box-shadow: 0 0 20px var(--glow-color);
     }
+
     100% {
         transform: scale(1);
         box-shadow: 0 0 10px var(--glow-color);
@@ -225,10 +245,13 @@ body {
 }
 
 @keyframes background-hologram {
-    0%, 100% {
+
+    0%,
+    100% {
         text-shadow: 0 0 10px var(--glow-color), 0 0 30px var(--glow-color), 0 0 50px var(--glow-color);
         opacity: 0.3;
     }
+
     50% {
         text-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color), 0 0 60px var(--glow-color);
         opacity: 0.1;
@@ -332,35 +355,43 @@ header {
 @keyframes glitch {
     0% {
         transform: translate(0);
-        text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.05em 0 0 rgba(0,255,0,.75), -0.025em -0.05em 0 rgba(0,0,255,.75);
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, .75), -0.05em 0 0 rgba(0, 255, 0, .75), -0.025em -0.05em 0 rgba(0, 0, 255, .75);
     }
+
     20% {
         transform: translate(-2px, 2px);
-        text-shadow: -0.05em 0 0 rgba(255,0,0,.75), 0.025em 0 0 rgba(0,255,0,.75), 0.05em -0.025em 0 rgba(0,0,255,.75);
+        text-shadow: -0.05em 0 0 rgba(255, 0, 0, .75), 0.025em 0 0 rgba(0, 255, 0, .75), 0.05em -0.025em 0 rgba(0, 0, 255, .75);
     }
+
     40% {
         transform: translate(2px, -2px);
-        text-shadow: 0.025em 0.05em 0 rgba(255,0,0,.75), 0.05em 0 0 rgba(0,255,0,.75), 0 -0.05em 0 rgba(0,0,255,.75);
+        text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, .75), 0.05em 0 0 rgba(0, 255, 0, .75), 0 -0.05em 0 rgba(0, 0, 255, .75);
     }
+
     60% {
         transform: translate(-2px, -2px);
-        text-shadow: -0.05em 0 0 rgba(255,0,0,.75), 0.025em 0 0 rgba(0,255,0,.75), -0.025em 0.05em 0 rgba(0,0,255,.75);
+        text-shadow: -0.05em 0 0 rgba(255, 0, 0, .75), 0.025em 0 0 rgba(0, 255, 0, .75), -0.025em 0.05em 0 rgba(0, 0, 255, .75);
     }
+
     80% {
         transform: translate(2px, 2px);
-        text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.025em 0 0 rgba(0,255,0,.75), 0.025em -0.05em 0 rgba(0,0,255,.75);
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, .75), -0.025em 0 0 rgba(0, 255, 0, .75), 0.025em -0.05em 0 rgba(0, 0, 255, .75);
     }
+
     100% {
         transform: translate(0);
-        text-shadow: -0.025em 0 0 rgba(255,0,0,.75), -0.05em -0.025em 0 rgba(0,255,0,.75), 0.05em 0.05em 0 rgba(0,0,255,.75);
+        text-shadow: -0.025em 0 0 rgba(255, 0, 0, .75), -0.05em -0.025em 0 rgba(0, 255, 0, .75), 0.05em 0.05em 0 rgba(0, 0, 255, .75);
     }
 }
 
 @keyframes hologram {
-    0%, 100% {
+
+    0%,
+    100% {
         text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
         opacity: 1;
     }
+
     50% {
         text-shadow: 0 0 5px var(--glow-color), 0 0 10px var(--glow-color), 0 0 15px var(--glow-color);
         opacity: 0.8;
@@ -514,6 +545,7 @@ header {
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);

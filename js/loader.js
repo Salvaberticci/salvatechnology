@@ -5,7 +5,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const loaderBar = document.querySelector('.loader-bar');
     const startButton = document.getElementById('start-button');
     const loaderText = document.querySelector('.loader-text');
-    
+
+    // Verificación inicial
+    if (window.skipLoader) {
+        if (typeof audioManager !== 'undefined') {
+            audioManager.unlock();
+        }
+        openPortal(() => {
+            document.body.style.overflow = 'auto';
+        });
+        return;
+    }
+
     // Animación de la barra de carga
     let progress = 0;
     const loadingInterval = setInterval(() => {
@@ -13,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (progress >= 100) {
             progress = 100; // Permitir llegar al 100%
             clearInterval(loadingInterval);
-            
+
             // Mostrar el botón con animación solo cuando llegue al 100%
             setTimeout(() => {
                 startButton.style.opacity = '1';
@@ -27,20 +38,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Manejar el clic en el botón de inicio
     startButton.addEventListener('click', () => {
+        // Guardar en sesión para no mostrar más el loader
+        sessionStorage.setItem('loader_shown', 'true');
+
         // Completar la barra de carga
         loaderBar.style.width = '100%';
-        
+
         // Reproducir sonido si está disponible
         if (typeof audioManager !== 'undefined') {
             audioManager.unlock();
         }
-        
+
         // Ocultar el loader con transición
         loader.style.opacity = '0';
         loader.style.pointerEvents = 'none'; // Evita que el loader bloquee los clics
         openPortal(() => {
             document.body.style.overflow = 'auto';
-            
+
             // Eliminar el loader del DOM después de la animación
             setTimeout(() => {
                 if (loader) {

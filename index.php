@@ -6,7 +6,15 @@
     <title>Salvatechnology</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="overflow-hidden">
+    <script>
+        // Pre-check for loader session
+        if (sessionStorage.getItem('loader_shown')) {
+            document.write('<style>#loader { display: none !important; }</style>');
+            document.body.classList.remove('overflow-hidden');
+            window.skipLoader = true;
+        }
+    </script>
     <div id="loader">
         <div class="loader-grid"></div>
         <div class="loader-content">
