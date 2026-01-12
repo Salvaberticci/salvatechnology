@@ -35,7 +35,7 @@
                     <li><a href="clientes.php">Clientes Ayudados</a></li>
                     <li><a href="#" id="contact-link">Contacto</a></li>
                     <li><a href="academia.php">Academia</a></li>
-                    <li><a href="#">Servicios</a></li>
+                    <li><a href="servicios.php">Servicios</a></li>
                     <li><a href="#">Newsletter</a></li>
                 </ul>
             </div>
