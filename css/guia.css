@@ -1,0 +1,76 @@
+/* Standard scroll for simpler guide page */
+body {
+    overflow-y: auto;
+    background-color: #000;
+}
+
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+.overlay-content {
+    pointer-events: all;
+    padding-bottom: 5rem;
+}
+
+.overlay-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.overlay-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.overlay-content::-webkit-scrollbar-thumb {
+    background: #ff8c00;
+    border-radius: 10px;
+}
+
+/* Override Tailwind bg for dark theme consistency */
+.glass-panel {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 140, 0, 0.3);
+}
+
+.nav-active {
+    border-bottom: 2px solid #ff8c00;
+    color: #ff8c00;
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
+    border-color: #ff8c00;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 250px;
+}
+
+@font-face {
+    font-family: 'Exo 2';
+    src: url('https://fonts.googleapis.com/css2?family=Exo+2:wght@700&display=swap');
+}
+
+.futuristic-title {
+    font-family: 'Exo 2', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ff8c00;
+    text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}

@@ -53,7 +53,7 @@ for (let i = 0; i < particleCount; i++) {
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     context.fillText(Math.random() > 0.5 ? '1' : '0', 16, 16);
-    
+
     const texture = new THREE.CanvasTexture(canvas);
     const spriteMaterial = material.clone();
     spriteMaterial.map = texture;
@@ -71,22 +71,24 @@ scene.add(particles);
 
 
 // --- 3D OBJECT ---
-const loader = new GLTFLoader();
 let model;
+if (!window.hideModel) {
+    const loader = new GLTFLoader();
 
-loader.load(
-    '3d/salva.glb',
-    function (gltf) {
-        model = gltf.scene;
-        model.scale.set(6, 6, 6);
-        model.position.y = -1;
-        scene.add(model);
-    },
-    undefined,
-    function (error) {
-        console.error(error);
-    }
-);
+    loader.load(
+        '3d/salva.glb',
+        function (gltf) {
+            model = gltf.scene;
+            model.scale.set(6, 6, 6);
+            model.position.y = -1;
+            scene.add(model);
+        },
+        undefined,
+        function (error) {
+            console.error(error);
+        }
+    );
+}
 
 // --- MOUSE INTERACTION ---
 const mouse = new THREE.Vector2();
@@ -107,7 +109,7 @@ function animate() {
         }
     });
 
-    if (model) {
+    if (typeof model !== 'undefined' && model) {
         const modelTime = Date.now() * 0.001;
         model.rotation.y = modelTime * 0.3;
 

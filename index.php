@@ -32,10 +32,9 @@
             <div class="menu">
                 <h2>Menú</h2>
                 <ul>
-                    <li><a href="#">Proyectos Realizados</a></li>
-                    <li><a href="#">Clientes Ayudados</a></li>
+                    <li><a href="clientes.php">Clientes Ayudados</a></li>
                     <li><a href="#" id="contact-link">Contacto</a></li>
-                    <li><a href="#">Academia</a></li>
+                    <li><a href="academia.php">Academia</a></li>
                     <li><a href="#">Servicios</a></li>
                     <li><a href="#">Newsletter</a></li>
                 </ul>
