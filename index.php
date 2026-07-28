@@ -40,11 +40,9 @@
             <div class="menu">
                 <h2>Menú</h2>
                 <ul>
-                    <li><a href="clientes.php">Clientes Ayudados</a></li>
-                    <li><a href="#" id="contact-link">Contacto</a></li>
-                    <li><a href="academia.php">Academia</a></li>
-                    <li><a href="servicios.php">Servicios</a></li>
-                    <li><a href="newsletter.php">Newsletter</a></li>
+                    <li><a href="/salvatechnology/academia">Academia</a></li>
+                    <li><a href="/salvatechnology/servicios">Servicios</a></li>
+                    <li><a href="/salvatechnology/newsletter">Newsletter</a></li>
                 </ul>
             </div>
             <div class="search-bar">
@@ -74,7 +72,7 @@
             <span class="close-modal">&times;</span>
             <div class="contact-form">
                 <h1>Contacto</h1>
-                <form action="contact.php" method="POST">
+                <form action="/salvatechnology/contact" method="POST">
                     <div class="input-group">
                         <label for="name">Nombre</label>
                         <input type="text" id="name" name="name" required>

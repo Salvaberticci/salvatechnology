@@ -7,13 +7,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // For this example, we'll just show a success message.
         echo "<h1>Gracias por suscribirte!</h1>";
         echo "<p>Pronto recibirás noticias de Salva Technology.</p>";
-        echo "<a href='index.php'>Volver al inicio</a>";
+        echo "<a href='/salvatechnology/'>Volver al inicio</a>";
     } else {
         echo "<h1>Error</h1>";
         echo "<p>El correo electrónico proporcionado no es válido.</p>";
-        echo "<a href='index.php#contact'>Volver a intentarlo</a>";
+        echo "<a href='/salvatechnology/#contact'>Volver a intentarlo</a>";
     }
 } else {
-    header("Location: index.php");
+    header("Location: /salvatechnology/");
 }
 ?>

@@ -99,11 +99,11 @@
         <header class="mb-16 flex justify-between items-center">
             <div class="flex items-center gap-6">
                 <div class="logo">
-                    <a href="index.php">
+                    <a href="/salvatechnology/">
                         <img src="img/logo.png" alt="Salva Technology Logo" class="h-12 hover:scale-105 transition-transform">
                     </a>
                 </div>
-                <a href="academia.php" class="text-accent hover:text-white transition-colors flex items-center gap-2 font-mono text-xs group">
+                <a href="/salvatechnology/academia" class="text-accent hover:text-white transition-colors flex items-center gap-2 font-mono text-xs group">
                     <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
