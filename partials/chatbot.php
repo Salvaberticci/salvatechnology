@@ -1,4 +1,5 @@
 <aside class="dash-chatbot" id="dashChatbot">
+    <div class="chatbot-resize-handle" id="chatbotResizeHandle" title="Arrastrar para ajustar ancho"></div>
     <div class="chatbot-header">
         <div class="chatbot-header-left">
             <span class="chatbot-avatar">🧠</span>
@@ -173,6 +174,47 @@
             e.preventDefault();
             sendMessage();
         }
+    });
+
+    var resizeHandle = document.getElementById('chatbotResizeHandle');
+    var isResizing = false;
+    var startX, startWidth;
+
+    function initWidth() {
+        var saved = localStorage.getItem('chatbot_width');
+        if (saved) {
+            var w = parseInt(saved, 10);
+            if (w >= 180 && w <= 600) {
+                chatbot.style.width = w + 'px';
+            }
+        }
+    }
+    initWidth();
+
+    resizeHandle.addEventListener('mousedown', function(e) {
+        isResizing = true;
+        startX = e.clientX;
+        startWidth = chatbot.offsetWidth;
+        document.body.style.cursor = 'ew-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!isResizing) return;
+        var diff = startX - e.clientX;
+        var newWidth = startWidth + diff;
+        if (newWidth < 180) newWidth = 180;
+        if (newWidth > 600) newWidth = 600;
+        chatbot.style.width = newWidth + 'px';
+    });
+
+    document.addEventListener('mouseup', function() {
+        if (!isResizing) return;
+        isResizing = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        localStorage.setItem('chatbot_width', chatbot.offsetWidth);
     });
 })();
 </script>

@@ -640,6 +640,41 @@ body.dashboard-body {
     transform: translateX(260px);
 }
 
+.chatbot-resize-handle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    cursor: ew-resize;
+    z-index: 55;
+    transition: background 0.2s;
+}
+
+.chatbot-resize-handle:hover,
+.chatbot-resize-handle:active {
+    background: rgba(255, 140, 0, 0.3);
+}
+
+.chatbot-resize-handle::after {
+    content: '';
+    position: absolute;
+    left: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 40px;
+    background: rgba(255, 140, 0, 0.2);
+    border-radius: 2px;
+    transition: all 0.2s;
+}
+
+.chatbot-resize-handle:hover::after,
+.chatbot-resize-handle:active::after {
+    background: var(--accent);
+    height: 60px;
+}
+
 .chatbot-reopen {
     position: fixed;
     right: 0;
