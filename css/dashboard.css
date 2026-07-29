@@ -637,7 +637,7 @@ body.dashboard-body {
 }
 
 .dash-chatbot.collapsed {
-    transform: translateX(260px);
+    transform: translateX(100%);
 }
 
 .chatbot-resize-handle {
@@ -991,6 +991,6 @@ body.dashboard-body {
 
 @media (min-width: 1401px) and (max-width: 1700px) {
     .dash-chatbot.collapsed {
-        transform: translateX(260px);
+        transform: translateX(100%);
     }
 }
