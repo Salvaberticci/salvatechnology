@@ -43,7 +43,7 @@ try {
     $_SESSION['usuario_rol'] = 'estudiante';
     $_SESSION['usuario_plan'] = 'gratuito';
 
-    echo json_encode(['status' => 'success', 'message' => 'Registro exitoso', 'redirect' => '/salvatechnology/dashboard']);
+    echo json_encode(['status' => 'success', 'message' => 'Registro exitoso', 'redirect' => BASE_URL . 'dashboard']);
 } catch (PDOException $e) {
     echo json_encode(['status' => 'error', 'message' => 'Error al registrar: ' . $e->getMessage()]);
 }

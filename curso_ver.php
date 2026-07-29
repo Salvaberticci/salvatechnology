@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/config/app.php';
 
 if (!isset($_SESSION['usuario_id'])) {
     header('Location: academia');
@@ -22,7 +23,7 @@ $curso = $stmt->fetch();
 
 if (!$curso) {
     if (!$esProfesor) {
-        header('Location: /salvatechnology/planes');
+        header('Location: ' . BASE_URL . 'planes');
         exit;
     }
     die("Curso no encontrado o no tienes acceso");
@@ -83,7 +84,7 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($leccionActual['titulo']); ?> | <?php echo htmlspecialchars($curso['titulo']); ?></title>
-    <base href="/salvatechnology/">
+    <base href="<?= BASE_URL ?>">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -113,7 +114,7 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
     <div class="dashboard-layout">
         <aside class="dash-sidebar">
             <div class="logo-side">
-                <a href="/salvatechnology/"><img src="img/logo.png" alt="Salva Technology"></a>
+                <a href="<?= BASE_URL ?>"><img src="img/logo.png" alt="Salva Technology"></a>
             </div>
             <div class="user-badge">
                 <div class="avatar"><?php echo strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)); ?></div>

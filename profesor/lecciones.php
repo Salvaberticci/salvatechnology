@@ -1,8 +1,9 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../config/app.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'profesor') {
-    header('Location: /salvatechnology/academia');
+    header('Location: ' . BASE_URL . 'academia');
     exit;
 }
 
@@ -23,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $orden = (int)($_POST['orden'] ?? 0);
         $stmt = $pdo->prepare("INSERT INTO lecciones (curso_id, titulo, descripcion, video_url, orden) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$cursoId, $titulo, $descripcion, $videoUrl, $orden]);
-        header('Location: /salvatechnology/profesor/lecciones/' . $cursoId);
+        header('Location: ' . BASE_URL . 'profesor/lecciones/' . $cursoId);
         exit;
     }
     if ($_POST['accion'] === 'crear_actividad') {
@@ -33,13 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tipo = $_POST['tipo'];
         $stmt = $pdo->prepare("INSERT INTO actividades (leccion_id, titulo, descripcion, tipo) VALUES (?, ?, ?, ?)");
         $stmt->execute([$leccionId, $titulo, $descripcion, $tipo]);
-        header('Location: /salvatechnology/profesor/lecciones/' . $cursoId);
+        header('Location: ' . BASE_URL . 'profesor/lecciones/' . $cursoId);
         exit;
     }
     if ($_POST['accion'] === 'eliminar_leccion') {
         $stmt = $pdo->prepare("DELETE FROM lecciones WHERE id = ? AND curso_id = ?");
         $stmt->execute([(int)$_POST['id'], $cursoId]);
-        header('Location: /salvatechnology/profesor/lecciones/' . $cursoId);
+        header('Location: ' . BASE_URL . 'profesor/lecciones/' . $cursoId);
         exit;
     }
 }
@@ -61,7 +62,7 @@ foreach ($lecciones as $l) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lecciones: <?php echo htmlspecialchars($curso['titulo']); ?> | Profesor</title>
-    <base href="/salvatechnology/">
+    <base href="<?= BASE_URL ?>">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>

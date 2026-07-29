@@ -1,8 +1,9 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../config/app.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'profesor') {
-    header('Location: /salvatechnology/academia');
+    header('Location: ' . BASE_URL . 'academia');
     exit;
 }
 
@@ -43,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
         }
     }
 
-    header('Location: /salvatechnology/profesor/pagos');
+    header('Location: ' . BASE_URL . 'profesor/pagos');
     exit;
 }
 
@@ -79,7 +80,7 @@ $pendientes = $pdo->query("SELECT COUNT(*) FROM pagos WHERE estado = 'pendiente'
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagos | Profesor</title>
-    <base href="/salvatechnology/">
+    <base href="<?= BASE_URL ?>">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>

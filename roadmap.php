@@ -190,12 +190,12 @@
         <header class="mb-16 flex justify-between items-center">
             <div class="flex items-center gap-6">
                 <div class="logo">
-                    <a href="/salvatechnology/">
+                    <a href="<?= BASE_URL ?>">
                         <img src="img/logo.png" alt="Salva Technology Logo"
                             class="h-12 hover:scale-105 transition-transform">
                     </a>
                 </div>
-                <a href="/salvatechnology/academia"
+                <a href="<?= BASE_URL ?>academia"
                     class="text-accent hover:text-white transition-colors flex items-center gap-2 font-mono text-xs group">
                     <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">

@@ -1,5 +1,6 @@
 <?php
+require_once __DIR__ . '/config/app.php';
 session_start();
 session_destroy();
-header('Location: /salvatechnology/academia');
+header('Location: ' . BASE_URL . 'academia');
 exit;

@@ -137,7 +137,7 @@
         input.value = '';
         addTypingIndicator();
 
-        fetch('/salvatechnology/api/chatbot.php', {
+        fetch('<?= BASE_URL ?>api/chatbot.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

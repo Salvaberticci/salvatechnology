@@ -54,5 +54,5 @@ if ($entregaExistente) {
     $stmt->execute([$actividadId, $usuarioId, $archivoUrl, $respuestaTexto, $linkUrl]);
 }
 
-header('Location: /salvatechnology/curso/' . $cursoId . '/leccion/' . $actividad['leccion_id']);
+header('Location: ' . BASE_URL . 'curso/' . $cursoId . '/leccion/' . $actividad['leccion_id']);
 exit;

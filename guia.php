@@ -34,7 +34,7 @@
         <!-- Site Header -->
         <header class="mb-8">
             <div class="logo">
-                <a href="/salvatechnology/">
+                <a href="<?= BASE_URL ?>">
                     <img src="img/logo.png" alt="Salva Technology Logo" class="h-12">
                 </a>
             </div>
@@ -46,7 +46,7 @@
             <!-- Navigation Inside Content -->
             <nav class="sticky top-0 z-50 glass-panel p-4 mb-4 rounded-xl flex justify-between items-center">
                 <div class="flex items-center gap-6">
-                    <a href="/salvatechnology/academia" class="text-accent hover:text-white transition-colors flex items-center gap-2 font-mono text-sm group">
+                    <a href="<?= BASE_URL ?>academia" class="text-accent hover:text-white transition-colors flex items-center gap-2 font-mono text-sm group">
                         <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>

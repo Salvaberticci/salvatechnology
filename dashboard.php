@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/config/app.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
     header('Location: academia');
@@ -55,7 +56,7 @@ if ($plan === 'suscripcion' && $suscripcionExpira) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Salvatechnology Academy</title>
-    <base href="/salvatechnology/">
+    <base href="<?= BASE_URL ?>">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -82,7 +83,7 @@ if ($plan === 'suscripcion' && $suscripcionExpira) {
     <div class="dashboard-layout">
         <aside class="dash-sidebar">
             <div class="logo-side">
-                <a href="/salvatechnology/"><img src="img/logo.png" alt="Salva Technology"></a>
+                <a href="<?= BASE_URL ?>"><img src="img/logo.png" alt="Salva Technology"></a>
             </div>
             <div class="user-badge">
                 <div class="avatar"><?php echo strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)); ?></div>

@@ -39,7 +39,7 @@ try {
     $_SESSION['usuario_plan'] = $usuario['plan'];
     $_SESSION['suscripcion_expira'] = $usuario['suscripcion_expira'];
 
-    $redirect = ($usuario['rol'] === 'profesor') ? '/salvatechnology/profesor' : '/salvatechnology/dashboard';
+    $redirect = ($usuario['rol'] === 'profesor') ? BASE_URL . 'profesor' : BASE_URL . 'dashboard';
     echo json_encode(['status' => 'success', 'message' => 'Inicio de sesión exitoso', 'redirect' => $redirect]);
 } catch (PDOException $e) {
     echo json_encode(['status' => 'error', 'message' => 'Error al iniciar sesión']);

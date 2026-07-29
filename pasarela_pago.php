@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/config/app.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
     header('Location: academia');
@@ -97,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pago | <?php echo htmlspecialchars($titulo); ?></title>
-    <base href="/salvatechnology/">
+    <base href="<?= BASE_URL ?>">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>
@@ -106,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="scanlines"></div>
     <div class="dashboard-layout">
         <aside class="dash-sidebar">
-            <div class="logo-side"><a href="/salvatechnology/"><img src="img/logo.png" alt="Salva Technology"></a></div>
+            <div class="logo-side"><a href="<?= BASE_URL ?>"><img src="img/logo.png" alt="Salva Technology"></a></div>
             <div class="user-badge">
                 <div class="avatar"><?php echo strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)); ?></div>
                 <div class="name"><?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?></div>

@@ -20,13 +20,13 @@ if (!$curso) {
 $stmt = $pdo->prepare("SELECT id FROM inscripciones WHERE usuario_id = ? AND curso_id = ? AND estado = 'activa'");
 $stmt->execute([$usuarioId, $cursoId]);
 if ($stmt->fetch()) {
-    header('Location: /salvatechnology/curso/' . $cursoId);
+    header('Location: ' . BASE_URL . 'curso/' . $cursoId);
     exit;
 }
 
 $tipo = 'gratuito';
 if ($curso['precio'] > 0 && $_SESSION['usuario_plan'] !== 'suscripcion') {
-    header('Location: /salvatechnology/planes');
+    header('Location: ' . BASE_URL . 'planes');
     exit;
 }
 if ($_SESSION['usuario_plan'] === 'suscripcion') {
@@ -36,5 +36,5 @@ if ($_SESSION['usuario_plan'] === 'suscripcion') {
 $stmt = $pdo->prepare("INSERT INTO inscripciones (usuario_id, curso_id, tipo, estado) VALUES (?, ?, ?, 'activa')");
 $stmt->execute([$usuarioId, $cursoId, $tipo]);
 
-header('Location: /salvatechnology/curso/' . $cursoId);
+header('Location: ' . BASE_URL . 'curso/' . $cursoId);
 exit;
