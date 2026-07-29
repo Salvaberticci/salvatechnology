@@ -30,6 +30,9 @@ $cursos = $stmt->fetchAll();
 $stmt = $pdo->prepare("SELECT DISTINCT categoria FROM cursos WHERE activo = 1 AND categoria IS NOT NULL ORDER BY categoria");
 $stmt->execute();
 $categorias = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+$config = require __DIR__ . '/config/pagos_config.php';
+$planes = $config['planes'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -37,8 +40,8 @@ $categorias = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explorar Cursos | Salvatechnology Academy</title>
-    <link rel="stylesheet" href="css/dashboard.css">
     <base href="/salvatechnology/">
+    <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -111,7 +114,7 @@ $categorias = $stmt->fetchAll(PDO::FETCH_COLUMN);
                     <div class="card-body">
                         <h3><?php echo htmlspecialchars($curso['titulo']); ?></h3>
                         <?php if ($curso['precio'] > 0): ?>
-                            <div class="price">$<?php echo number_format($curso['precio'], 2); ?></div>
+                            <div class="price" style="color:#ff8c00;font-size:0.65rem;">🔒 REQUIERE SUSCRIPCIÓN</div>
                         <?php else: ?>
                             <div class="price free">GRATUITO</div>
                         <?php endif; ?>
@@ -124,7 +127,9 @@ $categorias = $stmt->fetchAll(PDO::FETCH_COLUMN);
                         <?php if ($curso['ya_inscrito']): ?>
                             <a href="curso/<?php echo $curso['id']; ?>" class="btn-continuar" style="width:100%;justify-content:center">IR AL CURSO</a>
                         <?php elseif ($curso['precio'] > 0 && $plan !== 'suscripcion'): ?>
-                            <a href="pasarela_pago?curso=<?php echo $curso['id']; ?>" class="btn-explorar" style="width:100%;justify-content:center">COMPRAR $<?php echo number_format($curso['precio'], 2); ?></a>
+                            <a href="planes" class="btn-explorar" style="width:100%;justify-content:center">🔓 ADQUIRIR PLAN</a>
+                        <?php elseif ($curso['precio'] > 0 && $plan === 'suscripcion'): ?>
+                            <a href="inscribir/<?php echo $curso['id']; ?>" class="btn-continuar" style="width:100%;justify-content:center">INSCRIBIRME</a>
                         <?php else: ?>
                             <a href="inscribir/<?php echo $curso['id']; ?>" class="btn-continuar" style="width:100%;justify-content:center">INSCRIBIRME GRATIS</a>
                         <?php endif; ?>
@@ -139,7 +144,58 @@ $categorias = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 <p>Próximamente estaremos agregando contenido</p>
             </div>
             <?php endif; ?>
+
+            <?php if ($plan !== 'suscripcion'): ?>
+            <div class="mt-12 mb-6 text-center">
+                <h2 class="font-['Orbitron'] text-white text-lg font-bold mb-2">🚀 Desbloquea Todos los Cursos</h2>
+                <p class="text-stone-400 text-sm font-mono">Elige un plan de suscripción y accede a todos los cursos premium sin límites</p>
+            </div>
+            <div class="grid md:grid-cols-4 gap-5 mb-10">
+                <?php foreach ($planes as $meses => $planData): ?>
+                <?php $esRecomendado = ($meses === 6); ?>
+                <div class="bg-[var(--panel-bg)] border <?php echo $esRecomendado ? 'border-accent shadow-[0_0_30px_rgba(255,140,0,0.15)]' : 'border-[var(--border-color)]'; ?> rounded-xl p-6 flex flex-col relative">
+                    <?php if ($esRecomendado): ?>
+                    <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider font-mono">Recomendado</span>
+                    <?php endif; ?>
+                    <div class="text-center mb-4">
+                        <h3 class="font-['Orbitron'] text-white text-lg font-bold"><?php echo $planData['label']; ?></h3>
+                        <div class="mt-3">
+                            <span class="font-['Orbitron'] text-accent text-3xl font-black">$<?php echo $planData['precio']; ?></span>
+                        </div>
+                        <?php if ($planData['ahorro'] > 0): ?>
+                        <span class="inline-block mt-2 bg-green-500/15 text-green-400 text-[10px] font-bold px-2 py-1 rounded-full font-mono">Ahorras $<?php echo $planData['ahorro']; ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="text-stone-400 text-xs text-center font-mono flex-grow mb-6 leading-relaxed">
+                        <?php echo htmlspecialchars($planData['desc']); ?>
+                    </div>
+                    <a href="pasarela_pago?plan=<?php echo $meses; ?>" class="btn-continuar" style="width:100%;justify-content:center;padding:0.7rem;">ELEGIR PLAN</a>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="text-center mb-10 p-6 bg-white/5 rounded-xl border border-white/10">
+                <h3 class="font-['Orbitron'] text-white text-sm font-bold mb-3">🎯 Beneficios de la Suscripción</h3>
+                <div class="grid md:grid-cols-3 gap-4 text-left text-xs font-mono">
+                    <div class="bg-black/30 rounded-lg p-4">
+                        <span class="text-accent text-base block mb-1">📚</span>
+                        <span class="text-white font-bold">Acceso Ilimitado</span>
+                        <p class="text-stone-500 mt-1">Todos los cursos premium, todas las lecciones, sin restricciones.</p>
+                    </div>
+                    <div class="bg-black/30 rounded-lg p-4">
+                        <span class="text-accent text-base block mb-1">🎓</span>
+                        <span class="text-white font-bold">Clases en Vivo</span>
+                        <p class="text-stone-500 mt-1">Sesiones semanales en vivo con el profesor y la comunidad.</p>
+                    </div>
+                    <div class="bg-black/30 rounded-lg p-4">
+                        <span class="text-accent text-base block mb-1">💬</span>
+                        <span class="text-white font-bold">Grupo VIP</span>
+                        <p class="text-stone-500 mt-1">Acceso al grupo privado de Discord con soporte prioritario.</p>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
         </main>
+        <?php require 'partials/chatbot.php'; ?>
     </div>
 </body>
 </html>

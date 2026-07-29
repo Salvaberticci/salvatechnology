@@ -18,20 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
         if ($accion === 'aprobar') {
             $pdo->prepare("UPDATE pagos SET estado = 'completado', updated_at = NOW() WHERE id = ?")->execute([$pagoId]);
 
-            $existe = $pdo->prepare("SELECT id FROM inscripciones WHERE usuario_id = ? AND curso_id = ?");
-            $existe->execute([$pago['usuario_id'], $pago['curso_id']]);
-            if (!$existe->fetch()) {
-                $tipo = $pago['tipo'] === 'suscripcion' ? 'suscripcion' : 'pago';
-                $pdo->prepare("INSERT INTO inscripciones (usuario_id, curso_id, tipo, estado) VALUES (?, ?, ?, 'activa')")
-                    ->execute([$pago['usuario_id'], $pago['curso_id'], $tipo]);
-            }
-
             if ($pago['tipo'] === 'suscripcion') {
                 $mapaMeses = [40 => 1, 110 => 3, 190 => 6, 380 => 12];
                 $meses = $mapaMeses[(int)$pago['monto']] ?? 1;
                 $expira = date('Y-m-d', strtotime("+$meses months"));
                 $pdo->prepare("UPDATE usuarios SET plan = 'suscripcion', suscripcion_expira = ? WHERE id = ?")
                     ->execute([$expira, $pago['usuario_id']]);
+            } else {
+                $existe = $pdo->prepare("SELECT id FROM inscripciones WHERE usuario_id = ? AND curso_id = ?");
+                $existe->execute([$pago['usuario_id'], $pago['curso_id']]);
+                if (!$existe->fetch()) {
+                    $pdo->prepare("INSERT INTO inscripciones (usuario_id, curso_id, tipo, estado) VALUES (?, ?, 'pago', 'activa')")
+                        ->execute([$pago['usuario_id'], $pago['curso_id']]);
+                }
             }
         } elseif ($accion === 'rechazar') {
             $pdo->prepare("UPDATE pagos SET estado = 'rechazado', updated_at = NOW() WHERE id = ?")->execute([$pagoId]);
@@ -48,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
     exit;
 }
 
-$filtro = $_GET['filtro'] ?? 'pendientes';
+$filtro = $_GET['filtro'] ?? 'todos';
 
 $sql = "SELECT p.*, u.nombre as estudiante_nombre, u.email as estudiante_email, c.titulo as curso_titulo
     FROM pagos p
@@ -63,6 +62,8 @@ if ($filtro === 'pendientes') {
     $sql .= " AND p.estado = 'completado'";
 } elseif ($filtro === 'rechazados') {
     $sql .= " AND p.estado = 'rechazado'";
+} elseif ($filtro === 'todos') {
+    // sin filtro, muestra todos
 }
 
 $sql .= " ORDER BY p.fecha_pago DESC";
@@ -78,8 +79,8 @@ $pendientes = $pdo->query("SELECT COUNT(*) FROM pagos WHERE estado = 'pendiente'
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagos | Profesor</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
     <base href="/salvatechnology/">
+    <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>
 </head>
@@ -129,7 +130,11 @@ $pendientes = $pdo->query("SELECT COUNT(*) FROM pagos WHERE estado = 'pendiente'
                                 <span class="text-stone-500 text-xs font-mono ml-2"><?php echo htmlspecialchars($pago['estudiante_email']); ?></span>
                             </div>
                             <div class="card-meta">
+                                <?php if ($pago['tipo'] === 'suscripcion'): ?>
+                                <span class="text-stone-400 text-xs font-mono">Tipo: SUSCRIPCIÓN</span>
+                                <?php else: ?>
                                 <span class="text-stone-400 text-xs font-mono">Curso: <?php echo htmlspecialchars($pago['curso_titulo'] ?? 'N/A'); ?></span>
+                                <?php endif; ?>
                                 <span class="text-accent text-xs font-mono font-bold">$<?php echo number_format($pago['monto'], 2); ?></span>
                                 <span class="text-stone-600 text-xs font-mono"><?php echo strtoupper(htmlspecialchars($pago['metodo_pago'])); ?></span>
                                 <span class="activity-status status-<?php echo $pago['estado'] === 'completado' ? 'aprobado' : ($pago['estado'] === 'rechazado' ? 'rechazado' : 'pendiente'); ?>"><?php echo strtoupper($pago['estado']); ?></span>
@@ -138,10 +143,15 @@ $pendientes = $pdo->query("SELECT COUNT(*) FROM pagos WHERE estado = 'pendiente'
                     </div>
 
                     <div class="bg-black/30 rounded-lg p-4 mt-2 text-xs text-stone-400">
+                        <?php if ($pago['tipo'] === 'suscripcion'): ?>
+                        <p class="mb-1">Tipo: <span class="text-accent font-bold">SUSCRIPCIÓN</span></p>
+                        <?php endif; ?>
                         <p class="mb-1">Referencia: <span class="text-white font-bold"><?php echo htmlspecialchars($pago['referencia']); ?></span></p>
+                        <p class="mb-1">Monto: <span class="text-white font-bold">$<?php echo number_format($pago['monto'], 2); ?></span></p>
+                        <p class="mb-1">Método: <span class="text-white"><?php echo strtoupper(htmlspecialchars($pago['metodo_pago'])); ?></span></p>
                         <p class="mb-1">Fecha: <?php echo date('d/m/Y H:i', strtotime($pago['fecha_pago'])); ?></p>
                         <?php if ($pago['comprobante_url']): ?>
-                        <p>Comprobante: <a href="../<?php echo htmlspecialchars($pago['comprobante_url']); ?>" class="text-accent underline" target="_blank">Ver comprobante</a></p>
+                        <p>Comprobante: <a href="<?php echo htmlspecialchars($pago['comprobante_url']); ?>" class="text-accent underline" target="_blank">Ver comprobante</a></p>
                         <?php endif; ?>
                         <?php if ($pago['notas_estudiante']): ?>
                         <p class="mt-1">Notas: <span class="text-white"><?php echo nl2br(htmlspecialchars($pago['notas_estudiante'])); ?></span></p>
@@ -172,10 +182,16 @@ $pendientes = $pdo->query("SELECT COUNT(*) FROM pagos WHERE estado = 'pendiente'
             <div class="empty-state">
                 <svg class="w-16 h-16 text-stone-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 <h3>No hay pagos para revisar</h3>
-                <p><?php echo $filtro === 'pendientes' ? 'Todos los pagos han sido procesados' : 'Aún no hay pagos registrados'; ?></p>
+                <p><?php
+                    if ($filtro === 'pendientes') echo 'Todos los pagos han sido procesados';
+                    elseif ($filtro === 'completados') echo 'No hay pagos aprobados aún';
+                    elseif ($filtro === 'rechazados') echo 'No hay pagos rechazados';
+                    else echo 'Aún no hay pagos registrados en el sistema';
+                ?></p>
             </div>
             <?php endif; ?>
         </main>
+        <?php require __DIR__ . '/../partials/chatbot.php'; ?>
     </div>
 </body>
 </html>

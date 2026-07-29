@@ -9,6 +9,10 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante'
 $config = require __DIR__ . '/config/pagos_config.php';
 $planes = $config['planes'];
 $planActual = $_SESSION['usuario_plan'];
+
+$stmt = $pdo->prepare("SELECT * FROM pagos WHERE usuario_id = ? AND tipo = 'suscripcion' AND estado = 'pendiente' LIMIT 1");
+$stmt->execute([$_SESSION['usuario_id']]);
+$pagoPendiente = $stmt->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -16,8 +20,8 @@ $planActual = $_SESSION['usuario_plan'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planes de Suscripción | Salvatechnology</title>
-    <link rel="stylesheet" href="css/dashboard.css">
     <base href="/salvatechnology/">
+    <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>
 </head>
@@ -50,7 +54,13 @@ $planActual = $_SESSION['usuario_plan'];
                 <p class="text-stone-400 text-sm font-mono">Elige el plan que mejor se adapte a tu camino como AI-Driven Developer</p>
             </div>
 
-            <?php if ($planActual === 'suscripcion'): ?>
+            <?php if ($pagoPendiente): ?>
+            <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6 mb-8 text-center">
+                <div class="text-4xl mb-2">⏳</div>
+                <h3 class="font-['Orbitron'] text-yellow-400 text-base font-bold">Tu plan está en aprobación</h3>
+                <p class="text-stone-400 text-xs mt-1 font-mono">Realizaste un pago de <strong class="text-white">$<?php echo number_format($pagoPendiente['monto'], 0); ?></strong> por <strong class="text-white"><?php echo htmlspecialchars($pagoPendiente['metodo_pago']); ?></strong>. Estamos revisando tu comprobante, en breve un profesor activará tu suscripción.</p>
+            </div>
+            <?php elseif ($planActual === 'suscripcion'): ?>
             <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-6 mb-8 text-center">
                 <div class="text-4xl mb-2">✅</div>
                 <h3 class="font-['Orbitron'] text-green-400 text-base font-bold">Ya tienes una suscripción activa</h3>
@@ -99,6 +109,7 @@ $planActual = $_SESSION['usuario_plan'];
             </div>
             <?php endif; ?>
         </main>
+        <?php require 'partials/chatbot.php'; ?>
     </div>
 </body>
 </html>

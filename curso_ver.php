@@ -1,20 +1,30 @@
 <?php
 require_once __DIR__ . '/config/db.php';
 
-if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
+if (!isset($_SESSION['usuario_id'])) {
     header('Location: academia');
     exit;
 }
 
 $usuarioId = $_SESSION['usuario_id'];
+$esProfesor = $_SESSION['usuario_rol'] === 'profesor';
 $cursoId = (int)($_GET['id'] ?? 0);
 $leccionId = (int)($_GET['leccion'] ?? 0);
 
-$stmt = $pdo->prepare("SELECT c.*, i.tipo as inscripcion_tipo FROM cursos c JOIN inscripciones i ON i.curso_id = c.id AND i.usuario_id = ? WHERE c.id = ? AND i.estado = 'activa'");
-$stmt->execute([$usuarioId, $cursoId]);
+if ($esProfesor) {
+    $stmt = $pdo->prepare("SELECT c.*, NULL as inscripcion_tipo FROM cursos c WHERE c.id = ? AND c.profesor_id = ?");
+    $stmt->execute([$cursoId, $usuarioId]);
+} else {
+    $stmt = $pdo->prepare("SELECT c.*, i.tipo as inscripcion_tipo FROM cursos c JOIN inscripciones i ON i.curso_id = c.id AND i.usuario_id = ? WHERE c.id = ? AND i.estado = 'activa'");
+    $stmt->execute([$usuarioId, $cursoId]);
+}
 $curso = $stmt->fetch();
 
 if (!$curso) {
+    if (!$esProfesor) {
+        header('Location: /salvatechnology/planes');
+        exit;
+    }
     die("Curso no encontrado o no tienes acceso");
 }
 
@@ -73,8 +83,8 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($leccionActual['titulo']); ?> | <?php echo htmlspecialchars($curso['titulo']); ?></title>
-    <link rel="stylesheet" href="css/dashboard.css">
     <base href="/salvatechnology/">
+    <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -108,9 +118,18 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
             <div class="user-badge">
                 <div class="avatar"><?php echo strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)); ?></div>
                 <div class="name"><?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?></div>
+                <?php if ($esProfesor): ?>
+                <span class="plan-badge" style="background:rgba(255,68,68,0.15);color:#ff4444;border-color:rgba(255,68,68,0.3);">PROFESOR</span>
+                <?php else: ?>
                 <span class="plan-badge plan-<?php echo $_SESSION['usuario_plan']; ?>"><?php echo $_SESSION['usuario_plan'] === 'suscripcion' ? 'SUSCRIPCIÓN' : 'GRATUITO'; ?></span>
+                <?php endif; ?>
             </div>
             <nav class="dash-nav">
+                <?php if ($esProfesor): ?>
+                <a href="profesor">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Panel Profesor
+                </a>
+                <?php else: ?>
                 <a href="dashboard">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Dashboard
                 </a>
@@ -120,6 +139,7 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                 <a href="planes">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>Planes
                 </a>
+                <?php endif; ?>
             </nav>
         </aside>
 
@@ -127,14 +147,16 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
             <div class="dash-header">
                 <div>
                     <h1 style="font-size:1rem;"><?php echo htmlspecialchars($curso['titulo']); ?></h1>
+                    <?php if (!$esProfesor): ?>
                     <div class="flex items-center gap-3 mt-2">
                         <div class="progress-bar-track" style="width:200px;height:4px;">
                             <div class="progress-bar-fill" style="width:<?php echo $progresoTotal; ?>%"></div>
                         </div>
                         <span class="text-stone-500 text-[10px] font-mono"><?php echo $progresoTotal; ?>%</span>
                     </div>
+                    <?php endif; ?>
                 </div>
-                <a href="dashboard" class="text-stone-500 hover:text-accent transition-colors text-xs font-mono">← Volver</a>
+                <a href="<?php echo $esProfesor ? 'profesor/cursos' : 'dashboard'; ?>" class="text-stone-500 hover:text-accent transition-colors text-xs font-mono">← Volver</a>
             </div>
 
             <div class="course-viewer">
@@ -169,12 +191,44 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                         <div class="lesson-content text-sm"><?php echo nl2br(htmlspecialchars($leccionActual['descripcion'])); ?></div>
                         <?php endif; ?>
 
+                        <?php
+                        $claseNum = '';
+                        if (preg_match('/^Clase\s+([\d.]+)/', $leccionActual['titulo'], $m)) {
+                            $claseNum = $m[1];
+                        }
+                        $ebookPath = 'uploads/ebooks/clase-' . $claseNum . '.pdf';
+                        $diapoPath = 'uploads/diapositivas/clase-' . $claseNum . '.html';
+                        $tieneEbook = $claseNum && file_exists(__DIR__ . '/' . $ebookPath);
+                        $tieneDiapo = $claseNum && file_exists(__DIR__ . '/' . $diapoPath);
+                        ?>
+                        <?php if ($tieneEbook || $tieneDiapo): ?>
+                        <div class="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
+                            <h4 class="text-accent font-['Orbitron'] text-xs uppercase tracking-wider mb-3">📁 Recursos de la Clase</h4>
+                            <div class="flex flex-wrap gap-3">
+                                <?php if ($tieneEbook): ?>
+                                <button onclick="abrirModal('ebook-modal')" class="btn-continuar text-xs">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    📖 E-Book de la Clase
+                                </button>
+                                <?php endif; ?>
+                                <?php if ($tieneDiapo): ?>
+                                <button onclick="abrirModal('diapo-modal')" class="btn-continuar text-xs">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                                    📊 Diapositivas de la Clase
+                                </button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if (!$esProfesor): ?>
                         <form method="POST" class="mt-4">
                             <button type="submit" name="completar_leccion" value="1" class="btn-continuar <?php echo $leccionCompletada ? 'opacity-50 pointer-events-none' : ''; ?>">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <?php echo $leccionCompletada ? 'COMPLETADA' : 'MARCAR COMO COMPLETADA'; ?>
                             </button>
                         </form>
+                        <?php endif; ?>
                     </div>
 
                     <?php if (!empty($actividades)): ?>
@@ -268,6 +322,49 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                 </div>
             </div>
         </main>
+        <?php require 'partials/chatbot.php'; ?>
     </div>
+
+    <!-- Modal E-Book -->
+    <div id="ebook-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.9);backdrop-filter:blur(5px);">
+        <div class="relative w-full max-w-4xl h-[90vh] bg-[#111] rounded-2xl border border-accent/40 overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-white/10">
+                <h3 class="font-['Orbitron'] text-white text-sm font-bold">📖 E-Book</h3>
+                <button onclick="cerrarModal('ebook-modal')" class="text-stone-500 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div class="flex-1 p-4">
+                <iframe src="<?php echo $ebookPath; ?>" class="w-full h-full rounded-xl" style="border:none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Diapositivas -->
+    <div id="diapo-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.9);backdrop-filter:blur(5px);">
+        <div class="relative w-full max-w-5xl h-[90vh] bg-[#111] rounded-2xl border border-accent/40 overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-white/10">
+                <h3 class="font-['Orbitron'] text-white text-sm font-bold">📊 Diapositivas</h3>
+                <button onclick="cerrarModal('diapo-modal')" class="text-stone-500 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div class="flex-1 p-4">
+                <iframe src="<?php echo $diapoPath; ?>" class="w-full h-full rounded-xl" style="border:none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function abrirModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function cerrarModal(id) {
+        document.getElementById(id).classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    document.querySelectorAll('[id$="-modal"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            if (e.target === this) cerrarModal(this.id);
+        });
+    });
+    </script>
 </body>
 </html>

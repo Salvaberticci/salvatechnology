@@ -21,6 +21,33 @@ $misCursos = $stmt->fetchAll();
 $stmt = $pdo->prepare("SELECT COUNT(*) FROM entregas WHERE usuario_id = ? AND estado = 'pendiente'");
 $stmt->execute([$usuarioId]);
 $pendientes = $stmt->fetchColumn();
+
+$stmt = $pdo->prepare("SELECT * FROM pagos WHERE usuario_id = ? AND tipo = 'suscripcion' AND estado = 'pendiente' LIMIT 1");
+$stmt->execute([$usuarioId]);
+$pagoPendiente = $stmt->fetch();
+
+$diasRestantes = 0;
+$planLabel = '';
+$suscripcionExpira = $_SESSION['suscripcion_expira'] ?? null;
+
+if (!$suscripcionExpira && $plan === 'suscripcion') {
+    $stmt = $pdo->prepare("SELECT suscripcion_expira FROM usuarios WHERE id = ?");
+    $stmt->execute([$usuarioId]);
+    $suscripcionExpira = $stmt->fetchColumn();
+}
+
+if ($plan === 'suscripcion' && $suscripcionExpira) {
+    $expira = $suscripcionExpira;
+    $diasRestantes = max(0, floor((strtotime($expira) - time()) / 86400));
+    $planLabel = '';
+    $stmt = $pdo->prepare("SELECT monto FROM pagos WHERE usuario_id = ? AND tipo = 'suscripcion' AND estado = 'completado' ORDER BY fecha_pago DESC LIMIT 1");
+    $stmt->execute([$usuarioId]);
+    $ultPago = $stmt->fetchColumn();
+    if ($ultPago) {
+        $mapaMeses = [40 => '1 Mes', 110 => '3 Meses', 190 => '6 Meses', 380 => '1 Año'];
+        $planLabel = $mapaMeses[(int)$ultPago] ?? '';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,8 +55,8 @@ $pendientes = $stmt->fetchColumn();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Salvatechnology Academy</title>
-    <link rel="stylesheet" href="css/dashboard.css">
     <base href="/salvatechnology/">
+    <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -90,6 +117,40 @@ $pendientes = $stmt->fetchColumn();
                 </div>
             </div>
 
+            <?php if ($pagoPendiente): ?>
+            <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-5 mb-6 flex items-center gap-4">
+                <div class="text-3xl">⏳</div>
+                <div>
+                    <h3 class="font-['Orbitron'] text-yellow-400 text-sm font-bold">Tu suscripción está en revisión</h3>
+                    <p class="text-stone-400 text-xs font-mono mt-1">Realizaste un pago de <strong class="text-white">$<?php echo number_format($pagoPendiente['monto'], 2); ?></strong> por <?php echo htmlspecialchars($pagoPendiente['metodo_pago']); ?>. Un profesor lo revisará y activará tu plan.</p>
+                </div>
+            </div>
+            <?php elseif ($plan === 'suscripcion'): ?>
+            <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl p-5 mb-6">
+                <div class="flex items-center justify-between flex-wrap gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="text-3xl">🎯</div>
+                        <div>
+                            <h3 class="font-['Orbitron'] text-white text-sm font-bold">Plan <?php echo $planLabel ?: 'Suscripción'; ?></h3>
+                            <p class="text-stone-400 text-xs font-mono mt-1">
+                                <?php if ($diasRestantes > 0): ?>
+                                    Tu suscripción vence el <strong class="text-white"><?php echo date('d/m/Y', strtotime($suscripcionExpira)); ?></strong>
+                                    · <span class="<?php echo $diasRestantes <= 7 ? 'text-red-400' : 'text-green-400'; ?>"><?php echo $diasRestantes; ?> días restantes</span>
+                                <?php elseif (!$suscripcionExpira): ?>
+                                    Sin fecha de vencimiento · <span class="text-yellow-400">Consulta con tu profesor</span>
+                                <?php else: ?>
+                                    Tu suscripción vence hoy · <span class="text-red-400">Renueva tu plan</span>
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                    </div>
+                    <?php if ($diasRestantes <= 15): ?>
+                    <a href="planes" class="btn-explorar" style="padding:0.5rem 1.2rem;font-size:0.6rem;">RENOVAR PLAN</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <?php if (count($misCursos) > 0): ?>
             <div class="course-feed">
                 <?php foreach ($misCursos as $curso):
@@ -144,6 +205,7 @@ $pendientes = $stmt->fetchColumn();
             </div>
             <?php endif; ?>
         </main>
+        <?php require 'partials/chatbot.php'; ?>
     </div>
 
     <script>

@@ -34,8 +34,8 @@ $totalSuscripciones = $suscripcionesActivas->fetchColumn();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudiantes | Profesor</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
     <base href="/salvatechnology/">
+    <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>
 </head>
@@ -109,6 +109,7 @@ $totalSuscripciones = $suscripcionesActivas->fetchColumn();
                 <?php endif; ?>
             </div>
         </main>
+        <?php require __DIR__ . '/../partials/chatbot.php'; ?>
     </div>
 </body>
 </html>

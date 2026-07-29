@@ -9,7 +9,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'profesor') 
 $totalEstudiantes = $pdo->query("SELECT COUNT(*) FROM usuarios WHERE rol = 'estudiante'")->fetchColumn();
 $totalCursos = $pdo->query("SELECT COUNT(*) FROM cursos")->fetchColumn();
 $totalEntregasPendientes = $pdo->query("SELECT COUNT(*) FROM entregas WHERE estado = 'pendiente'")->fetchColumn();
-$suscripcionesActivas = $pdo->query("SELECT COUNT(*) FROM usuarios WHERE plan = 'suscripcion' AND (suscripcion_expira IS NULL OR suscripcion_expira >= CURDATE())")->fetchColumn();
+$suscripcionesActivas = $pdo->query("SELECT COUNT(*) FROM usuarios WHERE rol = 'estudiante' AND plan = 'suscripcion' AND (suscripcion_expira IS NULL OR suscripcion_expira >= CURDATE())")->fetchColumn();
 $inscripcionesHoy = $pdo->query("SELECT COUNT(*) FROM inscripciones WHERE DATE(fecha_inscripcion) = CURDATE()")->fetchColumn();
 $pagosPendientes = $pdo->query("SELECT COUNT(*) FROM pagos WHERE estado = 'pendiente'")->fetchColumn();
 ?>
@@ -19,8 +19,8 @@ $pagosPendientes = $pdo->query("SELECT COUNT(*) FROM pagos WHERE estado = 'pendi
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Profesor | Salvatechnology</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
     <base href="/salvatechnology/">
+    <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>
 </head>
@@ -111,6 +111,7 @@ $pagosPendientes = $pdo->query("SELECT COUNT(*) FROM pagos WHERE estado = 'pendi
                 </div>
             </div>
         </main>
+        <?php require __DIR__ . '/../partials/chatbot.php'; ?>
     </div>
 </body>
 </html>

@@ -9,8 +9,8 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante'
 $usuarioId = $_SESSION['usuario_id'];
 $config = require __DIR__ . '/config/pagos_config.php';
 $metodos = $config['metodos'];
-$planId = (int)($_GET['plan'] ?? 0);
-$cursoId = (int)($_GET['curso'] ?? 0);
+$planId = (int)($_GET['plan'] ?? $_POST['plan_id'] ?? 0);
+$cursoId = (int)($_GET['curso'] ?? $_POST['curso_compra'] ?? 0);
 $esSuscripcion = ($planId > 0 && isset($config['planes'][$planId]));
 
 if ($esSuscripcion) {
@@ -97,8 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pago | <?php echo htmlspecialchars($titulo); ?></title>
-    <link rel="stylesheet" href="css/dashboard.css">
     <base href="/salvatechnology/">
+    <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>
 </head>
@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="flex gap-2 mb-6 flex-wrap">
                             <?php foreach ($metodos as $key => $met): ?>
-                            <a href="?<?php echo $esSuscripcion ? 'plan=' . $planId : 'curso=' . $cursoId; ?>&metodo=<?php echo $key; ?>" class="px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider transition-all <?php echo $metodoSeleccionado === $key ? 'bg-accent text-black' : 'bg-white/5 text-stone-400 hover:text-white border border-white/10'; ?>">
+                            <a href="pasarela_pago?<?php echo $esSuscripcion ? 'plan=' . $planId : 'curso=' . $cursoId; ?>&metodo=<?php echo $key; ?>" class="px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider transition-all <?php echo $metodoSeleccionado === $key ? 'bg-accent text-black' : 'bg-white/5 text-stone-400 hover:text-white border border-white/10'; ?>">
                                 <?php echo $met['icono'] . ' ' . $met['nombre']; ?>
                             </a>
                             <?php endforeach; ?>
@@ -197,8 +197,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <p class="text-accent text-xs font-mono mt-3"><?php echo htmlspecialchars($met['nota']); ?></p>
                         </div>
 
-                        <form method="POST" enctype="multipart/form-data" id="pagoForm">
+                        <form method="POST" enctype="multipart/form-data" action="pasarela_pago">
                             <input type="hidden" name="metodo_pago" value="<?php echo htmlspecialchars($metodoSeleccionado); ?>">
+                            <?php if ($esSuscripcion): ?>
+                            <input type="hidden" name="plan_id" value="<?php echo $planId; ?>">
+                            <?php else: ?>
+                            <input type="hidden" name="curso_compra" value="<?php echo $cursoId; ?>">
+                            <?php endif; ?>
 
                             <div class="mb-4">
                                 <label class="text-[10px] uppercase text-stone-500 font-mono block mb-1">Referencia / Código de confirmación *</label>
@@ -228,6 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
             <?php endif; ?>
         </main>
+        <?php require 'partials/chatbot.php'; ?>
     </div>
 </body>
 </html>

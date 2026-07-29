@@ -26,7 +26,7 @@ if ($stmt->fetch()) {
 
 $tipo = 'gratuito';
 if ($curso['precio'] > 0 && $_SESSION['usuario_plan'] !== 'suscripcion') {
-    header('Location: /salvatechnology/pasarela_pago?curso=' . $cursoId);
+    header('Location: /salvatechnology/planes');
     exit;
 }
 if ($_SESSION['usuario_plan'] === 'suscripcion') {
