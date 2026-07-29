@@ -37,3 +37,6 @@ Thumbs.db
 
 # Uploads
 /uploads/
+
+# Base de datos (credenciales locales)
+/config/db.php
