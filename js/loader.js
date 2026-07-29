@@ -6,16 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('start-button');
     const loaderText = document.querySelector('.loader-text');
 
-    // Verificación inicial
-    if (window.skipLoader) {
-        if (typeof audioManager !== 'undefined') {
-            audioManager.unlock();
-        }
-        openPortal(() => {
-            document.body.style.overflow = 'auto';
-        });
-        return;
-    }
 
     // Animación de la barra de carga
     let progress = 0;
@@ -38,8 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Manejar el clic en el botón de inicio
     startButton.addEventListener('click', () => {
-        // Guardar en sesión para no mostrar más el loader
-        sessionStorage.setItem('loader_shown', 'true');
 
         // Completar la barra de carga
         loaderBar.style.width = '100%';
