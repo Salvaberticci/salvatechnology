@@ -1,20 +1,33 @@
 class AudioManager {
     constructor() {
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.audioContext = null;
         this.sounds = {};
         this.unlocked = false;
     }
 
+    _ensureContext() {
+        if (!this.audioContext) {
+            try {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.warn('AudioContext no disponible:', e);
+            }
+        }
+    }
+
     unlock() {
         if (this.unlocked) return;
-        this.audioContext.resume().then(() => {
+        this._ensureContext();
+        if (this.audioContext) {
+            this.audioContext.resume().then(() => {
+                this.unlocked = true;
+                if (this.sounds['load']) {
+                    this.playSound('load');
+                }
+            }).catch(() => {});
+        } else {
             this.unlocked = true;
-            console.log('Audio unlocked');
-            // Play any sounds that were queued
-            if (this.sounds['load']) {
-                this.playSound('load');
-            }
-        });
+        }
     }
 
     loadSound(name, src, loop = false) {
@@ -30,7 +43,7 @@ class AudioManager {
             this.sounds[name].currentTime = 0;
             this.sounds[name].play();
         } else {
-            console.log('Audio not unlocked yet. Sound will play after user interaction.');
+            console.log('Audio no desbloqueado. Sonará después de interacción del usuario.');
         }
     }
 }
