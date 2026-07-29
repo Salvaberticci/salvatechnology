@@ -48,4 +48,10 @@ return [
             'nota' => 'Envía USDT y coloca el hash de la transacción como referencia.',
         ],
     ],
+    'planes' => [
+        1 => ['label' => '1 Mes',    'precio' => 40,  'meses' => 1,  'ahorro' => 0,   'desc' => 'Acceso por 30 días a clases en vivo, soporte y grupo VIP.'],
+        3 => ['label' => '3 Meses',  'precio' => 110, 'meses' => 3,  'ahorro' => 10,  'desc' => 'Ideal para consolidar las bases del desarrollo con IA.'],
+        6 => ['label' => '6 Meses',  'precio' => 190, 'meses' => 6,  'ahorro' => 50,  'desc' => 'El plan recomendado para estructurar tu negocio freelance con soporte continuo.'],
+       12 => ['label' => '1 Año',    'precio' => 380, 'meses' => 12, 'ahorro' => 100, 'desc' => 'El pase definitivo de mentoría para vivir 100% del software asistido por IA.'],
+    ],
 ];

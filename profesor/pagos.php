@@ -27,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
             }
 
             if ($pago['tipo'] === 'suscripcion') {
-                $expira = date('Y-m-d', strtotime('+30 days'));
+                $mapaMeses = [40 => 1, 110 => 3, 190 => 6, 380 => 12];
+                $meses = $mapaMeses[(int)$pago['monto']] ?? 1;
+                $expira = date('Y-m-d', strtotime("+$meses months"));
                 $pdo->prepare("UPDATE usuarios SET plan = 'suscripcion', suscripcion_expira = ? WHERE id = ?")
                     ->execute([$expira, $pago['usuario_id']]);
             }
