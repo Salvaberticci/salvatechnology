@@ -1,21 +1,17 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Allow direct access to existing files (css, js, img, uploads, etc.)
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
-
-# Parameterized routes
+# Specific parameterized routes (must be before -d check)
 RewriteRule ^curso/([0-9]+)/leccion/([0-9]+)/?$ curso_ver.php?id=$1&leccion=$2 [L,QSA]
 RewriteRule ^curso/([0-9]+)/?$ curso_ver.php?id=$1 [L,QSA]
 RewriteRule ^inscribir/([0-9]+)/?$ curso_inscribir.php?id=$1 [L,QSA]
 RewriteRule ^profesor/lecciones/([0-9]+)/?$ profesor/lecciones.php?curso_id=$1 [L,QSA]
 
-# Professor routes
+# Professor routes (before -d check so /profesor doesn't trigger directory listing)
 RewriteRule ^profesor/cursos/?$ profesor/cursos.php [L]
 RewriteRule ^profesor/estudiantes/?$ profesor/estudiantes.php [L]
 RewriteRule ^profesor/entregas/?$ profesor/entregas.php [L]
+RewriteRule ^profesor/pagos/?$ profesor/pagos.php [L]
 RewriteRule ^profesor/?$ profesor/dashboard.php [L]
 
 # API routes
@@ -23,7 +19,12 @@ RewriteRule ^login/?$ auth/login.php [L]
 RewriteRule ^register/?$ auth/register.php [L]
 RewriteRule ^logout/?$ auth/logout.php [L]
 
-# General pages  
+# General pages
 RewriteRule ^entregar/?$ actividad_entregar.php [L]
 RewriteRule ^([a-zA-Z0-9_-]+)/?$ $1.php [L]
+
+# Allow direct access to existing files (css, js, img, uploads, etc.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
 </IfModule>
