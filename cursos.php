@@ -42,6 +42,7 @@ $planes = $config['planes'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explorar Cursos | Salvatechnology Academy</title>
     <base href="<?= BASE_URL ?>">
+    <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>

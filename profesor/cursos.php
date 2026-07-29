@@ -30,6 +30,7 @@ $cursos = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Cursos | Profesor</title>
     <base href="<?= BASE_URL ?>">
+    <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>

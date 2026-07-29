@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso Academia | Salvatechnology</title>
     <base href="<?= BASE_URL ?>">
+    <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/guia.css">
     <script src="https://cdn.tailwindcss.com"></script>
