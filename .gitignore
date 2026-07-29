@@ -36,7 +36,7 @@ ehthumbs.db
 Thumbs.db
 
 # Uploads
-/uploads/
+/uploads/comprobantes/
 
 # Base de datos (credenciales locales)
 /config/db.php

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 1: Arquitectura e Ingeniería de Software - SalvaTechnology</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;800;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            black: '#060608',
+                            dark: '#0e0e12',
+                            card: '#15151c',
+                            cardLight: '#1e1e28',
+                            orange: '#ff5722',
+                            neon: '#ff6b00',
+                            cyan: '#00f0ff',
+                            glow: 'rgba(255, 87, 34, 0.3)',
+                            text: '#e2e8f0',
+                            muted: '#94a3b8'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        code: ['Fira Code', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .cyber-grid {
+            background-size: 35px 35px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 87, 34, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 87, 34, 0.05) 1px, transparent 1px);
+        }
+
+        .neon-border {
+            box-shadow: 0 0 15px rgba(255, 87, 34, 0.2), inset 0 0 15px rgba(255, 87, 34, 0.05);
+            border: 1px solid rgba(255, 87, 34, 0.5);
+        }
+
+        .neon-border-cyan {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2), inset 0 0 15px rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.5);
+        }
+
+        .neon-text-glow {
+            text-shadow: 0 0 10px rgba(255, 87, 34, 0.6), 0 0 20px rgba(255, 107, 0, 0.4);
+        }
+
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.35s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #08080a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff5722;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-cyber-black text-cyber-text font-sans h-full overflow-hidden select-none cyber-grid flex flex-col justify-between">
+
+    <header class="w-full bg-cyber-dark/90 backdrop-blur border-b border-cyber-orange/20 px-4 md:px-6 py-2.5 flex justify-between items-center z-50 shrink-0">
+        <div class="flex items-center space-x-3">
+            <span class="w-3 h-3 bg-cyber-orange rounded-full animate-ping"></span>
+            <span class="font-code text-xs text-cyber-orange font-bold uppercase tracking-widest hidden sm:inline">
+                SYS_STATUS: ONLINE // SALVATECHNOLOGY ACADEMY
+            </span>
+            <span class="font-code text-xs text-cyber-orange font-bold uppercase tracking-widest sm:hidden">
+                SALVATECH ACADEMY
+            </span>
+        </div>
+        <div class="font-code text-xs text-gray-400 hidden lg:block">
+            MÓDULO 1: FUNDAMENTOS & ANATOMÍA MULTIPLATAFORMA
+        </div>
+        <div class="font-orbitron text-xs text-cyber-orange font-bold border border-cyber-orange/40 px-3 py-1 rounded bg-cyber-orange/10">
+            SLIDE <span id="current-slide-num">01</span> / <span id="total-slides-num">13</span>
+        </div>
+    </header>
+
+    <!-- BARRA DE PROGRESO DE LUZ NEÓN -->
+    <div class="w-full bg-cyber-dark h-1 shrink-0">
+        <div id="progress-bar" class="bg-cyber-orange h-1 shadow-[0_0_12px_#ff5722] transition-all duration-300 w-0"></div>
+    </div>
+
+    <!-- CONTENEDOR PRINCIPAL DE SLIDES -->
+    <main class="flex-1 relative flex items-center justify-center p-3 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full overflow-y-auto">
+
+        <section class="slide active flex-col items-center justify-center text-center space-y-6 w-full my-auto py-4">
+            <div class="inline-block px-4 py-1.5 rounded-full border border-cyber-orange/50 bg-cyber-orange/10 text-cyber-orange font-code text-xs md:text-sm tracking-widest neon-border">
+                &gt; SYSTEM_BOOT: CLASS_01_MASTERCLASS.EXE
+            </div>
+            
+            <h1 class="font-orbitron font-black text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-none uppercase max-w-4xl">
+                Ingeniería de Software <br>
+                <span class="text-cyber-orange neon-text-glow">& Arquitectura de Sistemas</span>
+            </h1>
+
+            <p class="font-code text-gray-300 text-xs sm:text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
+                Decodificando las bases del desarrollo moderno. Entiende la anatomía profunda y los flujos de datos de aplicaciones <span class="text-cyber-cyan font-bold">Web, Desktop y Mobile</span>.
+            </p>
+
+            <div class="w-full max-w-3xl bg-cyber-dark/90 p-4 rounded-xl border border-cyber-orange/40 neon-border my-4">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-2 mb-3 text-[11px] font-code text-gray-400">
+                    <span class="text-cyber-orange font-bold"><i class="fa-solid fa-microchip mr-1"></i> MAPA DE ANATOMÍA DE SOFTWARE</span>
+                    <span>v2.5 - READY</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 text-center text-[10px] md:text-xs font-code">
+                    <div class="bg-cyber-card p-3 rounded border border-gray-800 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-layer-group text-cyber-orange text-xl mb-1"></i>
+                        <span class="text-white font-bold">1. CAPA FRONTEND</span>
+                        <span class="text-gray-400 text-[9px] mt-0.5">Interfaz UI/UX & Eventos</span>
+                    </div>
+                    <div class="bg-cyber-card p-3 rounded border border-gray-800 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-gears text-cyber-cyan text-xl mb-1"></i>
+                        <span class="text-white font-bold">2. CAPA BACKEND</span>
+                        <span class="text-gray-400 text-[9px] mt-0.5">Reglas & Lógica de Negocio</span>
+                    </div>
+                    <div class="bg-cyber-card p-3 rounded border border-gray-800 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-database text-green-400 text-xl mb-1"></i>
+                        <span class="text-white font-bold">3. PERSISTENCIA</span>
+                        <span class="text-gray-400 text-[9px] mt-0.5">Base de Datos Permanente</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-2 flex flex-wrap justify-center gap-3 text-xs font-code text-gray-400">
+                <span class="bg-cyber-card border border-gray-800 px-3 py-1.5 rounded"><i class="fa-solid fa-code text-cyber-orange mr-2"></i>Programa ADD</span>
+                <span class="bg-cyber-card border border-gray-800 px-3 py-1.5 rounded"><i class="fa-solid fa-terminal text-cyber-orange mr-2"></i>By Salvatore Vertichi</span>
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; PROCESAMIENTO DE INFORMACIÓN</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-4xl text-white">1. Dato ➔ Información ➔ Sistema</h2>
+            </div>
+
+            <p class="font-code text-xs sm:text-sm text-gray-300">
+                Un software no opera con "magia": procesa datos desestructurados para convertirlos en decisiones automatizadas.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-code text-xs">
+                <!-- DATO -->
+                <div class="bg-cyber-card p-5 rounded-xl border border-gray-800 hover:border-cyber-orange transition space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-cyber-orange font-bold text-base">[ 1 ] EL DATO</span>
+                        <i class="fa-solid fa-hashtag text-cyber-orange text-xl"></i>
+                    </div>
+                    <p class="text-gray-400 text-[11px]">Un elemento crudo, aislado y sin contexto ni significado propio.</p>
+                    <div class="bg-black p-3 rounded text-center text-cyber-cyan font-mono text-lg font-bold border border-gray-800">
+                        "30"
+                    </div>
+                </div>
+
+                <!-- INFORMACION -->
+                <div class="bg-cyber-card p-5 rounded-xl border border-gray-800 hover:border-cyber-cyan transition space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-cyber-cyan font-bold text-base">[ 2 ] LA INFORMACIÓN</span>
+                        <i class="fa-solid fa-file-invoice text-cyber-cyan text-xl"></i>
+                    </div>
+                    <p class="text-gray-400 text-[11px]">Ese dato enmarcado en un contexto que le otorga un sentido útil.</p>
+                    <div class="bg-black p-3 rounded text-center text-white font-mono text-sm font-bold border border-gray-800">
+                        "30 personas en un aula"
+                    </div>
+                </div>
+
+                <!-- SISTEMA -->
+                <div class="bg-cyber-card p-5 rounded-xl border border-cyber-orange/60 neon-border space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-cyber-orange font-bold text-base">[ 3 ] EL SISTEMA</span>
+                        <i class="fa-solid fa-robot text-cyber-orange text-xl"></i>
+                    </div>
+                    <p class="text-gray-400 text-[11px]">El flujo automatizado que procesa, valida y reacciona a esa información.</p>
+                    <div class="bg-cyber-orange/20 p-3 rounded text-center text-cyber-orange font-mono text-xs font-bold border border-cyber-orange/40">
+                        Si "30 personas" &gt; Capacidad (25) ➔ Bloquear cupos & Notificar
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-black/60 p-3.5 rounded-lg border border-gray-800 font-code text-xs text-gray-300">
+                <span class="text-cyber-orange font-bold">💡 Definición Central:</span> El **Software** es un conjunto de instrucciones lógicas organizadas en un **Sistema** para convertir **Datos** crudos en **Información** valiosa y ejecutar decisiones automatizadas sin fallos humanos.
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; POR QUÉ EXISTE LA INGENIERÍA DE SOFTWARE</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-4xl text-white">2. "Picar Código" vs. Ingeniería de Software</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
+                <!-- Picar Codigo -->
+                <div class="bg-cyber-dark/90 border border-red-900/60 p-5 rounded-xl space-y-3">
+                    <div class="flex items-center space-x-3 text-red-500 font-orbitron font-bold text-base border-b border-red-900/40 pb-2">
+                        <i class="fa-solid fa-code text-xl"></i>
+                        <h3>"Picar Código" (Programar sin Plan)</h3>
+                    </div>
+                    <ul class="space-y-2 font-code text-xs text-gray-400">
+                        <li class="flex items-start"><span class="text-red-500 mr-2">✗</span> Escribir código improvisado directamente sin arquitectura.</li>
+                        <li class="flex items-start"><span class="text-red-500 mr-2">✗</span> Sin pruebas ni seguridad: colapsa al recibir 100 usuarios reales.</li>
+                        <li class="flex items-start"><span class="text-red-500 mr-2">✗</span> Mantenimiento imposible: arreglar un bug genera 3 bugs nuevos.</li>
+                    </ul>
+                </div>
+
+                <!-- Ingenieria de Software -->
+                <div class="bg-cyber-card border border-cyber-orange/60 p-5 rounded-xl space-y-3 neon-border">
+                    <div class="flex items-center space-x-3 text-cyber-orange font-orbitron font-bold text-base border-b border-cyber-orange/40 pb-2">
+                        <i class="fa-solid fa-compass-drafting text-xl"></i>
+                        <h3>Ingeniería de Software</h3>
+                    </div>
+                    <ul class="space-y-2 font-code text-xs text-gray-200">
+                        <li class="flex items-start"><span class="text-cyber-orange mr-2">⚡</span> **Diseñar, construir y mantener** sistemas previsibles.</li>
+                        <li class="flex items-start"><span class="text-cyber-orange mr-2">⚡</span> Sistemas **Escalables** (aguantan miles de usuarios), **Seguros** y **Eficientes**.</li>
+                        <li class="flex items-start"><span class="text-cyber-orange mr-2">⚡</span> Metodología rigurosa impulsada por Inteligencia Artificial (ADD).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CICLO DE VIDA DEL SOFTWARE SDLC -->
+            <div class="bg-cyber-dark p-4 rounded-xl border border-gray-800 space-y-3 font-code">
+                <span class="text-cyber-cyan font-bold text-xs block">&gt; EL CICLO DE VIDA BÁSICO DE CUALQUIER SOFTWARE (SDLC):</span>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-center text-[10px]">
+                    <div class="bg-black p-2.5 rounded border border-gray-800">
+                        <span class="text-cyber-orange font-bold block">1. Requerimientos</span>
+                        <span class="text-gray-400 text-[9px]">Entender el problema</span>
+                    </div>
+                    <div class="bg-black p-2.5 rounded border border-gray-800">
+                        <span class="text-cyber-orange font-bold block">2. Diseño</span>
+                        <span class="text-gray-400 text-[9px]">Arquitectura & DB</span>
+                    </div>
+                    <div class="bg-cyber-orange/20 p-2.5 rounded border border-cyber-orange/50 text-cyber-orange font-bold">
+                        <span>3. Desarrollo</span>
+                        <span class="text-gray-300 text-[9px] block">Construcción ADD</span>
+                    </div>
+                    <div class="bg-black p-2.5 rounded border border-gray-800">
+                        <span class="text-cyber-orange font-bold block">4. Pruebas (QA)</span>
+                        <span class="text-gray-400 text-[9px]">Seguridad & Errores</span>
+                    </div>
+                    <div class="bg-black p-2.5 rounded border border-gray-800">
+                        <span class="text-cyber-orange font-bold block">5. Despliegue</span>
+                        <span class="text-gray-400 text-[9px]">Salida a Producción</span>
+                    </div>
+                    <div class="bg-black p-2.5 rounded border border-gray-800">
+                        <span class="text-cyber-orange font-bold block">6. Mantenimiento</span>
+                        <span class="text-gray-400 text-[9px]">Soporte & Evolución</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; BLOQUE 2: ANATOMÍA DE UN SOFTWARE</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-4xl text-white">El Modelo Cliente - Servidor (La Analogía del Restaurante)</h2>
+            </div>
+
+            <!-- ANALOGÍA RESTAURANTE -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-code">
+                <!-- CLIENTE -->
+                <div class="bg-cyber-card p-4 rounded-xl border border-gray-800 space-y-2">
+                    <div class="flex items-center space-x-2 text-cyber-orange font-bold text-sm">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>EL CLIENTE (Frontend)</span>
+                    </div>
+                    <div class="text-xs text-gray-300 font-bold">Las Mesas, el Menú/Carta y el Mesero</div>
+                    <p class="text-[11px] text-gray-400 leading-relaxed">
+                        Es la interfaz visible. El usuario se sienta, consulta la carta y realiza su pedido (petición). Es todo lo que el usuario ve, toca e interactúa.
+                    </p>
+                </div>
+
+                <!-- SERVIDOR -->
+                <div class="bg-cyber-card p-4 rounded-xl border border-cyber-orange/60 neon-border space-y-2">
+                    <div class="flex items-center space-x-2 text-cyber-cyan font-bold text-sm">
+                        <i class="fa-solid fa-fire-burner"></i>
+                        <span>EL SERVIDOR (Backend)</span>
+                    </div>
+                    <div class="text-xs text-gray-300 font-bold">La Cocina y los Chefs</div>
+                    <p class="text-[11px] text-gray-300 leading-relaxed">
+                        Fuera de la vista del público. Recibe la comanda, valida la receta, aplica las reglas higiénicas/de negocio y cocina la respuesta para el cliente.
+                    </p>
+                </div>
+
+                <!-- BASE DE DATOS -->
+                <div class="bg-cyber-card p-4 rounded-xl border border-gray-800 space-y-2">
+                    <div class="flex items-center space-x-2 text-green-400 font-bold text-sm">
+                        <i class="fa-solid fa-warehouse"></i>
+                        <span>LA BASE DE DATOS</span>
+                    </div>
+                    <div class="text-xs text-gray-300 font-bold">La Despensa y la Nevera</div>
+                    <p class="text-[11px] text-gray-400 leading-relaxed">
+                        El almacén donde están organizados todos los ingredientes (registros). La cocina acude aquí para tomar lo necesario o guardar nuevos suministros.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-black/80 p-3.5 rounded-lg border border-gray-800 text-center font-code text-xs text-gray-300">
+                <span class="text-cyber-orange font-bold">Protocolo de Comunicación:</span> El Mesero (HTTP Request) lleva la orden a la Cocina y regresa a la Mesa con el plato servido (HTTP Response / JSON).
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; BLOQUE 2: EL CLIENTE</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-4xl text-white">Profundizando en el Frontend (La Interfaz)</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-code">
+                <div class="bg-cyber-card p-5 rounded-xl border border-gray-800 space-y-3">
+                    <h3 class="font-orbitron text-cyber-orange font-bold text-base flex items-center">
+                        <i class="fa-solid fa-display mr-2"></i> No es solo "diseño bonito"
+                    </h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">
+                        El Frontend es la capa de **experiencia e interacción de usuario (UI/UX)**. Es la aplicación ejecutándose localmente en la pantalla del cliente (Navegador, Celular o Escritorio).
+                    </p>
+                    <div class="bg-black/60 p-3 rounded border border-gray-800 text-[11px] text-gray-400">
+                        <span class="text-white font-bold block mb-1">Tecnologías Frontend:</span>
+                        HTML5 (Estructura), CSS3/Tailwind (Estilos visuales), JavaScript/React/Flutter (Lógica de pantalla).
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card p-5 rounded-xl border border-gray-800 space-y-3">
+                    <h3 class="font-orbitron text-cyber-cyan font-bold text-base flex items-center">
+                        <i class="fa-solid fa-hand-pointer mr-2"></i> Captura de Eventos
+                    </h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">
+                        ¿Cómo se comunica el ser humano con la máquina? El Frontend escucha continuamente los **eventos del usuario**:
+                    </p>
+                    <ul class="space-y-1.5 text-xs text-gray-300">
+                        <li class="bg-black/50 p-2 rounded border border-gray-800">🖱️ **Clics / Taps:** Presionar un botón de "Comprar".</li>
+                        <li class="bg-black/50 p-2 rounded border border-gray-800">⌨️ **Texto introducido:** Teclear correo y contraseña en formularios.</li>
+                        <li class="bg-black/50 p-2 rounded border border-gray-800">📱 **Gestos:** Swipe táctil, pellizcar zoom o agitar el teléfono.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-cyber-dark p-3.5 rounded-lg border border-cyber-orange/40 font-code text-xs text-center text-cyber-orange">
+                ⚠️ **Regla de Oro de Seguridad:** Nunca te fíes del Frontend. Todo código en el Frontend puede ser manipulado por un usuario malintencionado en su propio dispositivo.
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; BLOQUE 2: EL SERVIDOR</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-4xl text-white">Profundizando en el Backend (Lógica de Negocio)</h2>
+            </div>
+
+            <p class="font-code text-xs text-gray-300">
+                ¿Por qué no podemos poner todo el programa en el Frontend? Por dos pilares innegociables: **Seguridad** y **Capacidad de Procesamiento**.
+            </p>
+
+            <div class="bg-cyber-card p-5 rounded-xl border border-cyber-orange/60 neon-border space-y-4 font-code">
+                <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+                    <span class="text-cyber-orange font-bold text-sm"><i class="fa-solid fa-shield-halved mr-2"></i>CASO DE ESTUDIO: VERIFICACIÓN DE SALDO BANCARIO</span>
+                    <span class="text-[10px] bg-red-900/40 text-red-400 px-2 py-0.5 rounded border border-red-500/40">REGLA CRÍTICA</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-black/60 p-4 rounded border border-red-900/50 space-y-2">
+                        <span class="text-red-400 font-bold block">❌ SI ESTUVIERA EN EL FRONTEND (INSEGURO):</span>
+                        <p class="text-[11px] text-gray-400">
+                            Un usuario abre las herramientas de desarrollador (F12) en Chrome, cambia el saldo visual de <span class="text-white font-mono">$5</span> a <span class="text-green-400 font-mono">$10,000</span> y presiona "Aprobar Compra". ¡El cliente estafaría al sistema!
+                        </p>
+                    </div>
+
+                    <div class="bg-black/60 p-4 rounded border border-green-500/40 space-y-2">
+                        <span class="text-green-400 font-bold block">✅ PROCESADO EN EL BACKEND (SEGURO):</span>
+                        <p class="text-[11px] text-gray-300">
+                            El cliente solo solicita *"Quiero comprar un producto de $100"*. El Servidor revisa el saldo real oculto en la Base de Datos. Si `Saldo &lt; 100`, **rechaza la transacción de inmediato**. El usuario jamás puede alterar esta regla.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="text-center text-[11px] text-gray-400 pt-1">
+                    **Lógica de Negocio:** Algoritmos de cobro, encriptación de claves, cálculo de impuestos, envíos de emails y autenticación de identidad.
+                </div>
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; BLOQUE 2: PERSISTENCIA</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-4xl text-white">La Base de Datos: RAM vs. Almacenamiento Permanente</h2>
+            </div>
+
+            <p class="font-code text-xs text-gray-300">
+                ¿Qué significa **Persistencia**? Es la capacidad de conservar los datos intactos para que no se borren cuando la computadora, la app o el celular se apagan o se reinician.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 font-code text-xs">
+                <!-- RAM -->
+                <div class="bg-cyber-dark p-5 rounded-xl border border-gray-800 space-y-3">
+                    <div class="flex justify-between items-center text-red-400 font-bold text-sm">
+                        <span>⚡ MEMORIA RAM (Volátil / Temporal)</span>
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <ul class="space-y-2 text-gray-400 text-[11px]">
+                        <li>• Ultra rápida, pero se **borra por completo** al cortar la energía.</li>
+                        <li>• Almacena variables temporales mientras la app está abierta (ej: la pestaña activa del navegador).</li>
+                        <li>• Si el celular se apaga, todo lo que estaba solo en RAM desaparece.</li>
+                    </ul>
+                </div>
+
+                <!-- PERSISTENCIA -->
+                <div class="bg-cyber-card p-5 rounded-xl border border-cyber-orange/60 neon-border space-y-3">
+                    <div class="flex justify-between items-center text-green-400 font-bold text-sm">
+                        <span>💾 BASE DE DATOS (Persistente / Permanente)</span>
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <ul class="space-y-2 text-gray-200 text-[11px]">
+                        <li>• Escribe la información en almacenamiento físico (SSD/Disco Duro/Cloud).</li>
+                        <li>• Guarda usuarios, claves encriptadas, historial de compras y configuraciones.</li>
+                        <li>• **Modelos:** Relacionales (SQL: PostgreSQL, MySQL) y No Relacionales (NoSQL: MongoDB).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-black p-3.5 rounded-lg border border-gray-800 text-center font-code text-xs text-gray-300">
+                <span class="text-cyber-orange font-bold">Resumen de Arquitectura:</span> Frontend muestra la UI ➔ Backend evalúa las Reglas ➔ Base de Datos guarda la Persistencia.
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; BLOQUE 3: ANATOMÍA DE PLATAFORMAS</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-3xl text-white">Plataforma A: Desarrollo Web 🌐</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-code text-xs">
+                <!-- Cómo Funciona & Arquitectura -->
+                <div class="bg-cyber-card p-5 rounded-xl border border-gray-800 space-y-3">
+                    <span class="text-cyber-orange font-bold text-sm block border-b border-gray-800 pb-2">⚙️ FUNCIONAMIENTO & ARQUITECTURA</span>
+                    <p class="text-gray-300 leading-relaxed">
+                        Vive en un servidor remoto y se ejecuta dentro de un navegador web (Chrome, Safari, Edge, Firefox).
+                    </p>
+                    <ul class="space-y-1.5 text-gray-400 text-[11px]">
+                        <li>1. El usuario escribe un dominio URL en el navegador.</li>
+                        <li>2. Descarga archivos remotos: **HTML, CSS y JavaScript**.</li>
+                        <li>3. Se comunica con el Backend usando el protocolo **HTTP / HTTPS**.</li>
+                    </ul>
+                </div>
+
+                <!-- Ventajas y Limitaciones -->
+                <div class="bg-cyber-dark p-5 rounded-xl border border-gray-800 space-y-3">
+                    <span class="text-cyber-cyan font-bold text-sm block border-b border-gray-800 pb-2">⚖️ BALANCE TÉCNICO</span>
+                    
+                    <div class="space-y-2">
+                        <div class="text-green-400 font-bold">🟢 Ventajas:</div>
+                        <p class="text-gray-300 text-[11px]">Acceso universal desde cualquier dispositivo con internet. **0 Instalación requerida** por el cliente.</p>
+
+                        <div class="text-red-400 font-bold pt-1">🔴 Limitaciones:</div>
+                        <p class="text-gray-400 text-[11px]">Dependencia total de conexión a internet. Acceso muy restringido al hardware local por políticas de seguridad del navegador.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-black/60 p-3 rounded border border-gray-800 font-code text-xs text-gray-400">
+                <span class="text-cyber-orange font-bold">Casos de Uso Ideales:</span> E-commerce, plataformas de educación, portales bancarios y SaaS globales.
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; BLOQUE 3: ANATOMÍA DE PLATAFORMAS</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-3xl text-white">Plataforma B: Desarrollo Desktop 💻</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-code text-xs">
+                <!-- Cómo Funciona & Arquitectura -->
+                <div class="bg-cyber-card p-5 rounded-xl border border-gray-800 space-y-3">
+                    <span class="text-cyber-orange font-bold text-sm block border-b border-gray-800 pb-2">⚙️ FUNCIONAMIENTO & ARQUITECTURA</span>
+                    <p class="text-gray-300 leading-relaxed">
+                        Se instala e integra directamente con el Sistema Operativo (Windows, macOS, Linux).
+                    </p>
+                    <ul class="space-y-1.5 text-gray-400 text-[11px]">
+                        <li>• Aprovecha la potencia bruta de la **CPU, GPU y Memoria RAM** del PC.</li>
+                        <li>• Puede funcionar 100% **Offline** almacenando datos locales en SQLite o archivos JSON.</li>
+                    </ul>
+                </div>
+
+                <!-- Ventajas y Limitaciones -->
+                <div class="bg-cyber-dark p-5 rounded-xl border border-gray-800 space-y-3">
+                    <span class="text-cyber-cyan font-bold text-sm block border-b border-gray-800 pb-2">⚖️ BALANCE TÉCNICO</span>
+                    
+                    <div class="space-y-2">
+                        <div class="text-green-400 font-bold">🟢 Ventajas:</div>
+                        <p class="text-gray-300 text-[11px]">Acceso total al hardware: Lectores de código USB, impresoras fiscales térmicas, escáneres y discos duros ultrarrápidos.</p>
+
+                        <div class="text-red-400 font-bold pt-1">🔴 Limitaciones:</div>
+                        <p class="text-gray-400 text-[11px]">Requiere instalación manual en cada equipo y despliegue de actualizaciones máquina por máquina.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-black/60 p-3 rounded border border-gray-800 font-code text-xs text-gray-400">
+                <span class="text-cyber-orange font-bold">Casos de Uso Ideales:</span> Puntos de Venta (POS) en cajas registradoras, editores de video/3D, sistemas médicos industriales.
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; BLOQUE 3: ANATOMÍA DE PLATAFORMAS</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-3xl text-white">Plataforma C: Desarrollo Móvil 📱</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-code text-xs">
+                <!-- Funcionamiento & Ciclo de Vida -->
+                <div class="bg-cyber-card p-5 rounded-xl border border-gray-800 space-y-3">
+                    <span class="text-cyber-orange font-bold text-sm block border-b border-gray-800 pb-2">📱 RECURSOS & CICLO DE VIDA</span>
+                    <p class="text-gray-300 leading-relaxed">
+                        Instalada en smartphones (Android / iOS). Diseñada para **recursos limitados (batería y RAM)**.
+                    </p>
+                    <div class="space-y-1 text-[11px] text-gray-400">
+                        <div class="bg-black p-2 rounded">• **Primer Plano:** Usuario interactuando directamente.</div>
+                        <div class="bg-black p-2 rounded">• **Segundo Plano:** Minimizada ahorrando energía.</div>
+                        <div class="bg-black p-2 rounded">• **Destruida:** S.O. la liquida para liberar memoria.</div>
+                    </div>
+                </div>
+
+                <!-- Ventajas & Limitaciones -->
+                <div class="bg-cyber-dark p-5 rounded-xl border border-gray-800 space-y-3">
+                    <span class="text-cyber-cyan font-bold text-sm block border-b border-gray-800 pb-2">⚖️ BALANCE TÉCNICO</span>
+                    
+                    <div class="space-y-2">
+                        <div class="text-green-400 font-bold">🟢 Ventajas:</div>
+                        <p class="text-gray-300 text-[11px]">Acceso nativo a sensores: **GPS, Cámara, Bluetooth, Acelerómetro y Notificaciones Push**.</p>
+
+                        <div class="text-red-400 font-bold pt-1">🔴 Limitaciones:</div>
+                        <p class="text-gray-400 text-[11px]">Restricciones estrictas y comisiones de las tiendas oficializadas (**Google Play** y **Apple App Store**).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-black/60 p-3 rounded border border-gray-800 font-code text-xs text-gray-400">
+                <span class="text-cyber-orange font-bold">Casos de Uso Ideales:</span> Apps de Delivery, redes sociales, transporte GPS, billeteras digitales móviles.
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="text-center md:text-left">
+                <span class="font-code text-xs text-cyber-orange tracking-widest uppercase">&gt; BLOQUE 4: DESMONTANDO UN SOFTWARE REAL</span>
+                <h2 class="font-orbitron font-bold text-2xl md:text-3xl text-white">Caso Práctico: Sistema de Inventario & Ventas</h2>
+            </div>
+
+            <p class="font-code text-xs text-gray-300">
+                Las tres plataformas no compiten entre sí: **se complementan** dentro del mismo ecosistema empresarial.
+            </p>
+
+            <div class="bg-cyber-dark p-5 rounded-xl border border-cyber-orange/60 neon-border space-y-4 font-code">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    
+                    <!-- DESKTOP CAJERO -->
+                    <div class="bg-cyber-card p-4 rounded-xl border border-gray-800 space-y-2">
+                        <div class="flex items-center space-x-2 text-cyber-orange font-bold">
+                            <i class="fa-solid fa-desktop"></i>
+                            <span>1. DESKTOP (El Cajero)</span>
+                        </div>
+                        <p class="text-[11px] text-gray-300 leading-relaxed">
+                            El empleado en la tienda usa la app de escritorio para escanear productos a toda velocidad con un **lector USB** e imprimir el ticket fiscal sin demoras.
+                        </p>
+                    </div>
+
+                    <!-- WEB DUENO -->
+                    <div class="bg-cyber-card p-4 rounded-xl border border-gray-800 space-y-2">
+                        <div class="flex items-center space-x-2 text-cyber-cyan font-bold">
+                            <i class="fa-solid fa-globe"></i>
+                            <span>2. WEB (El Dueño)</span>
+                        </div>
+                        <p class="text-[11px] text-gray-300 leading-relaxed">
+                            El dueño abre Chrome en su laptop personal desde cualquier lugar del mundo para ver el **Dashboard de ventas en tiempo real** e inventario general.
+                        </p>
+                    </div>
+
+                    <!-- MOBILE REPARTIDOR -->
+                    <div class="bg-cyber-card p-4 rounded-xl border border-gray-800 space-y-2">
+                        <div class="flex items-center space-x-2 text-green-400 font-bold">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                            <span>3. MOBILE (El Repartidor)</span>
+                        </div>
+                        <p class="text-[11px] text-gray-300 leading-relaxed">
+                            El chofer abre la app móvil para ver la ruta óptima en **GPS** hasta la casa del cliente y solicitar su **firma digital** al entregar el pedido.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- UNIFIED DB/BACKEND NOTE -->
+                <div class="bg-black/90 p-3.5 rounded border border-cyber-orange/50 text-center text-xs">
+                    <span class="text-cyber-orange font-bold">🔥 PUNTO CLAVE DE ARQUITECTURA:</span> Las 3 aplicaciones totalmente distintas conversan con la **misma Capa Backend** y consultan la **misma Base de Datos Cloud**.
+                </div>
+            </div>
+        </section>
+
+        <section class="slide flex-col justify-center space-y-5 w-full my-auto py-2">
+            <div class="bg-cyber-card p-6 md:p-8 rounded-xl border border-cyber-orange/80 neon-border space-y-5 max-w-4xl mx-auto w-full font-code">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                    <span class="text-xs text-cyber-orange tracking-widest uppercase">&gt; BLOQUE 5: ASIGNACIÓN PRÁCTICA DE LA SEMANA</span>
+                    <span class="font-orbitron text-xs text-white bg-cyber-orange/20 px-3 py-1 rounded border border-cyber-orange/50">QUEST #01</span>
+                </div>
+
+                <h2 class="font-orbitron font-black text-xl md:text-3xl text-white">Desmontaje de un Software de Tu Vida Diaria</h2>
+
+                <p class="text-xs md:text-sm text-gray-300">
+                    Elige una aplicación que utilices todos los días (**Instagram, Spotify, MercadoLibre, Uber o WhatsApp**) y documenta en tu cuaderno/documento:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div class="bg-black/60 p-3.5 rounded border border-gray-800 space-y-1">
+                        <span class="text-cyber-orange font-bold block">[ 1 ] LA PERSISTENCIA</span>
+                        <p class="text-gray-400 text-[11px]">¿Qué 5 datos específicos crees que guarda esa app sí o sí en su Base de Datos permanente?</p>
+                    </div>
+                    <div class="bg-black/60 p-3.5 rounded border border-gray-800 space-y-1">
+                        <span class="text-cyber-cyan font-bold block">[ 2 ] LAS CAPAS</span>
+                        <p class="text-gray-400 text-[11px]">Identifica 2 funciones que ocurran en el Frontend y 2 validaciones que pertenezcan al Backend.</p>
+                    </div>
+                    <div class="bg-black/60 p-3.5 rounded border border-gray-800 space-y-1">
+                        <span class="text-green-400 font-bold block">[ 3 ] LAS PLATAFORMAS</span>
+                        <p class="text-gray-400 text-[11px]">Si la usas en Web, Desktop o Móvil, ¿qué diferencias operativas o de sensores notas entre ellas?</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-cyber-orange text-center font-bold pt-2">
+                    ⚡ Trae tus respuestas preparadas para analizarlas y auditarlas en nuestra próxima Clase en Vivo.
+                </p>
+            </div>
+        </section>
+
+        <section class="slide flex-col items-center justify-center text-center space-y-5 w-full my-auto py-2 font-code">
+            <div class="w-14 h-14 bg-cyber-orange/10 rounded-full flex items-center justify-center border border-cyber-orange text-cyber-orange text-2xl neon-border">
+                <i class="fa-solid fa-flag-checkered"></i>
+            </div>
+
+            <h1 class="font-orbitron font-black text-2xl md:text-4xl text-white uppercase">
+                &gt; CLASS_01_COMPLETED.
+            </h1>
+
+            <div class="w-full max-w-3xl bg-cyber-dark p-5 rounded-xl border border-gray-800 text-left space-y-3">
+                <span class="text-cyber-orange font-bold text-xs block">&gt; RESUMEN EJECUTIVO (RECAP DE LA CLASE):</span>
+                <ul class="space-y-1.5 text-xs text-gray-300">
+                    <li>1. El **Software** es lógica estructurada para transformar datos crudos en automatizaciones.</li>
+                    <li>2. Todo software robusto tiene **Frontend** (UI/Eventos), **Backend** (Reglas) y **Base de Datos** (Persistencia).</li>
+                    <li>3. **Web, Desktop y Mobile** no compiten: se integran según los requerimientos del cliente.</li>
+                </ul>
+            </div>
+
+            <div class="pt-2 flex flex-col sm:flex-row gap-3 text-xs">
+                <span class="bg-cyber-card px-4 py-2.5 rounded border border-gray-800 text-gray-300"><i class="fa-solid fa-book-open text-cyber-orange mr-2"></i>1. Lee el Ebook PDF Módulo 1</span>
+                <span class="bg-cyber-card px-4 py-2.5 rounded border border-gray-800 text-gray-300"><i class="fa-solid fa-pen-to-square text-cyber-orange mr-2"></i>2. Completa la Quest #01</span>
+                <span class="bg-cyber-orange/20 px-4 py-2.5 rounded border border-cyber-orange text-cyber-orange font-bold"><i class="fa-solid fa-users text-cyber-orange mr-2"></i>3. ¡Nos vemos en la Clase en Vivo!</span>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="w-full bg-cyber-dark/90 border-t border-cyber-orange/20 px-4 md:px-6 py-3 flex justify-between items-center z-50 shrink-0">
+        <button id="prev-btn" onclick="prevSlide()" class="px-4 py-2 rounded bg-cyber-card border border-gray-800 text-gray-300 hover:text-white hover:border-cyber-orange transition font-code text-xs flex items-center space-x-2">
+            <i class="fa-solid fa-chevron-left"></i>
+            <span class="hidden sm:inline">Anterior</span>
+        </button>
+
+        <div class="font-code text-[11px] text-gray-500 hidden md:block">
+            Navega con flechas <kbd class="bg-black px-2 py-0.5 rounded text-cyber-orange font-bold border border-gray-800">←</kbd> <kbd class="bg-black px-2 py-0.5 rounded text-cyber-orange font-bold border border-gray-800">→</kbd> o Barra Espaciadora
+        </div>
+
+        <button id="next-btn" onclick="nextSlide()" class="px-4 py-2 rounded bg-cyber-orange text-black font-bold hover:bg-cyber-neon transition font-code text-xs flex items-center space-x-2 shadow-[0_0_10px_#ff5722]">
+            <span class="hidden sm:inline">Siguiente</span>
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides-num').innerText = totalSlides < 10 ? '0' + totalSlides : totalSlides;
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                }
+            });
+
+            // Actualizar número en pantalla
+            const displayNum = currentSlide + 1;
+            document.getElementById('current-slide-num').innerText = displayNum < 10 ? '0' + displayNum : displayNum;
+
+            // Actualizar barra de progreso
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+
+            // Estado visual de botones
+            document.getElementById('prev-btn').style.opacity = currentSlide === 0 ? '0.4' : '1';
+            document.getElementById('next-btn').style.opacity = currentSlide === totalSlides - 1 ? '0.4' : '1';
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Navegación con Teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Soporte Swipe táctil para dispositivos móviles
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            if (touchstartX - touchendX > 50) nextSlide();
+            if (touchendX - touchstartX > 50) prevSlide();
+        });
+
+        // Inicializar presentación
+        updateSlide();
+    </script>
+</body>
+</html>
