@@ -200,23 +200,31 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                         }
                         $ebookPath = 'uploads/ebooks/clase-' . $claseNum . '.pdf';
                         $diapoPath = 'uploads/diapositivas/clase-' . $claseNum . '.html';
+                        $interactivePath = 'uploads/interactive/clase-' . $claseNum . '.html';
                         $tieneEbook = $claseNum && file_exists(__DIR__ . '/' . $ebookPath);
                         $tieneDiapo = $claseNum && file_exists(__DIR__ . '/' . $diapoPath);
+                        $tieneInteractive = $claseNum && file_exists(__DIR__ . '/' . $interactivePath);
                         ?>
-                        <?php if ($tieneEbook || $tieneDiapo): ?>
+                        <?php if ($tieneEbook || $tieneDiapo || $tieneInteractive): ?>
                         <div class="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
                             <h4 class="text-accent font-['Orbitron'] text-xs uppercase tracking-wider mb-3">📁 Recursos de la Clase</h4>
                             <div class="flex flex-wrap gap-3">
+                                <?php if ($tieneInteractive): ?>
+                                <button onclick="abrirModal('interactive-modal')" class="btn-continuar text-xs">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg>
+                                    🎮 E-Book Interactivo
+                                </button>
+                                <?php endif; ?>
                                 <?php if ($tieneEbook): ?>
                                 <button onclick="abrirModal('ebook-modal')" class="btn-continuar text-xs">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    📖 E-Book de la Clase
+                                    📖 PDF de la Clase
                                 </button>
                                 <?php endif; ?>
                                 <?php if ($tieneDiapo): ?>
                                 <button onclick="abrirModal('diapo-modal')" class="btn-continuar text-xs">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                                    📊 Diapositivas de la Clase
+                                    📊 Diapositivas
                                 </button>
                                 <?php endif; ?>
                             </div>
@@ -340,6 +348,19 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
         </div>
     </div>
 
+    <!-- Modal E-Book Interactivo (pantalla completa) -->
+    <div id="interactive-modal" class="hidden fixed inset-0 z-50" style="background:rgba(0,0,0,1);">
+        <div class="relative w-full h-full flex flex-col">
+            <div class="flex justify-between items-center p-3 bg-black border-b border-white/10 z-10">
+                <h3 class="font-['Orbitron'] text-white text-sm font-bold">🎮 E-Book Interactivo</h3>
+                <button onclick="cerrarModal('interactive-modal')" class="text-stone-500 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div class="flex-1">
+                <iframe src="<?php echo $interactivePath; ?>" class="w-full h-full" style="border:none;"></iframe>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Diapositivas -->
     <div id="diapo-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.9);backdrop-filter:blur(5px);">
         <div class="relative w-full max-w-5xl h-[90vh] bg-[#111] rounded-2xl border border-accent/40 overflow-hidden flex flex-col">
@@ -362,6 +383,9 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
         document.getElementById(id).classList.add('hidden');
         document.body.style.overflow = '';
     }
+    window.addEventListener('message', function(e) {
+        if (e.data === 'close-modal') cerrarModal('interactive-modal');
+    });
     document.querySelectorAll('[id$="-modal"]').forEach(function(el) {
         el.addEventListener('click', function(e) {
             if (e.target === this) cerrarModal(this.id);
