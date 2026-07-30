@@ -56,6 +56,7 @@ $planes = $config['planes'];
     </script>
 </head>
 <body class="dashboard-body">
+    <?php require 'partials/matrix-rain.php'; ?>
     <div class="scanlines"></div>
 
     <div class="dashboard-layout">
@@ -199,5 +200,6 @@ $planes = $config['planes'];
         </main>
         <?php require 'partials/chatbot.php'; ?>
     </div>
+    <script src="js/matrix-rain.js"></script>
 </body>
 </html>

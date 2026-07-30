@@ -28,6 +28,7 @@ $pagoPendiente = $stmt->fetch();
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>
 </head>
 <body class="dashboard-body">
+    <?php require 'partials/matrix-rain.php'; ?>
     <div class="scanlines"></div>
     <div class="dashboard-layout">
         <aside class="dash-sidebar">
@@ -113,5 +114,6 @@ $pagoPendiente = $stmt->fetch();
         </main>
         <?php require 'partials/chatbot.php'; ?>
     </div>
+    <script src="js/matrix-rain.js"></script>
 </body>
 </html>
