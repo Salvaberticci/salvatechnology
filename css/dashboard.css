@@ -853,6 +853,18 @@ body.dashboard-body {
     color: #ddd;
 }
 
+.msg-text code {
+    background: rgba(0,0,0,0.5);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    color: #ffb25e;
+}
+
+.msg-text strong {
+    color: #fff;
+}
+
 .msg-time {
     font-size: 0.55rem;
     color: #555;

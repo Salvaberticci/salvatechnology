@@ -24,7 +24,7 @@
         <button class="chatbot-send" id="chatbotSend">▶</button>
     </div>
     <div class="chatbot-footer">
-        <span class="text-stone-600 text-[9px] font-mono">SALVA AI · Powered by Groq</span>
+        <span class="text-stone-600 text-[9px] font-mono">SALVA AI · Asistente Inteligente</span>
     </div>
 </aside>
 <button class="chatbot-reopen" id="chatbotReopen" title="Abrir SALVA AI" style="display:none;">🧠</button>
@@ -72,6 +72,20 @@
         messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
+    function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function formatReply(text) {
+        var html = escapeHtml(text);
+        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+        html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\n/g, '<br>');
+        return html;
+    }
+
     function addMessage(text, role) {
         var wrapper = document.createElement('div');
         wrapper.className = 'chatbot-msg chatbot-msg-' + role;
@@ -85,7 +99,7 @@
 
         var msgText = document.createElement('div');
         msgText.className = 'msg-text';
-        msgText.textContent = text;
+        msgText.innerHTML = role === 'ai' ? formatReply(text) : escapeHtml(text);
 
         var msgTime = document.createElement('div');
         msgTime.className = 'msg-time';
