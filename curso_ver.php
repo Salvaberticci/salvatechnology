@@ -173,7 +173,7 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                                 }
                                 ?>
                                 <iframe src="https://www.youtube.com/embed/<?php echo $videoId; ?>" frameborder="0" allowfullscreen></iframe>
-                            <?php elseif (strpos($leccionActual['video_url'], 'bunny.net') !== false || strpos($leccionActual['video_url'], ' Bunny') !== false): ?>
+                            <?php elseif (strpos($leccionActual['video_url'], 'bunny.net') !== false || strpos($leccionActual['video_url'], 'mediadelivery.net') !== false): ?>
                                 <iframe src="<?php echo htmlspecialchars($leccionActual['video_url']); ?>" frameborder="0" allowfullscreen></iframe>
                             <?php else: ?>
                                 <video controls>
