@@ -41,7 +41,16 @@
                 </ul>
             </div>
             <div class="search-bar">
-                <input type="text" placeholder="Pregúntame lo que sea...">
+                <input type="text" id="ai-chat-input" placeholder="Pregúntame lo que sea..." autocomplete="off">
+                <div class="chat-panel" id="ai-chat-panel">
+                    <div class="chat-header">
+                        <span class="chat-title"><span class="chat-dot"></span> SALVA AI — Asistente de la Academia</span>
+                        <button class="chat-close" id="ai-chat-close" aria-label="Cerrar">&times;</button>
+                    </div>
+                    <div class="chat-messages" id="ai-chat-messages"></div>
+                    <div class="chat-typing" id="ai-chat-typing">SALVA AI está escribiendo<span class="typing-dots">...</span></div>
+                    <div class="chat-hint">Pulsa Enter para enviar · Esc para cerrar</div>
+                </div>
             </div>
         </div>
     </div>
@@ -60,6 +69,10 @@
     <script src="js/audio-manager.js"></script>
     <script type="module" src="js/loader.js"></script>
     <script src="js/menu-sound.js"></script>
+    <script>
+        window.SALVA_CHAT_API = "<?= BASE_URL ?>api/chatbot.php";
+    </script>
+    <script type="module" src="js/portal-chat.js"></script>
 
     <!-- Modal de Contacto -->
     <div id="contact-modal" class="modal-overlay">
