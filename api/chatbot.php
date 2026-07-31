@@ -41,53 +41,83 @@ $messages = array_merge(
     [['role' => 'user', 'content' => $message]]
 );
 
-$payload = json_encode([
-    'model'       => $config['groq_model'],
-    'messages'    => $messages,
-    'temperature' => 0.7,
-    'max_tokens'  => 1024,
-]);
+function chatbot_llamar_proveedor(array $proveedor, array $messages): array
+{
+    $payload = json_encode([
+        'model'       => $proveedor['modelo'],
+        'messages'    => $messages,
+        'temperature' => 0.7,
+        'max_tokens'  => $proveedor['max_tokens'] ?? 1024,
+    ]);
 
-$ch = curl_init('https://api.groq.com/openai/v1/chat/completions');
-curl_setopt_array($ch, [
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST           => true,
-    CURLOPT_POSTFIELDS     => $payload,
-    CURLOPT_HTTPHEADER     => [
-        'Content-Type: application/json',
-        'Authorization: Bearer ' . $config['groq_api_key'],
-        'User-Agent: Salvatechnology/1.0',
-    ],
-    CURLOPT_TIMEOUT        => 30,
-    CURLOPT_CONNECTTIMEOUT => 10,
-    CURLOPT_SSL_VERIFYPEER => true,
-]);
+    $ch = curl_init($proveedor['url']);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => $payload,
+        CURLOPT_HTTPHEADER     => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $proveedor['api_key'],
+            'User-Agent: Salvatechnology/1.0',
+        ],
+        CURLOPT_TIMEOUT        => 30,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_SSL_VERIFYPEER => true,
+    ]);
 
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$curlError = curl_error($ch);
-curl_close($ch);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
 
-if ($curlError) {
-    echo json_encode(['error' => 'Error de conexión con Groq: ' . $curlError]);
-    exit;
+    if ($curlError) {
+        return ['ok' => false, 'error' => 'Error de conexión: ' . $curlError];
+    }
+
+    $data = json_decode($response, true);
+
+    if ($httpCode !== 200) {
+        $errorMsg = $data['error']['message'] ?? $data['error'] ?? 'Error HTTP ' . $httpCode;
+        return ['ok' => false, 'error' => $errorMsg];
+    }
+
+    if (empty($data['choices'][0]['message']['content'])) {
+        return ['ok' => false, 'error' => 'Respuesta vacía'];
+    }
+
+    return ['ok' => true, 'reply' => $data['choices'][0]['message']['content']];
 }
 
-$data = json_decode($response, true);
+if (empty($_SESSION['chatbot_ultimo_proveedor'])) {
+    $_SESSION['chatbot_ultimo_proveedor'] = 0;
+}
 
-if ($httpCode !== 200) {
-    $errorMsg = $data['error']['message'] ?? 'Error HTTP ' . $httpCode;
-    if (stripos($errorMsg, 'rate limit') !== false) {
-        echo json_encode(['reply' => "⏳ ¡Uy! SALVA AI alcanzó el límite de consultas del día por ahora. Descansa un par de horas y vuelve a intentarlo, o escribe al profesor por WhatsApp si necesitas ayuda urgente. ¡Seguimos disponibles! 🚀"]);
+$inicio = (int) $_SESSION['chatbot_ultimo_proveedor'];
+$fallback = 1 - $inicio;
+$orden = $config['providers'];
+$ordenIntentos = [$orden[$inicio], $orden[$fallback]];
+
+$errores = [];
+foreach ($ordenIntentos as $proveedor) {
+    $resultado = chatbot_llamar_proveedor($proveedor, $messages);
+    if ($resultado['ok']) {
+        $_SESSION['chatbot_ultimo_proveedor'] = $fallback;
+        echo json_encode(['reply' => $resultado['reply']]);
         exit;
     }
-    echo json_encode(['error' => 'Groq rechazó la solicitud: ' . $errorMsg]);
-    exit;
+    $errores[] = $proveedor['nombre'] . ': ' . $resultado['error'];
 }
 
-if (empty($data['choices'][0]['message']['content'])) {
-    echo json_encode(['error' => 'Groq devolvió una respuesta vacía']);
-    exit;
+$todosRateLimit = true;
+foreach ($errores as $e) {
+    if (stripos($e, 'rate limit') === false) {
+        $todosRateLimit = false;
+        break;
+    }
 }
 
-echo json_encode(['reply' => $data['choices'][0]['message']['content']]);
+if ($todosRateLimit) {
+    echo json_encode(['reply' => "⏳ ¡Uy! SALVA AI alcanzó el límite de consultas del día en ambos proveedores por ahora. Descansa un par de horas y vuelve a intentarlo, o escribe al profesor por WhatsApp si necesitas ayuda urgente. ¡Seguimos disponibles! 🚀"]);
+} else {
+    echo json_encode(['error' => 'SALVA AI no pudo responder: ' . implode(' | ', $errores)]);
+}
