@@ -110,7 +110,7 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
         .lesson-content a { color: var(--accent); text-decoration: underline; }
     </style>
 </head>
-<body class="dashboard-body">
+<body class="dashboard-body" data-chatbot-collapsed="1">
     <div class="scanlines"></div>
     <div class="dashboard-layout">
         <aside class="dash-sidebar">

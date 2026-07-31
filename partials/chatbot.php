@@ -56,6 +56,10 @@
         }
     }
 
+    if (document.body.dataset.chatbotCollapsed === '1') {
+        setState(true);
+    }
+
     toggle.addEventListener('click', function() {
         setState(!chatbot.classList.contains('collapsed'));
     });
