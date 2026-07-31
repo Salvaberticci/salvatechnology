@@ -87,11 +87,8 @@ function chatbot_llamar_proveedor(array $proveedor, array $messages): array
 
     $reply = $data['choices'][0]['message']['content'];
     $finishReason = $data['choices'][0]['finish_reason'] ?? null;
-    if ($finishReason === 'length') {
-        $reply .= "\n\n*(respuesta cortada por el límite — escribe \"continúa\" para seguir)*";
-    }
 
-    return ['ok' => true, 'reply' => $reply];
+    return ['ok' => true, 'reply' => $reply, 'truncado' => ($finishReason === 'length')];
 }
 
 if (empty($_SESSION['chatbot_ultimo_proveedor'])) {
@@ -105,10 +102,28 @@ $ordenIntentos = [$orden[$inicio], $orden[$fallback]];
 
 $errores = [];
 foreach ($ordenIntentos as $proveedor) {
-    $resultado = chatbot_llamar_proveedor($proveedor, $messages);
-    if ($resultado['ok']) {
+    $mensajesContinuos = $messages;
+    $respuestaCompleta = '';
+    $cortado = true;
+    $segmentos = 0;
+
+    while ($cortado && $segmentos < 3) {
+        $segmentos++;
+        $resultado = chatbot_llamar_proveedor($proveedor, $mensajesContinuos);
+        if (!$resultado['ok']) {
+            break;
+        }
+        $respuestaCompleta .= $resultado['reply'];
+        if (!empty($resultado['truncado'])) {
+            $mensajesContinuos[] = ['role' => 'assistant', 'content' => $resultado['reply']];
+            $mensajesContinuos[] = ['role' => 'user', 'content' => 'Continúa exactamente desde donde te quedaste, sin repetir nada de lo ya dicho.'];
+        }
+        $cortado = !empty($resultado['truncado']);
+    }
+
+    if (trim($respuestaCompleta) !== '') {
         $_SESSION['chatbot_ultimo_proveedor'] = $fallback;
-        echo json_encode(['reply' => $resultado['reply']]);
+        echo json_encode(['reply' => trim($respuestaCompleta)]);
         exit;
     }
     $errores[] = $proveedor['nombre'] . ': ' . $resultado['error'];

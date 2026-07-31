@@ -203,7 +203,7 @@ function chatbot_core(): string
             $partes[] = "# " . $c['titulo'] . "\n" . trim($c['contenido']);
         }
     }
-    $partes[] = "# Uso del Contexto\n\nPara responder sobre los cursos, clases, la plataforma, planes de suscripción, pagos o sobre Salvatore, usa ÚNICAMENTE el bloque \"## CONTEXTO RELEVANTE PARA ESTA PREGUNTA\" incluido más abajo en este mensaje. Si la respuesta no está en ese contexto, responde con conocimiento técnico general de programación o indica amablemente que esa información no está publicada todavía.";
+    $partes[] = "# Uso del Contexto\n\nPara responder sobre los cursos, clases, la plataforma, planes de suscripción, pagos o sobre Salvatore, usa ÚNICAMENTE el bloque \"## CONTEXTO RELEVANTE PARA ESTA PREGUNTA\" incluido más abajo en este mensaje. Si la respuesta no está en ese contexto, responde con conocimiento técnico general de programación o indica amablemente que esa información no está publicada todavía.\n\n# Concisión Obligatoria\n\n- Responde SIEMPRE de forma breve y directa: máximo 150-200 palabras por mensaje.\n- Usa listas cortas (3-5 puntos) y párrafos de 1-2 líneas.\n- Ve al grano en la primera frase; no repitas la pregunta ni des intro largas.\n- Si la respuesta sería muy larga (ej. enumerar muchas clases), resume los puntos clave y ofrece ampliar: \"¿Quieres que te liste las clases X en detalle?\".\n- NUNCA dejes una respuesta a medias: si no alcanzas a terminar, recorta el detalle y termina con la idea principal completa.";
     return implode("\n\n", $partes);
 }
 
