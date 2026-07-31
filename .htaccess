@@ -4,6 +4,7 @@ RewriteEngine On
 # Specific parameterized routes (must be before -d check)
 RewriteRule ^curso/([0-9]+)/leccion/([0-9]+)/?$ curso_ver.php?id=$1&leccion=$2 [L,QSA]
 RewriteRule ^curso/([0-9]+)/?$ curso_ver.php?id=$1 [L,QSA]
+RewriteRule ^curso-info/([0-9]+)/?$ curso_landing.php?id=$1 [L,QSA]
 RewriteRule ^inscribir/([0-9]+)/?$ curso_inscribir.php?id=$1 [L,QSA]
 RewriteRule ^profesor/lecciones/([0-9]+)/?$ profesor/lecciones.php?curso_id=$1 [L,QSA]
 

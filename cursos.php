@@ -128,13 +128,9 @@ $planes = $config['planes'];
                             <?php if ($curso['categoria']): ?> · <?php echo htmlspecialchars($curso['categoria']); ?><?php endif; ?>
                         </div>
                         <?php if ($curso['ya_inscrito']): ?>
-                            <a href="curso/<?php echo $curso['id']; ?>" class="btn-continuar" style="width:100%;justify-content:center">IR AL CURSO</a>
-                        <?php elseif ($curso['precio'] > 0 && $plan !== 'suscripcion'): ?>
-                            <a href="planes" class="btn-explorar" style="width:100%;justify-content:center">🔓 ADQUIRIR PLAN</a>
-                        <?php elseif ($curso['precio'] > 0 && $plan === 'suscripcion'): ?>
-                            <a href="inscribir/<?php echo $curso['id']; ?>" class="btn-continuar" style="width:100%;justify-content:center">INSCRIBIRME</a>
+                            <a href="curso-info/<?php echo $curso['id']; ?>" class="btn-continuar" style="width:100%;justify-content:center">VER CURSO</a>
                         <?php else: ?>
-                            <a href="inscribir/<?php echo $curso['id']; ?>" class="btn-continuar" style="width:100%;justify-content:center">INSCRIBIRME GRATIS</a>
+                            <a href="curso-info/<?php echo $curso['id']; ?>" class="btn-explorar" style="width:100%;justify-content:center">VER DETALLES</a>
                         <?php endif; ?>
                     </div>
                 </div>

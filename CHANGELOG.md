@@ -44,6 +44,24 @@ Historial de cambios y modificaciones realizadas en **SalvaTechnology Academy**.
 - Clase 1 (lección 781): asignada URL de video de **Bunny Stream** (`player.mediadelivery.net`).
 - `curso_ver.php`: detección de `mediadelivery.net` para renderizar como iframe.
 
+### Landing Page de Cursos
+- **`curso_landing.php`** (ruta `curso-info/{id}`): landing page por curso con:
+  - Portada del curso en grande, badges (categoría, premium/gratis, duración), título y descripción.
+  - Estadísticas: número de módulos y lecciones calculados desde la BD.
+  - Tarjeta del instructor (Salvatore Berticci) con inicial, especialidad y experiencia.
+  - Sección de objetivo del curso y grid de módulos ("Clase N") con sus lecciones internas.
+  - Botón CTA inteligente: ya inscrito → "IR AL CURSO"; curso premium sin plan → "ADQUIRIR PLAN" (redirige a `planes`); con plan → "INSCRIBIRME AL CURSO" (redirige a `inscribir/{id}`).
+- `cursos.php`: las tarjetas ahora llevan a la landing page (`curso-info/{id}`).
+
+### Portada de Curso
+- `img/portada_curso_ia.png` asignada al curso 1 "Desarrollo de Software con Inteligencia Artificial" (migración 003).
+
+### Migraciones y CHANGELOG
+- **`CHANGELOG.md`**: historial de cambios del proyecto.
+- **`database/migrations/`**: sistema de migraciones SQL.
+- **`migrate.php`**: ejecutor de migraciones por URL (aplica pendientes, soporta `?file=` y `?dry=1`, registra en `migrations_log`).
+- `MIGRATION_TOKEN` en `config/app.php` para proteger el ejecutor en producción.
+
 ## 2026-07-30
 
 ### Chatbot
