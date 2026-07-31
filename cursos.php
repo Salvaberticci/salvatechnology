@@ -117,20 +117,20 @@ $planes = $config['planes'];
                     <div class="card-body">
                         <h3><?php echo htmlspecialchars($curso['titulo']); ?></h3>
                         <?php if ($curso['precio'] > 0): ?>
-                            <div class="price" style="color:#ff8c00;font-size:0.65rem;">🔒 REQUIERE SUSCRIPCIÓN</div>
+                            <div class="price" style="color:#ff8c00;font-size:1rem;">🔒 REQUIERE SUSCRIPCIÓN</div>
                         <?php else: ?>
                             <div class="price free">GRATUITO</div>
                         <?php endif; ?>
-                        <div class="desc"><?php echo htmlspecialchars(substr($curso['descripcion'] ?? '', 0, 120)) . (strlen($curso['descripcion'] ?? '') > 120 ? '...' : ''); ?></div>
-                        <div class="text-stone-600 text-[10px] font-mono mb-3">
+                        <div class="desc"><?php echo htmlspecialchars(substr($curso['descripcion'] ?? '', 0, 300)) . (strlen($curso['descripcion'] ?? '') > 300 ? '...' : ''); ?></div>
+                        <div class="text-stone-600 text-sm font-mono mb-4">
                             <?php echo $curso['total_lecciones']; ?> lecciones
                             <?php if ($curso['duracion']): ?> · <?php echo htmlspecialchars($curso['duracion']); ?><?php endif; ?>
                             <?php if ($curso['categoria']): ?> · <?php echo htmlspecialchars($curso['categoria']); ?><?php endif; ?>
                         </div>
                         <?php if ($curso['ya_inscrito']): ?>
-                            <a href="curso-info/<?php echo $curso['id']; ?>" class="btn-continuar" style="width:100%;justify-content:center">VER CURSO</a>
+                            <a href="curso-info/<?php echo $curso['id']; ?>" class="btn-continuar" style="width:100%;justify-content:center;padding:1rem;font-size:0.9rem;">VER CURSO</a>
                         <?php else: ?>
-                            <a href="curso-info/<?php echo $curso['id']; ?>" class="btn-explorar" style="width:100%;justify-content:center">VER DETALLES</a>
+                            <a href="curso-info/<?php echo $curso['id']; ?>" class="btn-explorar" style="width:100%;justify-content:center;padding:1rem;font-size:0.9rem;">VER DETALLES</a>
                         <?php endif; ?>
                     </div>
                 </div>

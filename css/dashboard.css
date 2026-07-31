@@ -389,8 +389,8 @@ body.dashboard-body {
 /* COURSE CATALOG */
 .course-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(640px, 1fr));
+    gap: 2rem;
 }
 
 .catalog-card {
@@ -408,7 +408,7 @@ body.dashboard-body {
 }
 
 .catalog-card .card-img {
-    height: 160px;
+    height: 320px;
     background: #111;
     display: flex;
     align-items: center;
@@ -423,27 +423,28 @@ body.dashboard-body {
 }
 
 .catalog-card .card-img .placeholder-icon {
-    font-size: 3rem;
+    font-size: 6rem;
     color: #333;
 }
 
 .catalog-card .card-body {
-    padding: 1.25rem;
+    padding: 2rem;
 }
 
 .catalog-card .card-body h3 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.95rem;
+    font-size: 1.5rem;
     color: #fff;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.9rem;
+    line-height: 1.3;
 }
 
 .catalog-card .card-body .price {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.3rem;
+    font-size: 2rem;
     font-weight: 900;
     color: var(--accent);
-    margin: 0.75rem 0;
+    margin: 1rem 0;
 }
 
 .catalog-card .card-body .price.free {
@@ -451,10 +452,10 @@ body.dashboard-body {
 }
 
 .catalog-card .card-body .desc {
-    font-size: 0.75rem;
+    font-size: 1.05rem;
     color: #666;
-    margin-bottom: 1rem;
-    line-height: 1.5;
+    margin-bottom: 1.4rem;
+    line-height: 1.6;
 }
 
 /* COURSE VIEWER */
