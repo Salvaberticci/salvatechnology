@@ -42,7 +42,7 @@ $stmt->execute([$curso['profesor_id']]);
 $profesor = $stmt->fetch();
 $profesorNombre = $profesor['nombre'] ?? 'Salvatore Berticci';
 $profesorInicial = strtoupper(substr($profesorNombre, 0, 1));
-$profesorExperiencia = '10+ años de experiencia';
+$profesorExperiencia = 'Más de 6 años de experiencia como desarrollador de software, actualmente impulsado con Inteligencia Artificial, y alrededor de 3 años formando programadores.';
 
 $esPremium = (float)$curso['precio'] > 0;
 $tienePlan = $plan === 'suscripcion';
@@ -136,7 +136,7 @@ $tienePlan = $plan === 'suscripcion';
                             <span class="text-stone-700">|</span>
                             <span><strong class="text-accent text-lg font-['Orbitron']"><?php echo $totalLecciones; ?></strong> lecciones</span>
                             <span class="text-stone-700">|</span>
-                            <span><strong class="text-accent text-lg font-['Orbitron']"><?php echo $esPremium ? '$' . number_format((float)$curso['precio'], 2) : 'Gratis'; ?></strong></span>
+                            <span class="px-3 py-1 rounded-full bg-accent/15 border border-accent/40 text-accent font-bold uppercase tracking-wider"><?php echo $esPremium ? 'Adquirir con suscripción' : 'Gratis'; ?></span>
                         </div>
                     </div>
                     <div class="relative">
@@ -160,8 +160,7 @@ $tienePlan = $plan === 'suscripcion';
                         <p class="text-accent text-xs font-mono uppercase tracking-wider mb-1">Fundador & Profesor Principal</p>
                         <p class="text-stone-400 text-xs font-mono leading-relaxed">
                             Arquitecto de software, especialista en la metodología ADD (Arquitectura Dirigida por IA).
-                            <strong class="text-white"><?php echo $profesorExperiencia; ?></strong> formando programadores
-                            capaces de construir software completo con Inteligencia Artificial.
+                            <strong class="text-white"><?php echo $profesorExperiencia; ?></strong>
                         </p>
                     </div>
                     <div class="hidden md:block text-right font-mono text-[10px] text-stone-500">
