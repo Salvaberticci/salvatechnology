@@ -85,7 +85,13 @@ function chatbot_llamar_proveedor(array $proveedor, array $messages): array
         return ['ok' => false, 'error' => 'Respuesta vacía'];
     }
 
-    return ['ok' => true, 'reply' => $data['choices'][0]['message']['content']];
+    $reply = $data['choices'][0]['message']['content'];
+    $finishReason = $data['choices'][0]['finish_reason'] ?? null;
+    if ($finishReason === 'length') {
+        $reply .= "\n\n*(respuesta cortada por el límite — escribe \"continúa\" para seguir)*";
+    }
+
+    return ['ok' => true, 'reply' => $reply];
 }
 
 if (empty($_SESSION['chatbot_ultimo_proveedor'])) {
