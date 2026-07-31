@@ -408,7 +408,7 @@ body.dashboard-body {
 }
 
 .catalog-card .card-img {
-    height: 320px;
+    aspect-ratio: 16 / 9;
     background: #111;
     display: flex;
     align-items: center;
