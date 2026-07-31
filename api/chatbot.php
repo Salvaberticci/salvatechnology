@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $config = require __DIR__ . '/../config/chatbot_config.php';
+require_once __DIR__ . '/../config/db.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 
@@ -32,8 +33,10 @@ if (!empty($input['history']) && is_array($input['history'])) {
     $history = array_slice($input['history'], -20);
 }
 
+$system = $config['core_prompt'] . chatbot_contexto_rag($pdo, $message);
+
 $messages = array_merge(
-    [['role' => 'system', 'content' => $config['system_prompt']]],
+    [['role' => 'system', 'content' => $system]],
     $history,
     [['role' => 'user', 'content' => $message]]
 );
