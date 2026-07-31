@@ -426,8 +426,8 @@ header {
 .chat-panel {
     position: absolute;
     bottom: calc(100% + 14px);
-    left: 50%;
-    transform: translateX(-50%) translateY(12px);
+    left: -60px;
+    transform: translateY(12px);
     width: 420px;
     max-width: 80vw;
     max-height: 52vh;
@@ -446,7 +446,7 @@ header {
 .chat-panel.open {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
 }
 
 .chat-header {
