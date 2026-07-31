@@ -46,6 +46,22 @@ $profesorExperiencia = 'Más de 6 años de experiencia como desarrollador de sof
 
 $esPremium = (float)$curso['precio'] > 0;
 $tienePlan = $plan === 'suscripcion';
+
+$cursoTituloLower = mb_strtolower($curso['titulo']);
+if (strpos($cursoTituloLower, 'píldora') !== false || strpos($cursoTituloLower, 'pildora') !== false) {
+    $objetivos = [
+        'Aprender conceptos prácticos en sesiones cortas y directas, sin rodeos.',
+        'Mantenerte al día con las últimas herramientas, tecnologías y tendencias del desarrollo de software.',
+        'Dominar técnicas de ventas y estrategias comerciales para vender tus servicios como desarrollador.',
+        'Reforzar fundamentos de programación, arquitectura y bases de datos en cada píldora.',
+        'Aplicar Inteligencia Artificial para acelerar tu flujo de trabajo y tu aprendizaje.',
+        'Adaptar tu aprendizaje a tu ritmo: cada clase es independiente y puedes verla cuando quieras.',
+    ];
+} else {
+    $objetivos = [
+        'Llevarte de los fundamentos a la construcción completa de software real potenciado por IA: dominarás arquitectura, backend, frontend, proyectos desktop y mobile, hasta vender y mantener tus propios sistemas como un ingeniero profesional.',
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -171,12 +187,21 @@ $tienePlan = $plan === 'suscripcion';
 
             <!-- OBJETIVO -->
             <div class="bg-white/5 border border-accent/20 rounded-2xl p-6 mb-8">
-                <h3 class="font-['Orbitron'] text-white text-sm font-bold mb-3"><span class="text-accent">🎯</span> Objetivo del Curso</h3>
+                <h3 class="font-['Orbitron'] text-white text-sm font-bold mb-3"><span class="text-accent">🎯</span> <?php echo $totalModulos <= 1 ? 'Objetivos del Curso' : 'Objetivo del Curso'; ?></h3>
+                <?php if (count($objetivos) > 1): ?>
+                <ul class="space-y-3">
+                    <?php foreach ($objetivos as $obj): ?>
+                    <li class="flex items-start gap-3 text-stone-300 text-sm font-mono leading-relaxed">
+                        <span class="text-accent text-base mt-0.5">▸</span>
+                        <span><?php echo $obj; ?></span>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php else: ?>
                 <p class="text-stone-300 text-sm font-mono leading-relaxed">
-                    Llevarte de los fundamentos a la construcción completa de software real potenciado por IA:
-                    dominarás arquitectura, backend, frontend, proyectos desktop y mobile, hasta vender y
-                    mantener tus propios sistemas como un ingeniero profesional.
+                    <?php echo $objetivos[0]; ?>
                 </p>
+                <?php endif; ?>
             </div>
 
             <!-- CONTENIDO / MODULOS -->
