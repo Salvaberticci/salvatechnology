@@ -424,23 +424,23 @@ header {
 
 /* Chat de SALVA AI en el portal */
 .chat-panel {
-    position: absolute;
-    bottom: calc(100% + 14px);
-    left: -60px;
-    transform: translateY(12px);
-    width: 420px;
-    max-width: 80vw;
+    position: fixed;
+    bottom: 90px;
+    right: 2rem;
+    width: min(420px, 88vw);
     max-height: 52vh;
     display: flex;
     flex-direction: column;
-    background: rgba(5, 5, 5, 0.92);
+    background: rgba(5, 5, 5, 0.95);
     border: 1px solid rgba(255, 140, 0, 0.35);
     border-radius: 14px;
     box-shadow: 0 0 30px rgba(255, 140, 0, 0.15), 0 20px 60px rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(10px);
     opacity: 0;
     visibility: hidden;
+    transform: translateY(12px);
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    z-index: 9000;
 }
 
 .chat-panel.open {
