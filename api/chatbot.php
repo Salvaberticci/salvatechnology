@@ -74,6 +74,10 @@ $data = json_decode($response, true);
 
 if ($httpCode !== 200) {
     $errorMsg = $data['error']['message'] ?? 'Error HTTP ' . $httpCode;
+    if (stripos($errorMsg, 'rate limit') !== false) {
+        echo json_encode(['reply' => "⏳ ¡Uy! SALVA AI alcanzó el límite de consultas del día por ahora. Descansa un par de horas y vuelve a intentarlo, o escribe al profesor por WhatsApp si necesitas ayuda urgente. ¡Seguimos disponibles! 🚀"]);
+        exit;
+    }
     echo json_encode(['error' => 'Groq rechazó la solicitud: ' . $errorMsg]);
     exit;
 }

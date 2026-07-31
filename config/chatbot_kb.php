@@ -25,7 +25,8 @@ function chatbot_generar_catalogo($pdo): string
         $md .= "- Categoría: " . ($curso['categoria'] ?: 'General')
             . " | Duración: " . ($curso['duracion'] ?: 'No especificada')
             . " | " . ($curso['precio'] > 0 ? 'Curso premium (requiere suscripción)' : 'Curso gratuito') . "\n";
-        $md .= "- Descripción: " . trim(preg_replace('/\s+/', ' ', (string) $curso['descripcion'])) . "\n";
+        $descCurso = trim(preg_replace('/\s+/', ' ', (string) $curso['descripcion']));
+        $md .= "- Descripción: " . mb_substr($descCurso, 0, 220) . "\n";
 
         $stmt = $pdo->prepare(
             "SELECT l.id, l.titulo, l.descripcion,
@@ -40,13 +41,13 @@ function chatbot_generar_catalogo($pdo): string
             $md .= "- Lecciones:\n";
             foreach ($lecciones as $lec) {
                 $desc = trim(preg_replace('/\s+/', ' ', (string) $lec['descripcion']));
-                $desc = mb_substr($desc, 0, 200);
-                $md .= "  - Clase: " . $lec['titulo'];
+                $desc = mb_substr($desc, 0, 100);
+                $md .= "  - " . $lec['titulo'];
                 if ($desc !== '') {
                     $md .= " → " . $desc;
                 }
                 if ((int) $lec['n_actividades'] > 0) {
-                    $md .= " [" . $lec['n_actividades'] . " actividad(es)]";
+                    $md .= " [" . $lec['n_actividades'] . " act]";
                 }
                 $md .= "\n";
             }
