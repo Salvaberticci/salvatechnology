@@ -41,5 +41,8 @@ Thumbs.db
 # Base de datos (credenciales locales)
 /config/db.php
 
+# Claves de API (credenciales locales)
+/config/keys.local.php
+
 # URL base de la aplicación (configuración por entorno)
 /config/app.php
