@@ -168,8 +168,8 @@ if (strpos($cursoTituloLower, 'píldora') !== false || strpos($cursoTituloLower,
             <!-- PROFESOR -->
             <div class="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8">
                 <div class="flex items-center gap-5 flex-wrap">
-                    <div class="w-20 h-20 rounded-2xl bg-accent/20 border border-accent/40 flex items-center justify-center font-['Orbitron'] text-3xl font-black text-accent shadow-[0_0_30px_rgba(255,140,0,0.2)]">
-                        <?php echo $profesorInicial; ?>
+                    <div class="w-20 h-20 rounded-2xl bg-accent/20 border border-accent/40 flex items-center justify-center overflow-hidden shadow-[0_0_30px_rgba(255,140,0,0.2)]">
+                        <img src="img/salvatore.png" alt="<?php echo htmlspecialchars($profesorNombre); ?>" class="w-full h-full object-cover">
                     </div>
                     <div class="flex-1 min-w-[200px]">
                         <h3 class="font-['Orbitron'] text-white text-lg font-bold"><?php echo htmlspecialchars($profesorNombre); ?></h3>
