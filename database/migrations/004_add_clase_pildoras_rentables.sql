@@ -16,7 +16,7 @@ No necesitas ser un "influencer" ni tener miles de seguidores para vivir del có
 
 - El Cliente Ideal: Cómo detectar negocios que aún sufren.
 - Stack Tecnológico: Por qué sigo usando HTML, CSS, JS y PHP para soluciones de alto valor.
-- Potenciado por IA: Cómo herramientas como Antigravity aceleran el desarrollo.
+- Potenciado por IA: Cómo herramientas de IA como OpenCode (Vibe Coding) aceleran el desarrollo.
 - Modelo de Negocio: Cómo cobrar por el desarrollo y asegurar un ingreso recurrente por mantenimiento.
 - Marca Personal: Estrategias de captación y el poder del boca a boca.
 - Las Dos Rutas: El camino largo (solo) vs. el camino rápido (mentoría).
