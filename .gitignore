@@ -46,3 +46,6 @@ Thumbs.db
 
 # URL base de la aplicación (configuración por entorno)
 /config/app.php
+
+# Guiones de clases (contenido local de desarrollo, NO se sube)
+/.guiones/
