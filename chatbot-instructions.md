@@ -160,7 +160,7 @@ Curriculum 2026: **6+ meses · 22 semanas · 110 lecciones + Quests y actividade
 - **Semana 9 — Vibe Coding con OpenCode.** Clase Maestra: Configuración del entorno. Quest: copiloto base. 9.1 Instalar OpenCode · 9.2 AGENTS.md · 9.3 UI con IA · 9.4 Prompts técnicos.
 - **Semana 10 — Backend con IA.** Quest: Backend funcional. 10.1 Migraciones · 10.2 CRUD · 10.3 Auth JWT · 10.4 Validaciones.
 - **Semana 11 — Frontend Dinámico.** Quest: App web interactiva. 11.1 Consumo de APIs · 11.2 Formularios · 11.3 Carga y errores · 11.4 Filtros.
-- **Semana 12 — Pruebas y Deploy Web.** Quest: Lanzamiento Proyecto 1. 12.1 Debugging · 12.2 Refactor · 12.3 .env · 12.4 Vercel/Netlify.
+- **Semana 12 — Pruebas y Deploy Web.** Quest: Lanzamiento Proyecto 1. 12.1 Debugging · 12.2 Refactor · 12.3 .env · 12.4 Deploy Laravel en Hostinger/Namecheap/Laravel Cloud.
 
 **MES 4 — Proyecto Desktop + Mobile (Semanas 13-16)**
 
