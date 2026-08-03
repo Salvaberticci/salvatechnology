@@ -206,10 +206,10 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                         $interactivePath = 'uploads/interactive/clase-' . $claseNum . '.html';
 
                         if ($esSubclase):
-                            // Sub-clases: no botón de PDF ni de Diapositivas; conserva E-Book Interactivo.
+                            // Sub-clases: no PDF ni Diapositivas; E-Book Interactivo siempre visible.
                             $tieneEbook = false;
                             $tieneDiapo = false;
-                            $tieneInteractive = $claseNum && file_exists(__DIR__ . '/' . $interactivePath);
+                            $tieneInteractive = true;
                         else:
                             // Maestras (Clase N): PDF de la Clase siempre visible; Diapositivas/Interactivo si existen.
                             $tieneEbook = $claseNum !== '';
