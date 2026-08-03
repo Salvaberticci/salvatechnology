@@ -133,11 +133,11 @@ El sistema te entrega en cada mensaje un bloque llamado **"CONTEXTO RELEVANTE PA
 
 ### Plan de Estudio completo — CURSO 1: Desarrollo de Software con Inteligencia Artificial
 
-Curriculum 2026: **6+ meses · 22 semanas · 110 lecciones + Quests y actividades**. Metodología **ADD**. Stack PHP, JavaScript, HTML, CSS y MySQL potenciado con IA generativa. Vibe Coding con **OpenCode**. Plataformas: **Web** (navegador), **Desktop** (Electron/Tauri/Python) y **Mobile** (Expo/Flutter).
+Curriculum 2026: **6+ meses · 22 semanas · 110 lecciones + Quests y actividades**. Metodología **ADD**. Stack: PHP, Laravel, JavaScript, HTML, CSS, MySQL + IA generativa. Vibe Coding con **OpenCode**. Plataformas: **Web** (PHP/Laravel), **Desktop** (Python) y **Mobile** (Flutter).
 
 **MES 1 — Fundamentos (Semanas 1-4)**
 
-- **Semana 1 — Conceptos Base de la Ingeniería de Software.**
+- **Semana 1 — Fundamentos Base de la Ingeniería de Software.**
   Clase Maestra: Anatomía de los Sistemas Modernos y la Metodología ADD.
   Quest #01 🎯 "**Desmontaje de un Software de Tu Vida Diaria**" — Elige una app (Instagram, Spotify, MercadoLibre, Uber o WhatsApp) y documenta: [1] La Persistencia (5 datos que guarda en su BD), [2] Las Capas (2 funciones Frontend + 2 validaciones Backend), [3] Las Plataformas (diferencias Web/Desktop/Móvil).
   - Clase 1.1 "El Arte de la Ingeniería: Dato, Información y Sistema" → Quest 1.1 (Análisis de Dato, Información y Sistema: dominio real con 3 datos crudos, contexto → información, regla de negocio + automatización).
@@ -166,7 +166,7 @@ Curriculum 2026: **6+ meses · 22 semanas · 110 lecciones + Quests y actividade
 
 - **Semana 13 — Desktop inicio.** Quest: prototipo con persistencia local. 13.1 Setup · 13.2 UI · 13.3 Archivos · 13.4 SQLite.
 - **Semana 14 — Desktop hard.** Quest: empaquetado .exe o .dmg. 14.1 Atajos · 14.2 Impresoras/PDF · 14.3 Empaquetado · 14.4 Instalación.
-- **Semana 15 — Mobile.** Quest: App móvil integrada. 15.1 Expo · 15.2 Pantallas · 15.3 API remota · 15.4 Cámara.
+- **Semana 15 — Mobile.** Quest: App móvil integrada. 15.1 Flutter · 15.2 Pantallas · 15.3 API remota · 15.4 Cámara.
 - **Semana 16 — Mobile avanzado.** Quest: Lanzamiento Proyecto 3 (APK). 16.1 GPS · 16.2 Notificaciones · 16.3 Build · 16.4 Publicación.
 
 **MES 5 — Negocio y Ventas (Semanas 17-20)**
