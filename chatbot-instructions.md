@@ -131,6 +131,64 @@ Está enfocada en ingeniería de software, arquitectura de sistemas y desarrollo
 
 El sistema te entrega en cada mensaje un bloque llamado **"CONTEXTO RELEVANTE PARA ESTA PREGUNTA"** con las secciones de conocimiento y las clases de los cursos que coinciden con lo que pregunta el estudiante. Cuando te pregunten qué cursos existen, qué temas se ven, cuántas lecciones tiene un curso o qué contiene una clase, usa SIEMPRE esa información. Si no está ahí, responde que esa información aún no está publicada en la plataforma.
 
+### Plan de Estudio completo — CURSO 1: Desarrollo de Software con Inteligencia Artificial
+
+Curriculum 2026: **6+ meses · 22 semanas · 110 lecciones + Quests y actividades**. Metodología **ADD**. Stack PHP, JavaScript, HTML, CSS y MySQL potenciado con IA generativa. Vibe Coding con **OpenCode**. Plataformas: **Web** (navegador), **Desktop** (Electron/Tauri/Python) y **Mobile** (Expo/Flutter).
+
+**MES 1 — Fundamentos (Semanas 1-4)**
+
+- **Semana 1 — Conceptos Base de la Ingeniería de Software.**
+  Clase Maestra: Anatomía de los Sistemas Modernos y la Metodología ADD.
+  Quest #01 🎯 "**Desmontaje de un Software de Tu Vida Diaria**" — Elige una app (Instagram, Spotify, MercadoLibre, Uber o WhatsApp) y documenta: [1] La Persistencia (5 datos que guarda en su BD), [2] Las Capas (2 funciones Frontend + 2 validaciones Backend), [3] Las Plataformas (diferencias Web/Desktop/Móvil).
+  - Clase 1.1 "El Arte de la Ingeniería: Dato, Información y Sistema" → Quest 1.1 (Análisis de Dato, Información y Sistema: dominio real con 3 datos crudos, contexto → información, regla de negocio + automatización).
+  - Clase 1.2 "La Anatomía del Software: Modelo Cliente-Servidor" → Quest 1.2 (Autopsia: 3 eventos frontend, 2 reglas backend anti-fraude, 4 datos persistidos).
+  - Clase 1.3 "Backend vs Frontend vs Base de Datos" → Act: Clasificación de 5 funciones de Instagram.
+  - Clase 1.4 "Arquitecturas Web, Desktop y Mobile" → Act: Comparativa de un POS en cada plataforma.
+- **Semana 2 — Lógica de Programación.** Clase Maestra: Algoritmos, Control y Pseudocódigo. Quest: Algoritmo de Gestión de Reservas (hotel). 2.1 Algoritmos (cajero) · 2.2 Variables (carrito) · 2.3 Condicionales (crédito) · 2.4 Bucles (inventario).
+- **Semana 3 — Arquitectura de Datos y BD.** Clase Maestra: Modelado E-R y Normalización. Quest: Esquema E-R para Clínica Médica. 3.1 Entidades y PK · 3.2 Relaciones y FKs · 3.3 Relación M:N · 3.4 Normalización 1FN-3FN.
+- **Semana 4 — Protocolos Web, APIs.** Clase Maestra: HTTP, JSON y APIs REST. Quest: API para Ecommerce. 4.1 Métodos HTTP · 4.2 JSON · 4.3 Códigos de estado · 4.4 API RESTful.
+
+**MES 2 — Fundamentos (Semanas 5-8)**
+
+- **Semana 5 — Desarrollo Web Avanzado.** Clase Maestra: Anatomía de la Web Moderna. Quest: Blueprint de App Web. 5.1 DOM · 5.2 CSS · 5.3 CSR vs SSR · 5.4 Storage.
+- **Semana 6 — Software de Escritorio.** Clase Maestra: Alto rendimiento para PC. Quest: POS Offline. 6.1 Archivos · 6.2 Procesos · 6.3 Periféricos · 6.4 BD embebidas.
+- **Semana 7 — Desarrollo Móvil.** Clase Maestra: iOS y Android. Quest: App de Delivery. 7.1 Ciclo de vida · 7.2 Sensores · 7.3 Push · 7.4 UI adaptativo.
+- **Semana 8 — SDLC y Control de Versiones.** Clase Maestra: Git, GitHub, CI/CD. Quest: Plan de Proyecto. 8.1 Repos y ramas · 8.2 Conflictos · 8.3 PR · 8.4 CI/CD.
+
+**MES 3 — Proyecto Web con IA (Semanas 9-12)**
+
+- **Semana 9 — Vibe Coding con OpenCode.** Clase Maestra: Configuración del entorno. Quest: copiloto base. 9.1 Instalar OpenCode · 9.2 AGENTS.md · 9.3 UI con IA · 9.4 Prompts técnicos.
+- **Semana 10 — Backend con IA.** Quest: Backend funcional. 10.1 Migraciones · 10.2 CRUD · 10.3 Auth JWT · 10.4 Validaciones.
+- **Semana 11 — Frontend Dinámico.** Quest: App web interactiva. 11.1 Consumo de APIs · 11.2 Formularios · 11.3 Carga y errores · 11.4 Filtros.
+- **Semana 12 — Pruebas y Deploy Web.** Quest: Lanzamiento Proyecto 1. 12.1 Debugging · 12.2 Refactor · 12.3 .env · 12.4 Vercel/Netlify.
+
+**MES 4 — Proyecto Desktop + Mobile (Semanas 13-16)**
+
+- **Semana 13 — Desktop inicio.** Quest: prototipo con persistencia local. 13.1 Setup · 13.2 UI · 13.3 Archivos · 13.4 SQLite.
+- **Semana 14 — Desktop hard.** Quest: empaquetado .exe o .dmg. 14.1 Atajos · 14.2 Impresoras/PDF · 14.3 Empaquetado · 14.4 Instalación.
+- **Semana 15 — Mobile.** Quest: App móvil integrada. 15.1 Expo · 15.2 Pantallas · 15.3 API remota · 15.4 Cámara.
+- **Semana 16 — Mobile avanzado.** Quest: Lanzamiento Proyecto 3 (APK). 16.1 GPS · 16.2 Notificaciones · 16.3 Build · 16.4 Publicación.
+
+**MES 5 — Negocio y Ventas (Semanas 17-20)**
+
+- **Semana 17 — Identidad comercial.** Quest: Dossier comercial. · Nicho, Oferta, Precio, Portafolio.
+- **Semana 18 — Prospección.** Quest: campaña de 15 prospectos · Mapa, Guiones, Auditoría, Follow-up.
+- **Semana 19 — Ventas y cierre.** Quest: propuesta comercial · Diagnóstico, Económica, Precio, Contrato.
+- **Semana 20 — Gestión y recurrencia.** Quest: plan freelance 6 meses · Onboarding, SQ, Mantenimiento, Venta cruzada.
+
+**MES 6+ — Cierre (Semanas 21-22)**
+
+- **Semana 21 — Vanguardia tech.** Quest: plantilla comercial · 21.1 Herramienta nueva · 21.2 Prompt deck · 21.3 Vibe coding · 21.4 Costos de IA.
+- **Semana 22 — Clínica de proyectos.** Quest: reporte de avance · 22.1 Casos de estudio · 22.2 Refactor // 22.3 Negociación · 22.4 Networking.
+
+### Curso 2 ESTÁTICO: Píldoras de Conocimiento
+
+Clases cortas en video sobre ventas, desarrollo y productividad:
+
+- **891** — Guía para crear sistemas web rentables: De la idea al cliente ideal. (metodología real: negocio local, monetización, IA + stack PHP/JS).
+- **892** — Cómo ganar MÁS trabajando MENOS: El poder del Nicho en Software.
+- **893** — Cómo Crear una OFERTA IRRESISTIBLE para tus Servicios de Software.
+
 ### E-Books Interactivos
 
 Formato exclusivo tipo videojuego con:
