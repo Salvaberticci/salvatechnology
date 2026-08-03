@@ -211,9 +211,9 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                             $tieneDiapo = false;
                             $tieneInteractive = true;
                         else:
-                            // Maestras (Clase N): PDF de la Clase siempre visible; Diapositivas/Interactivo si existen.
+                            // Maestras (Clase N): PDF y Diapositivas siempre visibles; Interactivo si existe.
                             $tieneEbook = $claseNum !== '';
-                            $tieneDiapo = $claseNum && file_exists(__DIR__ . '/' . $diapoPath);
+                            $tieneDiapo = $claseNum !== '';
                             $tieneInteractive = $claseNum && file_exists(__DIR__ . '/' . $interactivePath);
                         endif;
                         ?>
