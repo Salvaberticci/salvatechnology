@@ -198,12 +198,24 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                         if (preg_match('/^Clase\s+([\d.]+)/', $leccionActual['titulo'], $m)) {
                             $claseNum = $m[1];
                         }
+                        // Una sub-clase tiene número decimal (Clase 1.1, Clase 2.3, etc.)
+                        $esSubclase = ($claseNum !== '' && strpos($claseNum, '.') !== false);
+
                         $ebookPath = 'uploads/ebooks/clase-' . $claseNum . '.pdf';
                         $diapoPath = 'uploads/diapositivas/clase-' . $claseNum . '.html';
                         $interactivePath = 'uploads/interactive/clase-' . $claseNum . '.html';
-                        $tieneEbook = $claseNum && file_exists(__DIR__ . '/' . $ebookPath);
-                        $tieneDiapo = $claseNum && file_exists(__DIR__ . '/' . $diapoPath);
-                        $tieneInteractive = $claseNum && file_exists(__DIR__ . '/' . $interactivePath);
+
+                        if ($esSubclase):
+                            // Sub-clases: no botón de PDF ni de Diapositivas; conserva E-Book Interactivo.
+                            $tieneEbook = false;
+                            $tieneDiapo = false;
+                            $tieneInteractive = $claseNum && file_exists(__DIR__ . '/' . $interactivePath);
+                        else:
+                            // Maestras (Clase N): PDF de la Clase siempre visible; Diapositivas/Interactivo si existen.
+                            $tieneEbook = $claseNum !== '';
+                            $tieneDiapo = $claseNum && file_exists(__DIR__ . '/' . $diapoPath);
+                            $tieneInteractive = $claseNum && file_exists(__DIR__ . '/' . $interactivePath);
+                        endif;
                         ?>
                         <?php if ($tieneEbook || $tieneDiapo || $tieneInteractive): ?>
                         <div class="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
