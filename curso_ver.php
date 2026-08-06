@@ -204,10 +204,14 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                         $clasePadre = $esSubclase ? explode('.', $claseNum)[0] : $claseNum;
 
                         if ($esSubclase):
-                            // Sub-clases: no PDF ni Diapositivas; E-Book Interactivo de la clase madre.
+                            // Sub-clases: no PDF ni Diapositivas; E-Book Interactivo propio o de la clase madre.
                             $ebookPath = '';
                             $diapoPath = '';
-                            $interactivePath = $clasePadre !== '' ? 'uploads/interactive/clase-' . $clasePadre . '.html' : '';
+                            $interactivePath = '';
+                            if ($claseNum !== '') {
+                                $propio = 'uploads/interactive/clase-' . $claseNum . '.html';
+                                $interactivePath = file_exists(__DIR__ . '/' . $propio) ? $propio : 'uploads/interactive/clase-' . $clasePadre . '.html';
+                            }
                             $tieneEbook = false;
                             $tieneDiapo = false;
                             $tieneInteractive = $interactivePath !== '';

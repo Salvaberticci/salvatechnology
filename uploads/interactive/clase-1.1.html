@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 1.1: Dato, Información y Sistema | E-Book Interactivo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#060608;color:#e2e8f0;font-family:'Inter',sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:'Orbitron',sans-serif}
+code,.font-code{font-family:'Fira Code',monospace}
+
+.cyber-grid{background-size:35px 35px;background-image:linear-gradient(to right,rgba(255,87,34,0.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,87,34,0.04) 1px,transparent 1px)}
+.neon-text{text-shadow:0 0 10px rgba(255,87,34,0.6),0 0 20px rgba(255,107,0,0.4)}
+.neon-box{box-shadow:0 0 15px rgba(255,87,34,0.2),inset 0 0 15px rgba(255,87,34,0.05);border:1px solid rgba(255,87,34,0.5)}
+.neon-box-cyan{box-shadow:0 0 15px rgba(0,240,255,0.2),inset 0 0 15px rgba(0,240,255,0.05);border:1px solid rgba(0,240,255,0.5)}
+
+.section-page{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:2rem;position:relative;border-bottom:1px solid rgba(255,87,34,0.08)}
+.section-page:last-child{border-bottom:none}
+
+.toc-item{cursor:pointer;transition:all 0.3s;padding:0.75rem 1rem;border-radius:0.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06)}
+.toc-item:hover{background:rgba(255,87,34,0.1);border-color:rgba(255,87,34,0.3);transform:translateX(4px)}
+
+.code-block{background:#0a0a0e;border:1px solid #1e1e28;border-radius:0.75rem;padding:1rem;font-family:'Fira Code',monospace;font-size:0.75rem;line-height:1.7;overflow-x:auto}
+.code-block .kw{color:#ff5722}
+.code-block .str{color:#00f0ff}
+.code-block .cm{color:#6b7280}
+.code-block .tp{color:#a78bfa}
+.code-block .fn{color:#34d399}
+
+.interactive-card{transition:all 0.3s;cursor:pointer}
+.interactive-card:hover{transform:translateY(-3px)}
+
+.flip-card{perspective:1000px;height:220px}
+.flip-card-inner{position:relative;width:100%;height:100%;transition:transform 0.6s;transform-style:preserve-3d;cursor:pointer}
+.flip-card.flipped .flip-card-inner{transform:rotateY(180deg)}
+.flip-card-front,.flip-card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:0.75rem;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center}
+.flip-card-front{background:rgba(21,21,28,0.95);border:1px solid rgba(255,87,34,0.3)}
+.flip-card-back{background:rgba(255,87,34,0.12);border:1px solid #ff5722;transform:rotateY(180deg)}
+
+.progress-ring{position:fixed;bottom:2rem;right:2rem;z-index:50}
+.progress-ring svg{transform:rotate(-90deg)}
+
+.float-anim{animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.glow-pulse{animation:glowPulse 2s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 10px rgba(255,87,34,0.2)}50%{box-shadow:0 0 25px rgba(255,87,34,0.5)}}
+
+.fade-in{opacity:0;transform:translateY(25px);transition:all 0.6s ease-out}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#08080a}
+::-webkit-scrollbar-thumb{background:#ff5722;border-radius:3px}
+
+.level-badge{background:linear-gradient(135deg,#ff5722,#ff6b00);border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;font-family:'Orbitron',sans-serif;box-shadow:0 0 20px rgba(255,87,34,0.4)}
+
+.quiz-option{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:0.75rem;padding:1rem;cursor:pointer;transition:all 0.3s;font-size:0.85rem}
+.quiz-option:hover{background:rgba(255,87,34,0.1);border-color:rgba(255,87,34,0.4)}
+.quiz-option.selected{border-color:#ff5722;background:rgba(255,87,34,0.15)}
+.quiz-option.correct{border-color:#34d399;background:rgba(52,211,153,0.15)}
+.quiz-option.wrong{border-color:#ef4444;background:rgba(239,68,68,0.15)}
+
+.xp-bar{height:8px;background:#1e1e28;border-radius:4px;overflow:hidden}
+.xp-bar-fill{height:100%;background:linear-gradient(90deg,#ff5722,#ff6b00);border-radius:4px;transition:width 0.8s ease}
+
+.achievement{background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.3);border-radius:0.75rem;padding:1rem;display:flex;align-items:center;gap:1rem;transition:all 0.3s}
+.achievement.locked{opacity:0.4;filter:grayscale(0.8)}
+.achievement.unlocked{opacity:1}
+.achievement.unlocked{box-shadow:0 0 15px rgba(255,215,0,0.15)}
+
+.chapter-progress{position:sticky;top:60px;z-index:40;padding:0.5rem 2rem;background:rgba(6,6,8,0.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,87,34,0.1)}
+.chapter-progress .step{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-family:'Fira Code',monospace;font-weight:700;border:2px solid rgba(255,255,255,0.1);background:transparent;color:#6b7280;transition:all 0.3s}
+.chapter-progress .step.active{border-color:#ff5722;background:rgba(255,87,34,0.2);color:#ff5722}
+.chapter-progress .step.done{border-color:#34d399;background:rgba(52,211,153,0.2);color:#34d399}
+.chapter-progress .connector{flex:1;height:2px;background:rgba(255,255,255,0.1);margin:0 4px}
+.chapter-progress .connector.done{background:#34d399}
+
+.dialog-box{background:rgba(15,15,20,0.95);border:1px solid rgba(255,87,34,0.3);border-radius:1rem;padding:1.5rem;position:relative}
+.dialog-box::before{content:'SALVA';position:absolute;top:-10px;left:20px;background:#ff5722;color:#000;font-family:'Orbitron',sans-serif;font-size:0.6rem;font-weight:900;padding:2px 10px;border-radius:4px;letter-spacing:2px}
+
+.code-editor-sim{background:#0d0d14;border:1px solid #1e1e28;border-radius:0.75rem;overflow:hidden}
+.code-editor-sim .editor-header{background:#15151c;padding:0.5rem 1rem;border-bottom:1px solid #1e1e28;display:flex;gap:6px}
+.code-editor-sim .editor-header .dot{width:10px;height:10px;border-radius:50%}
+.code-editor-sim .editor-body{padding:1rem;font-family:'Fira Code',monospace;font-size:0.7rem;line-height:1.8;overflow-x:auto}
+
+.tooltip-info{cursor:help;border-bottom:1px dashed #ff5722;color:#ff5722}
+
+.typing-effect::after{content:'|';animation:blink 1s step-end infinite;color:#ff5722}
+@keyframes blink{50%{opacity:0}}
+
+.notification-toast{position:fixed;top:80px;right:20px;z-index:100;padding:1rem 1.5rem;border-radius:0.75rem;background:rgba(15,15,20,0.95);border:1px solid rgba(255,87,34,0.4);transform:translateX(120%);transition:transform 0.4s ease;max-width:350px}
+.notification-toast.show{transform:translateX(0)}
+
+.salva-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff5722,#ff6b00);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:0.7rem;font-weight:900;color:#000;flex-shrink:0}
+</style>
+</head>
+<body class="cyber-grid">
+
+<div class="fixed top-0 left-0 w-full z-50 bg-[#0e0e12]/95 backdrop-blur border-b border-[#ff5722]/20 px-4 py-2.5 flex justify-between items-center">
+  <div class="flex items-center gap-3">
+    <span class="w-2 h-2 bg-[#ff5722] rounded-full animate-ping"></span>
+    <span class="font-['Fira Code'] text-[10px] text-[#ff5722] font-bold uppercase tracking-widest hidden sm:inline">SALVA ACADEMY // E-BOOK INTERACTIVO v1.0</span>
+    <span class="font-['Fira Code'] text-[10px] text-[#ff5722] font-bold uppercase tracking-widest sm:hidden">E-BOOK</span>
+  </div>
+  <div class="flex items-center gap-3">
+    <span id="xp-display" class="font-['Orbitron'] text-[10px] text-[#ff5722] border border-[#ff5722]/30 px-2 py-0.5 rounded bg-[#ff5722]/5">
+      <i class="fa-solid fa-star mr-1"></i>XP: <span id="xp-count">0</span>
+    </span>
+    <span id="level-display" class="font-['Orbitron'] text-[10px] text-[#00f0ff] border border-[#00f0ff]/30 px-2 py-0.5 rounded bg-[#00f0ff]/5">
+      NIVEL <span id="level-num">1</span>
+    </span>
+    <button onclick="toggleTOC()" class="font-['Fira Code'] text-[10px] text-[#ff5722] border border-[#ff5722]/40 px-3 py-1 rounded hover:bg-[#ff5722]/10 transition">
+      <i class="fa-solid fa-list mr-1"></i>ÍNDICE
+    </button>
+  </div>
+</div>
+
+<div id="toc-overlay" class="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm hidden" onclick="toggleTOC()"></div>
+<div id="toc-panel" class="fixed top-0 right-0 z-50 h-full w-80 bg-[#0e0e12] border-l border-[#ff5722]/30 p-6 overflow-y-auto transform translate-x-full transition-transform duration-300">
+  <div class="flex justify-between items-center mb-6">
+    <h3 class="font-['Orbitron'] text-white text-sm font-bold">ÍNDICE</h3>
+    <button onclick="toggleTOC()" class="text-gray-500 hover:text-white text-xl">&times;</button>
+  </div>
+  <div id="toc-links" class="space-y-2"></div>
+  <div class="mt-6 pt-4 border-t border-white/10">
+    <div class="flex justify-between items-center mb-2">
+      <span class="font-['Orbitron'] text-[10px] text-gray-500">PROGRESO</span>
+      <span class="font-['Fira Code'] text-[10px] text-[#ff5722]" id="toc-progress">0%</span>
+    </div>
+    <div class="xp-bar"><div class="xp-bar-fill" id="toc-progress-bar" style="width:0%"></div></div>
+    <div class="mt-4 space-y-2" id="toc-achievements"></div>
+  </div>
+</div>
+
+<div id="toast" class="notification-toast">
+  <div class="flex items-center gap-3">
+    <div class="salva-avatar">S</div>
+    <div>
+      <p id="toast-title" class="font-['Orbitron'] text-xs text-white font-bold"></p>
+      <p id="toast-desc" class="font-['Fira Code'] text-[10px] text-gray-400 mt-0.5"></p>
+    </div>
+  </div>
+</div>
+
+<div class="progress-ring" id="progress-ring">
+  <svg width="50" height="50">
+    <circle cx="25" cy="25" r="20" fill="none" stroke="#1e1e28" stroke-width="3"/>
+    <circle cx="25" cy="25" r="20" fill="none" stroke="#ff5722" stroke-width="3" stroke-dasharray="125.66" stroke-dashoffset="125.66" id="progress-circle" style="transition:stroke-dashoffset 0.3s"/>
+  </svg>
+  <span id="progress-text" class="absolute inset-0 flex items-center justify-center text-[10px] font-['Fira Code'] text-[#ff5722] font-bold">0%</span>
+</div>
+
+<div class="chapter-progress hidden md:flex items-center justify-center gap-0" id="chapter-progress-bar">
+  <div class="step active" data-chapter="0">1</div><div class="connector" data-connector="1"></div>
+  <div class="step" data-chapter="1">2</div><div class="connector" data-connector="2"></div>
+  <div class="step" data-chapter="2">3</div><div class="connector" data-connector="3"></div>
+  <div class="step" data-chapter="3">4</div><div class="connector" data-connector="4"></div>
+  <div class="step" data-chapter="4">5</div><div class="connector" data-connector="5"></div>
+  <div class="step" data-chapter="5">6</div>
+</div>
+
+<section class="section-page min-h-screen" id="nivel-0">
+  <div class="max-w-4xl mx-auto w-full text-center space-y-8">
+    <div class="inline-block px-4 py-1.5 rounded-full border border-[#ff5722]/50 bg-[#ff5722]/10 text-[#ff5722] font-['Fira Code'] text-xs md:text-sm tracking-widest neon-box">
+      &gt; SYSTEM_BOOT: CLASS_01.1_MASTERCLASS.EXE
+    </div>
+    <div class="flex justify-center">
+      <div class="level-badge float-anim">1.1</div>
+    </div>
+    <h1 class="font-['Orbitron'] font-black text-3xl sm:text-5xl lg:text-7xl text-white tracking-tight leading-none uppercase">
+      El Arte de la<br>
+      <span class="text-[#ff5722] neon-text">Ingeniería de Software</span>
+    </h1>
+    <p class="font-['Fira Code'] text-gray-300 text-xs sm:text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
+      Dato, Información y Sistema: la jerarquía universal sobre la que reposa <span class="text-[#00f0ff] font-bold">toda la tecnología existente</span>.
+    </p>
+    <div class="flex justify-center gap-4 text-[10px] font-['Fira Code'] text-gray-500">
+      <span><i class="fa-solid fa-layer-group text-[#ff5722] mr-1"></i> 5 Capítulos</span>
+      <span><i class="fa-solid fa-star text-yellow-500 mr-1"></i> 4 Logros</span>
+      <span><i class="fa-solid fa-question-circle text-[#00f0ff] mr-1"></i> 4 Desafíos</span>
+    </div>
+    <div class="max-w-3xl mx-auto bg-[#0e0e12]/90 p-4 rounded-xl border border-[#ff5722]/40 neon-box my-4">
+      <div class="flex justify-between items-center border-b border-gray-800 pb-2 mb-3 text-[11px] font-['Fira Code'] text-gray-400">
+        <span class="text-[#ff5722] font-bold"><i class="fa-solid fa-diagram-project mr-1"></i> TRIÁNGULO CONCEPTUAL</span>
+        <span>v1.1 - READY</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center text-[10px] md:text-xs font-['Fira Code']">
+        <div class="bg-[#15151c] p-3 rounded border border-gray-800 flex flex-col items-center justify-center hover:border-[#ff5722] transition">
+          <i class="fa-solid fa-hashtag text-[#ff5722] text-xl mb-1"></i>
+          <span class="text-white font-bold">1. EL DATO</span>
+          <span class="text-gray-400 text-[9px] mt-0.5">Materia prima inerte</span>
+        </div>
+        <div class="bg-[#15151c] p-3 rounded border border-gray-800 flex flex-col items-center justify-center hover:border-[#00f0ff] transition">
+          <i class="fa-solid fa-file-invoice text-[#00f0ff] text-xl mb-1"></i>
+          <span class="text-white font-bold">2. LA INFORMACIÓN</span>
+          <span class="text-gray-400 text-[9px] mt-0.5">El poder del contexto</span>
+        </div>
+        <div class="bg-[#15151c] p-3 rounded border border-gray-800 flex flex-col items-center justify-center hover:border-green-400 transition">
+          <i class="fa-solid fa-robot text-green-400 text-xl mb-1"></i>
+          <span class="text-white font-bold">3. EL SISTEMA</span>
+          <span class="text-gray-400 text-[9px] mt-0.5">Automatización inteligente</span>
+        </div>
+      </div>
+    </div>
+    <div class="pt-4">
+      <button onclick="document.getElementById('nivel-1').scrollIntoView({behavior:'smooth'})" class="font-['Fira Code'] text-xs text-[#ff5722] border border-[#ff5722]/40 px-5 py-2.5 rounded-xl hover:bg-[#ff5722]/10 transition glow-pulse">
+        <i class="fa-solid fa-play mr-2"></i>INICIAR CLASE 1.1
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="section-page" id="nivel-1">
+  <div class="max-w-4xl mx-auto w-full space-y-6">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="level-badge" style="width:40px;height:40px;font-size:1rem;">1</div>
+      <div>
+        <span class="font-['Fira Code'] text-[10px] text-[#ff5722] tracking-widest uppercase">CAPÍTULO 1 // EL ARTE DE LA INGENIERÍA</span>
+        <h2 class="font-['Orbitron'] font-bold text-2xl md:text-4xl text-white">"Picar Código" vs. El Arte de la Ingeniería</h2>
+      </div>
+    </div>
+
+    <div class="dialog-box fade-in">
+      <p class="font-['Fira Code'] text-xs sm:text-sm text-gray-300 leading-relaxed">
+        Bienvenido oficialmente a la Clase 1.1 de SalvaTechnology Academy. Hoy venimos a 
+        <strong class="text-[#ff5722]">reconfigurar la forma en que tu cerebro procesa la realidad digital</strong>. 
+        Antes de escribir una sola línea, hay que establecer una frontera clara e inquebrantable: la diferencia 
+        entre <strong class="text-red-400">picar código</strong> y dominar <strong class="text-[#ff5722]">el Arte de la Ingeniería de Software</strong>.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full fade-in">
+      <div class="bg-[#0e0e12]/90 border border-red-900/60 p-6 rounded-xl space-y-4">
+        <div class="flex items-center space-x-3 text-red-500 font-['Orbitron'] font-bold text-base border-b border-red-900/40 pb-2">
+          <i class="fa-solid fa-code text-xl"></i>
+          <h3>"Picar Código"</h3>
+        </div>
+        <ul class="space-y-3 font-['Fira Code'] text-xs text-gray-400">
+          <li class="flex items-start"><span class="text-red-500 mr-2 text-base">✗</span> <strong class="text-red-400">Sin estrategia:</strong> Abre el editor y escribe líneas impulsivamente, sin analizar el problema.</li>
+          <li class="flex items-start"><span class="text-red-500 mr-2 text-base">✗</span> <strong class="text-red-400">Sin dominio del negocio:</strong> No modela flujos de información ni anticipa escenarios de fallo.</li>
+          <li class="flex items-start"><span class="text-red-500 mr-2 text-base">✗</span> <strong class="text-red-400">Código espagueti:</strong> Aplicaciones frágiles, vulnerables y sin estructura.</li>
+          <li class="flex items-start"><span class="text-red-500 mr-2 text-base">✗</span> <strong class="text-red-400">Colapsa al crecer:</strong> El proyecto se derrumba en el instante en que intenta escalar.</li>
+        </ul>
+        <div class="bg-black/40 p-3 rounded-lg border border-red-900/40 text-[10px] text-gray-500">
+          🏚️ Equivalente a <strong class="text-red-400">colocar ladrillos sin plano arquitectónico</strong>.
+        </div>
+      </div>
+      <div class="bg-[#15151c] border border-[#ff5722]/60 p-6 rounded-xl space-y-4 neon-box">
+        <div class="flex items-center space-x-3 text-[#ff5722] font-['Orbitron'] font-bold text-base border-b border-[#ff5722]/40 pb-2">
+          <i class="fa-solid fa-compass-drafting text-xl"></i>
+          <h3>Ingeniería de Software</h3>
+        </div>
+        <ul class="space-y-3 font-['Fira Code'] text-xs text-gray-200">
+          <li class="flex items-start"><span class="text-[#ff5722] mr-2 text-base">⚡</span> <strong class="text-[#ff5722]">Ciencia y arte analítico:</strong> Principios científicos, matemáticos y metodológicos.</li>
+          <li class="flex items-start"><span class="text-[#ff5722] mr-2 text-base">⚡</span> <strong class="text-[#ff5722]">Capacidad de abstracción:</strong> Su principal herramienta no es el teclado, es la mente.</li>
+          <li class="flex items-start"><span class="text-[#ff5722] mr-2 text-base">⚡</span> <strong class="text-[#ff5722]">Estructuras elegantes:</strong> Convierte el caos humano en lógica mantenible y segura.</li>
+          <li class="flex items-start"><span class="text-[#ff5722] mr-2 text-base">⚡</span> <strong class="text-[#ff5722]">El código es solo el medio:</strong> El producto final es la arquitectura planificada.</li>
+        </ul>
+        <div class="bg-black/40 p-3 rounded-lg border border-[#ff5722]/40 text-[10px] text-gray-400">
+          🏢 Equivalente a <strong class="text-[#ff5722]">dibujar planos arquitectónicos</strong> antes de construir.
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-black/60 p-5 rounded-lg border border-gray-800 font-['Fira Code'] text-xs text-gray-300 fade-in">
+      <span class="text-[#ff5722] font-bold">Concepto Central:</span> Un Ingeniero de Software no se define por la cantidad de líneas de código que teclea en una hora. Se define por su 
+      <strong class="text-[#00f0ff]">capacidad de abstracción</strong>: transformar el caos de las necesidades humanas en estructuras lógicas, elegantes, mantenibles y seguras.
+    </div>
+
+    <div id="quiz-1" class="bg-[#15151c] p-6 rounded-xl border border-gray-800 fade-in">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-yellow-500 text-lg"><i class="fa-solid fa-question-circle"></i></span>
+        <h3 class="font-['Orbitron'] text-white text-sm font-bold">DESAFÍO RÁPIDO #1</h3>
+      </div>
+      <p class="font-['Fira Code'] text-[11px] text-gray-400 mb-4">¿Cuál es la principal herramienta de trabajo de un verdadero Ingeniero de Software?</p>
+      <div class="space-y-2">
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-1')">a) El teclado mecánico más rápido del mercado</div>
+        <div class="quiz-option" data-correct="true" onclick="responderQuiz(this, true, 'quiz-1')">b) Su capacidad de abstracción — su mente</div>
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-1')">c) La documentación oficial de PHP</div>
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-1')">d) Copiar y pegar código de Stack Overflow</div>
+      </div>
+      <div class="quiz-feedback mt-3 hidden"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-page" id="nivel-2">
+  <div class="max-w-4xl mx-auto w-full space-y-6">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="level-badge" style="width:40px;height:40px;font-size:1rem;background:linear-gradient(135deg,#00f0ff,#06b6d4)">2</div>
+      <div>
+        <span class="font-['Fira Code'] text-[10px] text-[#00f0ff] tracking-widest uppercase">CAPÍTULO 2 // EL PELDAÑO CERO</span>
+        <h2 class="font-['Orbitron'] font-bold text-2xl md:text-4xl text-white">El Dato (Raw Data)</h2>
+      </div>
+    </div>
+
+    <div class="dialog-box fade-in" style="border-color:rgba(0,240,255,0.3)">
+      <p class="font-['Fira Code'] text-xs sm:text-sm text-gray-300 leading-relaxed">
+        Comencemos desde la base absoluta. Un <strong class="text-[#00f0ff]">dato</strong> es una unidad mínima, primaria, atómica y 
+        completamente aislada de representación simbólica: un número, una letra, un valor booleano, un conjunto de bits o una cadena de caracteres. 
+        Su característica crítica e innegociable: <strong class="text-[#ff5722]">carece por completo de contexto</strong> y, por lo tanto, 
+        <strong class="text-[#ff5722]">no posee significado por sí mismo</strong>.
+      </p>
+    </div>
+
+    <div class="bg-black/60 p-6 rounded-lg border border-gray-800 fade-in">
+      <p class="font-['Fira Code'] text-xs text-gray-300 mb-4">Imagina que auditas la memoria de un servidor y aparece flotando este elemento:</p>
+      <div class="text-center">
+        <div class="inline-block bg-black px-10 py-6 rounded-xl border border-[#00f0ff]/50 text-[#00f0ff] font-mono text-5xl md:text-6xl font-bold glow-pulse" style="box-shadow:0 0 25px rgba(0,240,255,0.15)">42</div>
+      </div>
+      <p class="font-['Fira Code'] text-[11px] text-gray-500 mt-4 text-center">¿42 dólares? ¿42 °C? ¿42 km/h? ¿42 errores críticos en un log? <strong class="text-[#00f0ff]">No tenemos la menor idea.</strong></p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 fade-in">
+      <div class="interactive-card bg-[#15151c] p-5 rounded-xl border border-gray-800 hover:border-[#00f0ff] space-y-3" onclick="revelar(this)">
+        <div class="flex items-center justify-between">
+          <span class="text-[#00f0ff] font-bold text-base">"CANCELADO"</span>
+          <i class="fa-solid fa-ban text-[#00f0ff] text-xl"></i>
+        </div>
+        <p class="text-gray-400 text-[11px]">Sin una entidad asociada, no sabemos qué se canceló.</p>
+        <div class="bg-black p-3 rounded text-center text-[#ff5722] font-mono text-sm font-bold border border-gray-800">
+          txt // "CANCELADO"
+        </div>
+        <p class="text-[10px] text-gray-500 text-center secret-text italic">🔒 Toca para ver explicación</p>
+      </div>
+      <div class="interactive-card bg-[#15151c] p-5 rounded-xl border border-gray-800 hover:border-[#00f0ff] space-y-3" onclick="revelar(this)">
+        <div class="flex items-center justify-between">
+          <span class="text-[#00f0ff] font-bold text-base">-12.04637</span>
+          <i class="fa-solid fa-location-arrow text-[#00f0ff] text-xl"></i>
+        </div>
+        <p class="text-gray-400 text-[11px]">Un número negativo en una escala continua. Nada más.</p>
+        <div class="bg-black p-3 rounded text-center text-[#ff5722] font-mono text-sm font-bold border border-gray-800">
+          float // -12.04637
+        </div>
+        <p class="text-[10px] text-gray-500 text-center secret-text italic">🔒 Toca para ver explicación</p>
+      </div>
+      <div class="interactive-card bg-[#15151c] p-5 rounded-xl border border-gray-800 hover:border-[#00f0ff] space-y-3" onclick="revelar(this)">
+        <div class="flex items-center justify-between">
+          <span class="text-[#00f0ff] font-bold text-base">1722528000</span>
+          <i class="fa-solid fa-clock text-[#00f0ff] text-xl"></i>
+        </div>
+        <p class="text-gray-400 text-[11px]">Segundos desde la época Unix. Sin lectura humana directa.</p>
+        <div class="bg-black p-3 rounded text-center text-[#ff5722] font-mono text-sm font-bold border border-gray-800">
+          ts // 1722528000
+        </div>
+        <p class="text-[10px] text-gray-500 text-center secret-text italic">🔒 Toca para ver explicación</p>
+      </div>
+      <div class="interactive-card bg-[#15151c] p-5 rounded-xl border border-[#ff5722]/60 neon-box space-y-3" onclick="revelar(this)">
+        <div class="flex items-center justify-between">
+          <span class="text-[#ff5722] font-bold text-base">Petabytes de datos</span>
+          <i class="fa-solid fa-database text-[#ff5722] text-xl"></i>
+        </div>
+        <p class="text-gray-400 text-[11px]">Sensores IoT, clics, peticiones HTTP... materia prima inerte.</p>
+        <div class="bg-[#ff5722]/20 p-3 rounded text-center text-[#ff5722] font-mono text-xs font-bold border border-[#ff5722]/40">
+          ⚠️ Tener datos ≠ Tener conocimiento
+        </div>
+        <p class="text-[10px] text-gray-500 text-center secret-text italic">🔒 Toca para ver explicación</p>
+      </div>
+    </div>
+
+    <div class="code-editor-sim fade-in">
+      <div class="editor-header">
+        <span class="dot" style="background:#ef4444"></span>
+        <span class="dot" style="background:#f59e0b"></span>
+        <span class="dot" style="background:#34d399"></span>
+        <span class="ml-3 font-['Fira Code'] text-[10px] text-gray-500">raw-data.log</span>
+      </div>
+      <div class="editor-body">
+        <span class="cm"># Lo que captura el sistema SÍN contexto (solo datos crudos):</span><br>
+        <span class="str">"42"</span> <span class="cm">// número, letra, bits... nada interpretable</span><br>
+        <span class="str">"CANCELADO"</span> <span class="cm">// texto sin entidad asociada</span><br>
+        <span class="str">-12.04637</span> <span class="cm">// flotante en escala continua</span><br>
+        <span class="str">1722528000</span> <span class="cm">// timestamp Unix sin formato</span><br><br>
+        <span class="cm">// El dato es únicamente la arcilla sin moldear</span>
+      </div>
+    </div>
+
+    <div class="bg-[#15151c] p-5 rounded-xl border border-gray-800 fade-in">
+      <h3 class="font-['Orbitron'] text-white text-sm font-bold mb-3"><i class="fa-solid fa-brain text-[#ff5722] mr-2"></i>Analogía del Mundo Real</h3>
+      <p class="font-['Fira Code'] text-xs text-gray-300 leading-relaxed">
+        Acumular datos masivamente en discos duros sin comprender su ciclo de transformación es uno de los errores más costosos de la industria moderna. 
+        El dato es <strong class="text-[#00f0ff]">la materia prima inerte</strong>, la arcilla sin moldear con la que los ingenieros comenzamos a construir.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section-page" id="nivel-3">
+  <div class="max-w-4xl mx-auto w-full space-y-6">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="level-badge" style="width:40px;height:40px;font-size:1rem;background:linear-gradient(135deg,#34d399,#059669)">3</div>
+      <div>
+        <span class="font-['Fira Code'] text-[10px] text-green-400 tracking-widest uppercase">CAPÍTULO 3 // EL SEGUNDO PELDAÑO</span>
+        <h2 class="font-['Orbitron'] font-bold text-2xl md:text-4xl text-white">La Información (El Poder del Contexto)</h2>
+      </div>
+    </div>
+
+    <div class="dialog-box fade-in" style="border-color:rgba(52,211,153,0.3)">
+      <p class="font-['Fira Code'] text-xs sm:text-sm text-gray-300 leading-relaxed">
+        ¿Cómo se produce el milagro técnico de transformar un dato inerte en información útil? 
+        La respuesta se resume en una sola palabra: <strong class="text-green-400">CONTEXTO</strong>. 
+        La información es el resultado de tomar datos crudos y someterlos a estructuración, asociación y 
+        enmarcado semántico dentro de un dominio específico. Al otorgarle contexto al dato, 
+        <strong class="text-[#ff5722]">este pierde su ambigüedad</strong> y adquiere significado.
+      </p>
+    </div>
+
+    <div class="bg-black/60 p-6 rounded-lg border border-gray-800 fade-in">
+      <p class="font-['Fira Code'] text-xs text-gray-300 mb-4">Regresemos al número <strong class="text-[#00f0ff]">42</strong> y apliquemos el poder del contexto:</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-['Fira Code'] text-xs">
+        <div class="bg-[#15151c] p-4 rounded-lg border border-gray-800">
+          <h4 class="text-[#00f0ff] font-bold mb-2">📦 DATO CRUDO</h4>
+          <div class="bg-black p-3 rounded text-center text-[#00f0ff] font-mono text-lg font-bold border border-gray-800">42</div>
+          <p class="text-[10px] text-gray-500 mt-2">Un símbolo mudo flotando en el vacío.</p>
+        </div>
+        <div class="bg-[#15151c] p-4 rounded-lg border border-green-400/40">
+          <h4 class="text-green-400 font-bold mb-2">🧬 INFORMACIÓN (CON CONTEXTO)</h4>
+          <div class="bg-black p-3 rounded text-green-400 font-mono text-xs font-bold border border-green-800/60 leading-relaxed">
+            "El paciente ID: 8904 presenta una <span class="text-[#ff5722]">temperatura corporal de 42 °C</span>."
+          </div>
+          <p class="text-[10px] text-gray-500 mt-2">Dato + °C + ficha del paciente = hipertermia severa que pone en riesgo la vida.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-[#0e0e12] p-5 rounded-xl border border-gray-800 space-y-3 font-['Fira Code'] fade-in">
+      <span class="text-green-400 font-bold text-xs block">&gt; CUADRO COMPARATIVO: DATO vs INFORMACIÓN</span>
+      <div class="space-y-3">
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-800 grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+          <div><span class="text-[#00f0ff] font-bold">Escenario A:</span> <span class="text-gray-400">Dato crudo:</span> <span class="text-white font-mono">0.00</span></div>
+          <div><span class="text-green-400 font-bold">→</span> <span class="text-gray-300">"El saldo disponible en la cuenta corriente del usuario es $0.00 USD."</span></div>
+        </div>
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-800 grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+          <div><span class="text-[#00f0ff] font-bold">Escenario B:</span> <span class="text-gray-400">Dato crudo:</span> <span class="text-white font-mono">"CRITICAL_FAIL"</span></div>
+          <div><span class="text-green-400 font-bold">→</span> <span class="text-gray-300">"El microservicio de autenticación en la región US-EAST-1 respondió CRITICAL_FAIL a las 14:02:05 UTC."</span></div>
+        </div>
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-800 grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+          <div><span class="text-[#00f0ff] font-bold">Escenario C:</span> <span class="text-gray-400">Dato crudo:</span> <span class="text-white font-mono">98</span></div>
+          <div><span class="text-green-400 font-bold">→</span> <span class="text-gray-300">"El porcentaje de carga de la batería en la unidad de transporte robotizada #4 es del 98%."</span></div>
+        </div>
+      </div>
+      <p class="text-[11px] text-gray-400 pt-1">La información responde: <strong class="text-white">¿Qué sucede?</strong> <strong class="text-white">¿Dónde?</strong> <strong class="text-white">¿A quién afecta?</strong> <strong class="text-white">¿En qué momento?</strong></p>
+    </div>
+
+    <div class="bg-[#15151c] p-5 rounded-xl border border-gray-800 fade-in">
+      <h3 class="font-['Orbitron'] text-white text-sm font-bold mb-3"><i class="fa-solid fa-exclamation-triangle text-yellow-400 mr-2"></i>La limitación de la información</h3>
+      <p class="font-['Fira Code'] text-xs text-gray-300 leading-relaxed">
+        La información sola exige que un ser humano la lea, la analice y decida. Si un médico debe revisar mil expedientes a mano 
+        para encontrar al paciente con 42 °C, el tiempo de respuesta sería <strong class="text-[#ff5722]">desastroso</strong>. 
+        Y es exactamente aquí donde la Ingeniería de Software despliega su verdadero poder: creando <strong class="text-green-400">Sistemas</strong>.
+      </p>
+    </div>
+
+    <div id="quiz-3" class="bg-[#15151c] p-6 rounded-xl border border-gray-800 fade-in">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-yellow-500 text-lg"><i class="fa-solid fa-question-circle"></i></span>
+        <h3 class="font-['Orbitron'] text-white text-sm font-bold">DESAFÍO RÁPIDO #2</h3>
+      </div>
+      <p class="font-['Fira Code'] text-[11px] text-gray-400 mb-4">¿Qué convierte al número "42" en la información "el paciente ID 8904 tiene 42 °C de temperatura"?</p>
+      <div class="space-y-2">
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-3')">a) El tamaño del número almacenado en memoria</div>
+        <div class="quiz-option" data-correct="true" onclick="responderQuiz(this, true, 'quiz-3')">b) El contexto: estructuración, asociación y enmarcado semántico en un dominio</div>
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-3')">c) La velocidad del servidor que lo procesa</div>
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-3')">d) El lenguaje de programación usado en el backend</div>
+      </div>
+      <div class="quiz-feedback mt-3 hidden"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-page" id="nivel-4">
+  <div class="max-w-4xl mx-auto w-full space-y-6">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="level-badge" style="width:40px;height:40px;font-size:1rem;background:linear-gradient(135deg,#a78bfa,#7c3aed)">4</div>
+      <div>
+        <span class="font-['Fira Code'] text-[10px] text-purple-400 tracking-widest uppercase">CAPÍTULO 4 // LA CUMBRE DE LA JERARQUÍA</span>
+        <h2 class="font-['Orbitron'] font-bold text-2xl md:text-4xl text-white">El Sistema de Software</h2>
+      </div>
+    </div>
+
+    <div class="dialog-box fade-in" style="border-color:rgba(167,139,250,0.3)">
+      <p class="font-['Fira Code'] text-xs sm:text-sm text-gray-300 leading-relaxed">
+        Un <strong class="text-purple-400">Sistema de Software</strong> es una estructura coordinada de componentes tecnológicos —hardware, software, 
+        protocolos de red y bases de datos— que interactúan bajo reglas de negocio estrictas para ingresar datos (Inputs), procesarlos automáticamente, 
+        evaluar condiciones, persistir resultados y generar salidas o acciones autónomas de alto valor. 
+        Mientras la información nos dice <strong class="text-[#ff5722]">qué pasa</strong>, el sistema decide <strong class="text-[#ff5722]">qué hacer al respecto</strong> en fracciones de segundo.
+      </p>
+    </div>
+
+    <div class="bg-black/60 p-5 rounded-lg border border-gray-800 font-['Fira Code'] text-xs fade-in">
+      <span class="text-purple-400 font-bold">El Modelo Fundamental:</span>
+      <div class="mt-3 flex flex-wrap items-center justify-center gap-2 text-[10px]">
+        <span class="bg-[#00f0ff]/20 text-[#00f0ff] px-3 py-1.5 rounded border border-[#00f0ff]/30">📥 Input</span>
+        <span class="text-gray-600 text-lg">→</span>
+        <span class="bg-[#ff5722]/20 text-[#ff5722] px-3 py-1.5 rounded border border-[#ff5722]/30">⚙️ Processing</span>
+        <span class="text-gray-600 text-lg">→</span>
+        <span class="bg-green-400/20 text-green-400 px-3 py-1.5 rounded border border-green-400/30">🗄️ Persistence</span>
+        <span class="text-gray-600 text-lg">→</span>
+        <span class="bg-purple-400/20 text-purple-400 px-3 py-1.5 rounded border border-purple-400/30">📤 Output</span>
+      </div>
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-[10px] text-gray-400">
+        <div class="bg-black/40 p-3 rounded border border-[#00f0ff]/30"><strong class="text-[#00f0ff]">Entrada:</strong> Captura datos crudos desde formularios, sensores, códigos de barras o APIs.</div>
+        <div class="bg-black/40 p-3 rounded border border-[#ff5722]/30"><strong class="text-[#ff5722]">Procesamiento:</strong> El Backend contextualiza los datos (los vuelve información) y aplica reglas de negocio.</div>
+        <div class="bg-black/40 p-3 rounded border border-green-400/30"><strong class="text-green-400">Persistencia:</strong> Almacena el estado en una Base de Datos para que la información no se pierda.</div>
+        <div class="bg-black/40 p-3 rounded border border-purple-400/30"><strong class="text-purple-400">Salida:</strong> Respuesta gráfica, evento por red o acción automatizada.</div>
+      </div>
+    </div>
+
+    <div class="bg-[#15151c] p-6 rounded-xl border border-[#ff5722]/40 fade-in">
+      <h3 class="font-['Orbitron'] text-white text-sm font-bold mb-3"><i class="fa-solid fa-shield-halved text-[#ff5722] mr-2"></i>Caso de Estudio: Detección de Fraude Bancario</h3>
+      <div class="space-y-4">
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-800 font-['Fira Code'] text-[11px] text-gray-300">
+          <h4 class="text-[#00f0ff] font-bold mb-2">FASE 1 — El Dato Crudo</h4>
+          <p>Compras con tu tarjeta en Tokio. La terminal emite <strong class="text-white">3 datos aislados</strong>: monto <span class="text-[#ff5722]">5000.00</span>, país <span class="text-[#ff5722]">"JP"</span>, hora <span class="text-[#ff5722]">03:15:00</span>.</p>
+        </div>
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-800 font-['Fira Code'] text-[11px] text-gray-300">
+          <h4 class="text-green-400 font-bold mb-2">FASE 2 — La Información</h4>
+          <p>El servidor contextualiza con tu perfil: <em>"Juan Pérez usó su tarjeta hace 10 minutos en Caracas y ahora intenta una compra de $5,000 en Tokio a las 3:15 AM."</em></p>
+        </div>
+        <div class="bg-black/40 p-4 rounded-lg border border-purple-400/40 font-['Fira Code'] text-[11px] text-gray-300">
+          <h4 class="text-purple-400 font-bold mb-2">FASE 3 — La Acción del Sistema</h4>
+          <div class="space-y-2 mb-2">
+            <p><span class="text-[#ff5722]">Regla 1:</span> ¿Es físicamente posible ir de Venezuela a Japón en 10 minutos? → <strong class="text-red-400">FALSO</strong></p>
+            <p><span class="text-[#ff5722]">Regla 2:</span> ¿$5,000 excede el patrón habitual de gasto? → <strong class="text-green-400">VERDADERO</strong></p>
+          </div>
+          <p class="text-[10px] text-gray-500">En menos de <strong class="text-white">50 milisegundos</strong>, sin intervención humana:</p>
+          <ul class="text-[10px] text-gray-400 mt-1 space-y-1">
+            <li><span class="text-[#ff5722]">▸</span> Bloquea la transacción (Output de rechazo)</li>
+            <li><span class="text-[#ff5722]">▸</span> Congela la tarjeta en la Base de Datos (Persistencia)</li>
+            <li><span class="text-[#ff5722]">▸</span> Envía Push + SMS de alerta al usuario (Acción Externa)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-editor-sim fade-in">
+      <div class="editor-header">
+        <span class="dot" style="background:#ef4444"></span>
+        <span class="dot" style="background:#f59e0b"></span>
+        <span class="dot" style="background:#34d399"></span>
+        <span class="ml-3 font-['Fira Code'] text-[10px] text-gray-500">fraude-detector.php</span>
+      </div>
+      <div class="editor-body">
+        <span class="cm">// Dato crudo entrante</span><br>
+        $monto = <span class="str">"5000.00"</span>; $pais = <span class="str">"JP"</span>; $hora = <span class="str">"03:15"</span>;<br><br>
+        <span class="cm">// Contexto: perfil del cliente</span><br>
+        $ultimoUso = <span class="fn">obtenerUltimoUso</span>($usuario); <span class="cm">// Caracas, hace 10 min</span><br><br>
+        <span class="cm">// Reglas de negocio del sistema</span><br>
+        <span class="kw">if</span> (<span class="fn">geoImposible</span>($ultimoUso, $pais, <span class="tp">600</span>)) { <span class="cm">// &gt;600s de viaje</span><br>
+        &nbsp;&nbsp;<span class="kw">if</span> (<span class="fn">excedePatron</span>($monto, $usuario)) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">bloquearTransaccion</span>(); <span class="cm">// Output</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">congelarTarjeta</span>($usuario); <span class="cm">// Persistencia</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">notificarAlerta</span>(<span class="str">"push"</span>, <span class="str">"sms"</span>); <span class="cm">// Acción externa</span><br>
+        &nbsp;&nbsp;}<br>
+        }
+      </div>
+    </div>
+
+    <div id="quiz-4" class="bg-[#15151c] p-6 rounded-xl border border-gray-800 fade-in">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-yellow-500 text-lg"><i class="fa-solid fa-question-circle"></i></span>
+        <h3 class="font-['Orbitron'] text-white text-sm font-bold">DESAFÍO RÁPIDO #3</h3>
+      </div>
+      <p class="font-['Fira Code'] text-[11px] text-gray-400 mb-4">En el sistema de detección de fraude, ¿quién decide bloquear la transacción?</p>
+      <div class="space-y-2">
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-4')">a) Un operador humano del banco revisa cada compra</div>
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-4')">b) El cliente, confirmando por SMS</div>
+        <div class="quiz-option" data-correct="true" onclick="responderQuiz(this, true, 'quiz-4')">c) El Sistema: aplica las reglas de negocio automáticamente en milisegundos</div>
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-4')">d) La base de datos decide según el país</div>
+      </div>
+      <div class="quiz-feedback mt-3 hidden"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-page" id="nivel-5">
+  <div class="max-w-4xl mx-auto w-full space-y-8 text-center">
+    <div class="flex items-center justify-center gap-3 mb-2">
+      <div class="level-badge" style="width:50px;height:50px;font-size:1.3rem;background:linear-gradient(135deg,#ff5722,#ff6b00);animation:glowPulse 2s ease-in-out infinite">★</div>
+      <div>
+        <span class="font-['Fira Code'] text-[10px] text-[#ff5722] tracking-widest uppercase">CAPÍTULO FINAL // SÍNTESIS</span>
+        <h2 class="font-['Orbitron'] font-bold text-2xl md:text-4xl text-white">Síntesis Magistral & Quest 1.1</h2>
+      </div>
+    </div>
+
+    <div class="dialog-box fade-in text-left max-w-3xl mx-auto" style="border-color:rgba(255,87,34,0.5);box-shadow:0 0 30px rgba(255,87,34,0.15)">
+      <p class="font-['Fira Code'] text-xs sm:text-sm text-gray-300 leading-relaxed">
+        ¡Cierre de esta clase magistral! La Ingeniería de Software es una disciplina de 
+        <strong class="text-[#ff5722]">abstracción, diseño y resolución de problemas</strong>. El código es solo nuestra herramienta final. 
+        Aquí está tu síntesis conceptual completa:
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-3xl mx-auto fade-in">
+      <div class="bg-[#15151c] p-5 rounded-xl border border-[#ff5722]/30 space-y-3">
+        <h3 class="font-['Orbitron'] text-[#ff5722] text-sm font-bold"><i class="fa-solid fa-list-check mr-2"></i>Puntos Clave</h3>
+        <ul class="font-['Fira Code'] text-xs text-gray-300 space-y-2">
+          <li><span class="text-[#ff5722]">→</span> <strong>Ingeniería vs Picar código:</strong> Abstracción y diseño antes que teclear.</li>
+          <li><span class="text-[#ff5722]">→</span> <strong>El Dato (Raw Data):</strong> Unidad mínima y aislada sin significado propio. Ej: <span class="text-[#00f0ff]">30</span>.</li>
+          <li><span class="text-[#ff5722]">→</span> <strong>La Información:</strong> El dato dotado de contexto. Ej: <span class="text-[#00f0ff]">30 °C en un servidor</span>.</li>
+          <li><span class="text-[#ff5722]">→</span> <strong>El Sistema:</strong> Automatización que procesa, aplica reglas y ejecuta acciones autónomas.</li>
+        </ul>
+      </div>
+      <div class="bg-[#15151c] p-5 rounded-xl border border-[#00f0ff]/30 space-y-3">
+        <h3 class="font-['Orbitron'] text-[#00f0ff] text-sm font-bold"><i class="fa-solid fa-trophy mr-2"></i>Logros Desbloqueados</h3>
+        <div class="space-y-2" id="achievements-list">
+          <div class="achievement locked" data-achievement="iniciado">
+            <span class="text-2xl">🌅</span>
+            <div class="text-left">
+              <p class="font-['Orbitron'] text-xs text-white font-bold">Iniciado</p>
+              <p class="font-['Fira Code'] text-[10px] text-gray-400">Completaste el primer capítulo</p>
+            </div>
+          </div>
+          <div class="achievement locked" data-achievement="analista">
+            <span class="text-2xl">🔬</span>
+            <div class="text-left">
+              <p class="font-['Orbitron'] text-xs text-white font-bold">Analista de Datos</p>
+              <p class="font-['Fira Code'] text-[10px] text-gray-400">Distinguiste Dato de Información</p>
+            </div>
+          </div>
+          <div class="achievement locked" data-achievement="desafiante">
+            <span class="text-2xl">⚡</span>
+            <div class="text-left">
+              <p class="font-['Orbitron'] text-xs text-white font-bold">Desafiante</p>
+              <p class="font-['Fira Code'] text-[10px] text-gray-400">Respondiste todos los desafíos correctamente</p>
+            </div>
+          </div>
+          <div class="achievement locked" data-achievement="graduado">
+            <span class="text-2xl">🎓</span>
+            <div class="text-left">
+              <p class="font-['Orbitron'] text-xs text-white font-bold">Graduado</p>
+              <p class="font-['Fira Code'] text-[10px] text-gray-400">Completaste el e-book interactivo completo</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-[#15151c] p-6 rounded-xl border border-[#ff5722]/40 max-w-3xl mx-auto fade-in">
+      <h3 class="font-['Orbitron'] text-white text-sm font-bold mb-4">🚀 QUEST 1.1: Análisis Anatómico de Dato, Información y Sistema</h3>
+      <p class="font-['Fira Code'] text-xs text-gray-300 mb-4">Tu misión para consolidar este aprendizaje en tu cerebro:</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-['Fira Code'] text-[11px] text-left">
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-800">
+          <h4 class="text-[#ff5722] font-bold mb-1">1. Dominio Real</h4>
+          <p class="text-gray-400">Selecciona un negocio real: reservas de vuelos, delivery de comida o una red social.</p>
+        </div>
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-800">
+          <h4 class="text-[#00f0ff] font-bold mb-1">2. Datos Crudos</h4>
+          <p class="text-gray-400">Identifica y documenta 3 datos crudos que circulen en esa plataforma.</p>
+        </div>
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-800">
+          <h4 class="text-green-400 font-bold mb-1">3. Información Valiosa</h4>
+          <p class="text-gray-400">Explica cómo el software envuelve esos datos en contexto para transformarlos en información.</p>
+        </div>
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-800">
+          <h4 class="text-purple-400 font-bold mb-1">4. Regla y Acción</h4>
+          <p class="text-gray-400">Describe la Regla de Negocio y la Acción Automatizada que ejecuta el sistema al procesar esa información.</p>
+        </div>
+      </div>
+      <p class="font-['Fira Code'] text-[10px] text-gray-500 mt-4 italic">💡 Recuerda: los conceptos teóricos firmes son los que construyen a los arquitectos de software mejor pagados del mundo.</p>
+    </div>
+
+    <div id="quiz-5" class="bg-[#15151c] p-6 rounded-xl border border-gray-800 text-left max-w-3xl mx-auto fade-in">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-yellow-500 text-lg"><i class="fa-solid fa-question-circle"></i></span>
+        <h3 class="font-['Orbitron'] text-white text-sm font-bold">DESAFÍO RÁPIDO #4</h3>
+      </div>
+      <p class="font-['Fira Code'] text-[11px] text-gray-400 mb-4">¿Cuál es la jerarquía correcta en la que todo software transforma la realidad?</p>
+      <div class="space-y-2">
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-5')">a) Sistema → Dato → Información</div>
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-5')">b) Información → Dato → Sistema</div>
+        <div class="quiz-option" data-correct="true" onclick="responderQuiz(this, true, 'quiz-5')">c) Dato (materia prima) → Información (contexto) → Sistema (decisión autónoma)</div>
+        <div class="quiz-option" onclick="responderQuiz(this, false, 'quiz-5')">d) Código → Base de datos → Nube</div>
+      </div>
+      <div class="quiz-feedback mt-3 hidden"></div>
+    </div>
+
+    <div class="bg-[#0e0e12] p-5 rounded-xl border border-gray-800 font-['Fira Code'] text-xs max-w-2xl mx-auto fade-in" style="box-shadow:0 0 20px rgba(255,87,34,0.1)">
+      <span class="text-gray-400 text-sm">"Tu trabajo nunca será escribir código por escribir. Tu trabajo será diseñar los engranajes lógicos para que la transformación de 
+      <strong class="text-[#00f0ff]">Dato</strong> → <strong class="text-green-400">Información</strong> → <strong class="text-[#ff5722]">Sistema</strong> ocurra de forma impecable, rápida y segura."</span>
+      <br><br>
+      <span class="text-[#ff5722] font-bold">— Salvatore Berticci</span>
+      <br><br>
+      <span class="text-gray-500 text-[10px]">Has completado el E-Book Interactivo de la Clase 1.1. Mantén el foco en la arquitectura... ¡nos vemos en la siguiente clase! 🚀</span>
+    </div>
+
+    <div class="pt-4 flex justify-center gap-4 fade-in">
+      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="font-['Fira Code'] text-xs text-[#ff5722] border border-[#ff5722]/40 px-4 py-2 rounded-xl hover:bg-[#ff5722]/10 transition">
+        <i class="fa-solid fa-arrow-up mr-2"></i>VOLVER AL INICIO
+      </button>
+      <button onclick="parent.postMessage('close-modal','*')" class="font-['Fira Code'] text-xs text-white bg-[#ff5722]/20 border border-[#ff5722]/40 px-4 py-2 rounded-xl hover:bg-[#ff5722]/30 transition">
+        <i class="fa-solid fa-door-open mr-2"></i>CERRAR E-BOOK
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+const STORAGE_KEY = 'salva_ebook_clase1_1';
+let state = loadState();
+let quizAnswered = new Set();
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return { xp: 0, level: 1, achievements: [], quizzes: [] };
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function addXP(amount) {
+  state.xp += amount;
+  const newLevel = Math.floor(state.xp / 100) + 1;
+  if (newLevel > state.level) {
+    state.level = newLevel;
+    showToast('SUBIDA DE NIVEL', `¡Has alcanzado el nivel ${newLevel}!`);
+  }
+  updateUI();
+  saveState();
+}
+
+function unlockAchievement(id) {
+  if (state.achievements.includes(id)) return;
+  state.achievements.push(id);
+  const el = document.querySelector(`[data-achievement="${id}"]`);
+  if (el) {
+    el.classList.remove('locked');
+    el.classList.add('unlocked');
+  }
+  const names = { iniciado: '🌅 Iniciado', analista: '🔬 Analista de Datos', desafiante: '⚡ Desafiante', graduado: '🎓 Graduado' };
+  showToast('LOGRO DESBLOQUEADO', names[id] || id);
+  addXP(50);
+  saveState();
+}
+
+function showToast(title, desc) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toast-title').textContent = title;
+  document.getElementById('toast-desc').textContent = desc;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+function updateUI() {
+  document.getElementById('xp-count').textContent = state.xp;
+  document.getElementById('level-num').textContent = state.level;
+  updateProgress();
+  updateTOCProgress();
+}
+
+function updateProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? Math.min(100, Math.round((scrollTop / docHeight) * 100)) : 0;
+  const circumference = 125.66;
+  document.getElementById('progress-circle').style.strokeDashoffset = circumference - (progress / 100) * circumference;
+  document.getElementById('progress-text').textContent = progress + '%';
+}
+
+function updateTOCProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? Math.min(100, Math.round((scrollTop / docHeight) * 100)) : 0;
+  document.getElementById('toc-progress').textContent = progress + '%';
+  document.getElementById('toc-progress-bar').style.width = progress + '%';
+}
+
+function toggleTOC() {
+  const panel = document.getElementById('toc-panel');
+  const overlay = document.getElementById('toc-overlay');
+  const isOpen = panel.style.transform === 'translateX(0px)';
+  panel.style.transform = isOpen ? 'translateX(100%)' : 'translateX(0)';
+  overlay.classList.toggle('hidden');
+}
+
+function revelar(el) {
+  const secret = el.querySelector('.secret-text');
+  if (!secret) return;
+  if (secret.textContent.includes('🔒')) {
+    const explanations = {
+      'CANCELADO': 'Sin una entidad asociada, "CANCELADO" no nos dice si se canceló una suscripción, un vuelo internacional, una transacción bancaria o una orden de compra. Es un dato inerte.',
+      '-12.04637': 'Por sí mismo es solo un número negativo en una escala continua. No sabemos si es una latitud, un saldo en contra o la variación porcentual de un activo financiero.',
+      '1722528000': 'Es simplemente una cantidad de segundos transcurridos desde la época Unix: un número entero masivo desprovisto de lectura humana directa.',
+      'Petabytes de datos': 'Sensores IoT, clics, pulsaciones de teclas y peticiones HTTP generan petabytes de datos crudos cada segundo. Pero tener datos no equivale a tener conocimiento: el dato es solo la materia prima inerte.'
+    };
+    const title = el.querySelector('.text-base')?.textContent?.trim() || '';
+    let explanation = 'El software transforma datos crudos en información contextualizada y ejecuta decisiones automáticas basadas en reglas de negocio predefinidas.';
+    for (const [key, val] of Object.entries(explanations)) {
+      if (title.includes(key)) { explanation = val; break; }
+    }
+    secret.innerHTML = '💡 ' + explanation;
+    secret.classList.remove('text-gray-500', 'italic');
+    secret.classList.add('text-[#ff5722]', 'text-[10px]');
+    addXP(10);
+  } else {
+    secret.innerHTML = '🔒 Toca para ver explicación';
+    secret.classList.add('text-gray-500', 'italic');
+    secret.classList.remove('text-[#ff5722]', 'text-[10px]');
+  }
+}
+
+function responderQuiz(el, correct, quizId) {
+  const alreadyCorrect = quizAnswered.has(quizId);
+  
+  const container = el.closest('.bg-\\[\\#15151c\\]') || el.closest('[id^="quiz"]');
+  const options = container.querySelectorAll('.quiz-option');
+  const feedback = container.querySelector('.quiz-feedback');
+  
+  if (alreadyCorrect) return;
+
+  options.forEach(opt => {
+    opt.classList.remove('wrong');
+  });
+
+  if (correct) {
+    el.classList.add('correct');
+    quizAnswered.add(quizId);
+    feedback.className = 'quiz-feedback mt-3 font-[\'Fira Code\'] text-xs text-green-400';
+    feedback.textContent = '✅ ¡Correcto! +20 XP';
+    feedback.classList.remove('hidden');
+    addXP(20);
+    state.quizzes.push(quizId);
+    saveState();
+    
+    const allQuizIds = ['quiz-1', 'quiz-3', 'quiz-4', 'quiz-5'];
+    const answered = allQuizIds.filter(id => quizAnswered.has(id));
+    if (answered.length >= 2) unlockAchievement('analista');
+    if (answered.length >= allQuizIds.length) unlockAchievement('desafiante');
+  } else {
+    el.classList.add('wrong');
+    options.forEach(opt => {
+      if (opt.dataset.correct === 'true') opt.classList.add('correct');
+    });
+    feedback.className = 'quiz-feedback mt-3 font-[\'Fira Code\'] text-xs text-yellow-400';
+    feedback.textContent = '❌ Incorrecto. La opción correcta está resaltada en verde. Intenta de nuevo.';
+    feedback.classList.remove('hidden');
+  }
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+document.addEventListener('scroll', updateProgress);
+
+const sections = [
+  { id: 'nivel-0', title: 'Portada' },
+  { id: 'nivel-1', title: '1. El Arte de la Ingeniería vs Picar Código' },
+  { id: 'nivel-2', title: '2. El Dato (Raw Data)' },
+  { id: 'nivel-3', title: '3. La Información (El Poder del Contexto)' },
+  { id: 'nivel-4', title: '4. El Sistema de Software' },
+  { id: 'nivel-5', title: '5. Síntesis y Quest 1.1' },
+];
+
+const tocContainer = document.getElementById('toc-links');
+sections.forEach(s => {
+  const a = document.createElement('a');
+  a.href = '#' + s.id;
+  a.className = 'toc-item block';
+  a.innerHTML = `<span class="text-[#ff5722] text-[10px] font-['Fira Code']">${s.title}</span>`;
+  a.onclick = function(e) {
+    e.preventDefault();
+    document.getElementById(s.id).scrollIntoView({behavior:'smooth'});
+    toggleTOC();
+  };
+  tocContainer.appendChild(a);
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+document.addEventListener('scroll', function() {
+  const sections = document.querySelectorAll('.section-page');
+  let current = 0;
+  sections.forEach((sec, i) => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top <= 200) current = i;
+  });
+  document.querySelectorAll('.chapter-progress .step').forEach((step, i) => {
+    step.classList.remove('active', 'done');
+    if (i < current) step.classList.add('done');
+    else if (i === current) step.classList.add('active');
+  });
+  document.querySelectorAll('.chapter-progress .connector').forEach((conn, i) => {
+    conn.classList.toggle('done', i < current);
+  });
+});
+
+let hasScrolledToChapter = false;
+document.addEventListener('scroll', function checkGraduate() {
+  if (!hasScrolledToChapter) {
+    const lastSection = document.getElementById('nivel-5');
+    if (lastSection) {
+      const rect = lastSection.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        hasScrolledToChapter = true;
+        unlockAchievement('graduado');
+      }
+    }
+  }
+});
+
+unlockAchievement('iniciado');
+updateUI();
+
+if (state.achievements.includes('analista')) {
+  const el = document.querySelector('[data-achievement="analista"]');
+  if (el) { el.classList.remove('locked'); el.classList.add('unlocked'); }
+}
+if (state.achievements.includes('desafiante')) {
+  const el = document.querySelector('[data-achievement="desafiante"]');
+  if (el) { el.classList.remove('locked'); el.classList.add('unlocked'); }
+}
+if (state.achievements.includes('graduado')) {
+  const el = document.querySelector('[data-achievement="graduado"]');
+  if (el) { el.classList.remove('locked'); el.classList.add('unlocked'); }
+  hasScrolledToChapter = true;
+}
+</script>
+
+</body>
+</html>
