@@ -118,7 +118,11 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                 <a href="<?= BASE_URL ?>"><img src="img/logo.png" alt="Salva Technology"></a>
             </div>
             <div class="user-badge">
-                <div class="avatar"><?php echo strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)); ?></div>
+                <?php if (!empty($_SESSION['usuario_avatar']) && !$esProfesor): ?>
+                    <img src="<?= htmlspecialchars($_SESSION['usuario_avatar']) ?>" alt="Foto" class="avatar-img">
+                <?php else: ?>
+                    <div class="avatar"><?php echo strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)); ?></div>
+                <?php endif; ?>
                 <div class="name"><?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?></div>
                 <?php if ($esProfesor): ?>
                 <span class="plan-badge" style="background:rgba(255,68,68,0.15);color:#ff4444;border-color:rgba(255,68,68,0.3);">PROFESOR</span>
@@ -140,6 +144,9 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                 </a>
                 <a href="planes">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>Planes
+                </a>
+                <a href="perfil">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Mi Perfil
                 </a>
                 <?php endif; ?>
             </nav>

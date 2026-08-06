@@ -86,7 +86,11 @@ if ($plan === 'suscripcion' && $suscripcionExpira) {
                 <a href="<?= BASE_URL ?>"><img src="img/logo.png" alt="Salva Technology"></a>
             </div>
             <div class="user-badge">
-                <div class="avatar"><?php echo strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)); ?></div>
+                <?php if (!empty($_SESSION['usuario_avatar'])): ?>
+                    <img src="<?= htmlspecialchars($_SESSION['usuario_avatar']) ?>" alt="Foto" class="avatar-img">
+                <?php else: ?>
+                    <div class="avatar"><?php echo strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)); ?></div>
+                <?php endif; ?>
                 <div class="name"><?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?></div>
                 <span class="plan-badge plan-<?php echo $plan; ?>"><?php echo $plan === 'suscripcion' ? 'SUSCRIPCIÓN' : 'GRATUITO'; ?></span>
             </div>

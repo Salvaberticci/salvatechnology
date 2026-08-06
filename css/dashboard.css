@@ -87,6 +87,17 @@ body.dashboard-body {
     box-shadow: 0 0 20px var(--accent-glow);
 }
 
+.dash-sidebar .user-badge .avatar-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    display: block;
+    margin: 0 auto 0.75rem;
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
 .dash-sidebar .user-badge .name {
     font-family: 'Orbitron', sans-serif;
     font-size: 0.8rem;

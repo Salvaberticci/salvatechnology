@@ -13,56 +13,96 @@ $mensaje = '';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nuevoNombre = trim($_POST['nombre'] ?? '');
-    $nuevoEmail = trim($_POST['email'] ?? '');
-    $nuevoTelefono = trim($_POST['telefono'] ?? '');
-    $nuevoPais = trim($_POST['pais'] ?? '');
-    $nuevaPassword = $_POST['password'] ?? '';
+    $accion = $_POST['accion'] ?? '';
 
-    if ($nuevoNombre === '' || !filter_var($nuevoEmail, FILTER_VALIDATE_EMAIL)) {
-        $error = 'El nombre y un email válido son obligatorios.';
-    } else {
-        $stmt = $pdo->prepare('SELECT id FROM usuarios WHERE email = ? AND id != ?');
-        $stmt->execute([$nuevoEmail, $usuarioId]);
-        if ($stmt->fetch()) {
-            $error = 'Ese email ya está registrado por otro usuario.';
-        } elseif ($nuevaPassword !== '' && strlen($nuevaPassword) < 6) {
-            $error = 'La contraseña debe tener al menos 6 caracteres.';
+    if ($accion === 'datos') {
+        $nuevoNombre = trim($_POST['nombre'] ?? '');
+        $nuevoEmail = trim($_POST['email'] ?? '');
+        $nuevoTelefono = trim($_POST['telefono'] ?? '');
+        $nuevoPais = trim($_POST['pais'] ?? '');
+        $nuevaPassword = $_POST['password'] ?? '';
+
+        if ($nuevoNombre === '' || !filter_var($nuevoEmail, FILTER_VALIDATE_EMAIL)) {
+            $error = 'El nombre y un email válido son obligatorios.';
         } else {
-            if ($nuevaPassword !== '') {
-                $stmt = $pdo->prepare('UPDATE usuarios SET nombre = ?, email = ?, telefono = ?, pais = ?, password = ? WHERE id = ?');
-                $stmt->execute([$nuevoNombre, $nuevoEmail, $nuevoTelefono, $nuevoPais, password_hash($nuevaPassword, PASSWORD_DEFAULT), $usuarioId]);
+            $stmt = $pdo->prepare('SELECT id FROM usuarios WHERE email = ? AND id != ?');
+            $stmt->execute([$nuevoEmail, $usuarioId]);
+            if ($stmt->fetch()) {
+                $error = 'Ese email ya está registrado por otro usuario.';
+            } elseif ($nuevaPassword !== '' && strlen($nuevaPassword) < 6) {
+                $error = 'La contraseña debe tener al menos 6 caracteres.';
             } else {
-                $stmt = $pdo->prepare('UPDATE usuarios SET nombre = ?, email = ?, telefono = ?, pais = ? WHERE id = ?');
-                $stmt->execute([$nuevoNombre, $nuevoEmail, $nuevoTelefono, $nuevoPais, $usuarioId]);
+                if ($nuevaPassword !== '') {
+                    $stmt = $pdo->prepare('UPDATE usuarios SET nombre = ?, email = ?, telefono = ?, pais = ?, password = ? WHERE id = ?');
+                    $stmt->execute([$nuevoNombre, $nuevoEmail, $nuevoTelefono, $nuevoPais, password_hash($nuevaPassword, PASSWORD_DEFAULT), $usuarioId]);
+                } else {
+                    $stmt = $pdo->prepare('UPDATE usuarios SET nombre = ?, email = ?, telefono = ?, pais = ? WHERE id = ?');
+                    $stmt->execute([$nuevoNombre, $nuevoEmail, $nuevoTelefono, $nuevoPais, $usuarioId]);
+                }
+                $_SESSION['usuario_nombre'] = $nuevoNombre;
+                $_SESSION['usuario_email'] = $nuevoEmail;
+                $mensaje = 'Perfil actualizado correctamente.';
             }
-            $_SESSION['usuario_nombre'] = $nuevoNombre;
-            $_SESSION['usuario_email'] = $nuevoEmail;
-            $mensaje = 'Perfil actualizado correctamente.';
         }
     }
 
-    if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
-        $ext = strtolower(pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION));
+    if ($accion === 'avatar' && isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
+        $tmp = $_FILES['avatar']['tmp_name'];
         $permitidas = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-        $maxBytes = 2 * 1024 * 1024;
+        $ext = strtolower(pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION));
+        $maxBytes = 4 * 1024 * 1024;
+
         if (!in_array($ext, $permitidas)) {
             $error = 'Formato de imagen no permitido (usa JPG, PNG, WEBP o GIF).';
         } elseif ($_FILES['avatar']['size'] > $maxBytes) {
-            $error = 'La imagen supera los 2 MB.';
+            $error = 'La imagen supera los 4 MB.';
         } else {
-            $carpeta = __DIR__ . '/uploads/avatars';
-            if (!is_dir($carpeta)) {
-                mkdir($carpeta, 0755, true);
-            }
-            $nombreUnico = 'usuario_' . $usuarioId . '_' . uniqid() . '.' . $ext;
-            if (move_uploaded_file($_FILES['avatar']['tmp_name'], $carpeta . '/' . $nombreUnico)) {
-                $stmt = $pdo->prepare('UPDATE usuarios SET avatar = ? WHERE id = ?');
-                $stmt->execute(['uploads/avatars/' . $nombreUnico, $usuarioId]);
-                $_SESSION['usuario_avatar'] = 'uploads/avatars/' . $nombreUnico;
-                $mensaje = 'Imagen de perfil actualizada.';
+            $info = @getimagesize($tmp);
+            if (!$info) {
+                $error = 'No se pudo leer la imagen.';
             } else {
-                $error = 'No se pudo subir la imagen.';
+                $src = null;
+                switch ($info[2]) {
+                    case IMAGETYPE_JPEG: $src = @imagecreatefromjpeg($tmp); break;
+                    case IMAGETYPE_PNG:  $src = @imagecreatefrompng($tmp); break;
+                    case IMAGETYPE_GIF:  $src = @imagecreatefromgif($tmp); break;
+                    case IMAGETYPE_WEBP:
+                        if (function_exists('imagecreatefromwebp')) { $src = @imagecreatefromwebp($tmp); }
+                        break;
+                }
+                if (!$src) {
+                    $error = 'No se pudo procesar la imagen.';
+                } else {
+                    $imgW = imagesx($src);
+                    $imgH = imagesy($src);
+                    $ratio = min(1, 480 / $imgW, 480 / $imgH);
+                    if ($ratio < 1) {
+                        $nw = (int) round($imgW * $ratio);
+                        $nh = (int) round($imgH * $ratio);
+                        $res = imagecreatetruecolor($nw, $nh);
+                        imagealphablending($res, false);
+                        imagesavealpha($res, true);
+                        imagecopyresampled($res, $src, 0, 0, 0, 0, $nw, $nh, $imgW, $imgH);
+                        imagedestroy($src);
+                        $src = $res;
+                    }
+                    $carpeta = __DIR__ . '/uploads/avatars';
+                    if (!is_dir($carpeta)) { mkdir($carpeta, 0755, true); }
+
+                    if (function_exists('imagewebp')) {
+                        $nombre = 'avatar_' . $usuarioId . '_' . uniqid() . '.webp';
+                        imagewebp($src, $carpeta . '/' . $nombre, 80);
+                    } else {
+                        $nombre = 'avatar_' . $usuarioId . '_' . uniqid() . '.jpg';
+                        imagejpeg($src, $carpeta . '/' . $nombre, 85);
+                    }
+                    imagedestroy($src);
+
+                    $stmt = $pdo->prepare('UPDATE usuarios SET avatar = ? WHERE id = ?');
+                    $stmt->execute(['uploads/avatars/' . $nombre, $usuarioId]);
+                    $_SESSION['usuario_avatar'] = 'uploads/avatars/' . $nombre;
+                    $mensaje = 'Imagen de perfil actualizada.';
+                }
             }
         }
     }
@@ -105,44 +145,78 @@ $stmt = $pdo->prepare("SELECT c.*, i.estado as inscripcion_estado, i.tipo as ins
 $stmt->execute([$usuarioId, $usuarioId]);
 $misCursos = $stmt->fetchAll();
 
-// Experiencia y logros de e-books
+// Logros reales basados en datos de la plataforma
 $stmt = $pdo->prepare('SELECT * FROM ebook_progreso WHERE usuario_id = ? ORDER BY actualizado_en DESC');
 $stmt->execute([$usuarioId]);
 $ebookProgresos = $stmt->fetchAll();
 
-$xpTotal = 0;
+$xpEbooks = 0;
 $quizAciertosTotal = 0;
-$logrosGanados = [];
-$ebooksCompletados = 0;
 foreach ($ebookProgresos as $ep) {
-    $xpTotal += (int)$ep['xp'];
+    $xpEbooks += (int)$ep['xp'];
     $quizAciertosTotal += (int)$ep['quiz_aciertos'];
-    $parsed = json_decode($ep['logros'] ?? '[]', true);
-    if (is_array($parsed)) {
-        foreach ($parsed as $l) {
-            if (!in_array($l, $logrosGanados)) {
-                $logrosGanados[] = $l;
-            }
-        }
-    }
-    if ((int)$ep['level'] >= 5 || in_array('graduado', (array)$parsed)) {
-        $ebooksCompletados++;
-    }
 }
-$nivelTotal = floor($xpTotal / 100) + 1;
-$xpNivelActual = $xpTotal % 100;
-if (!in_array('iniciado', $logrosGanados) && count($ebookProgresos) > 0) {
-    $logrosGanados[] = 'iniciado';
-}
+$ebooksLeidos = count($ebookProgresos);
 
-$catalogoLogros = [
-    'iniciado'    => ['nombre' => 'Iniciado',            'icono' => '🌅', 'desc' => 'Completaste tu primer capítulo en un E-Book'],
-    'arquitecto'  => ['nombre' => 'Arquitecto',          'icono' => '🏗️', 'desc' => 'Entendiste la anatomía de los sistemas'],
-    'analista'    => ['nombre' => 'Analista de Datos',    'icono' => '🔬', 'desc' => 'Distinguiste Dato de Información'],
-    'desafiante'  => ['nombre' => 'Desafiante',           'icono' => '⚡', 'desc' => 'Respondiste todos los desafíos correctamente'],
-    'graduado'    => ['nombre' => 'Graduado',             'icono' => '🎓', 'desc' => 'Completaste un E-Book interactivo completo'],
+$stmt = $pdo->prepare('SELECT COUNT(*) FROM progreso_lecciones WHERE usuario_id = ? AND completado = 1');
+$stmt->execute([$usuarioId]);
+$clasesCompletadas = (int)$stmt->fetchColumn();
+
+$stmt = $pdo->prepare('SELECT COUNT(*) FROM entregas WHERE usuario_id = ?');
+$stmt->execute([$usuarioId]);
+$entregasEnviadas = (int)$stmt->fetchColumn();
+
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM entregas WHERE usuario_id = ? AND estado = 'aprobado'");
+$stmt->execute([$usuarioId]);
+$entregasAprobadas = (int)$stmt->fetchColumn();
+
+$cursoCompleto = false;
+foreach ($misCursos as $curso) {
+    if ((int)$curso['total_lecciones'] > 0 && (int)$curso['lecciones_completadas'] >= (int)$curso['total_lecciones']) {
+        $cursoCompleto = true;
+        break;
+    }
+}
+$esSuscriptor = ($plan === 'suscripcion');
+
+$stats = [
+    'clases'         => $clasesCompletadas,
+    'ebooks'         => $ebooksLeidos,
+    'quizzes'        => $quizAciertosTotal,
+    'entregas'       => $entregasEnviadas,
+    'aprobadas'      => $entregasAprobadas,
+    'suscriptor'     => $esSuscriptor,
+    'curso_completo' => $cursoCompleto,
 ];
 
+$catalogoLogros = [
+    'primera_clase'  => ['nombre' => 'Primera Clase',             'icono' => 'fa-solid fa-flag-checkered', 'desc' => 'Completar 1 clase del programa', 'regla' => ['clave' => 'clases', 'min' => 1]],
+    'clases_10'      => ['nombre' => 'Estudiante Constante',      'icono' => 'fa-solid fa-bullseye',       'desc' => 'Completar 10 clases del programa', 'regla' => ['clave' => 'clases', 'min' => 10]],
+    'clases_25'      => ['nombre' => 'Maratonista',               'icono' => 'fa-solid fa-award',          'desc' => 'Completar 25 clases del programa', 'regla' => ['clave' => 'clases', 'min' => 25]],
+    'primer_ebook'   => ['nombre' => 'Explorador Digital',        'icono' => 'fa-solid fa-book-open',     'desc' => 'Leer 1 e-book interactivo', 'regla' => ['clave' => 'ebooks', 'min' => 1]],
+    'ebooks_3'       => ['nombre' => 'Bibliófilo Digital',        'icono' => 'fa-solid fa-book',          'desc' => 'Leer 3 e-books interactivos', 'regla' => ['clave' => 'ebooks', 'min' => 3]],
+    'primer_quiz'    => ['nombre' => 'Mente Curiosa',             'icono' => 'fa-solid fa-lightbulb',     'desc' => 'Responder 1 quiz correctamente', 'regla' => ['clave' => 'quizzes', 'min' => 1]],
+    'quizzes_10'     => ['nombre' => 'Maestro de Quizzes',        'icono' => 'fa-solid fa-brain',         'desc' => 'Responder 10 quizzes correctamente', 'regla' => ['clave' => 'quizzes', 'min' => 10]],
+    'primer_entrega' => ['nombre' => 'Primera Entrega',           'icono' => 'fa-solid fa-paper-plane',   'desc' => 'Enviar 1 actividad a tu profesor', 'regla' => ['clave' => 'entregas', 'min' => 1]],
+    'entregas_5'     => ['nombre' => 'Estudiante Comprometido',   'icono' => 'fa-solid fa-file-pen',      'desc' => 'Enviar 5 actividades a tu profesor', 'regla' => ['clave' => 'entregas', 'min' => 5]],
+    'aprobado'       => ['nombre' => 'Aprobado por la Maestría',  'icono' => 'fa-solid fa-circle-check',  'desc' => 'Tener 1 entrega aprobada por un profesor', 'regla' => ['clave' => 'aprobadas', 'min' => 1]],
+    'curso_completo' => ['nombre' => 'Graduado',                  'icono' => 'fa-solid fa-user-graduate', 'desc' => 'Completar el 100% de un curso', 'regla' => ['clave' => 'curso_completo', 'min' => 1]],
+    'suscriptor'     => ['nombre' => 'Miembro Elite',             'icono' => 'fa-solid fa-gem',           'desc' => 'Tener una suscripción activa', 'regla' => ['clave' => 'suscriptor', 'min' => 1]],
+];
+
+$logrosGanados = [];
+foreach ($catalogoLogros as $key => $l) {
+    $valor = $stats[$l['regla']['clave']] ?? 0;
+    if (is_bool($valor)) {
+        if ($valor) { $logrosGanados[] = $key; }
+    } elseif ($valor >= $l['regla']['min']) {
+        $logrosGanados[] = $key;
+    }
+}
+
+$xpTotal = $xpEbooks + $clasesCompletadas * 10 + $entregasAprobadas * 20 + $quizAciertosTotal * 5;
+$nivelTotal = floor($xpTotal / 100) + 1;
+$xpNivelActual = $xpTotal % 100;
 $logroKeys = array_keys($catalogoLogros);
 ?>
 <!DOCTYPE html>
@@ -154,6 +228,7 @@ $logroKeys = array_keys($catalogoLogros);
     <base href="<?= BASE_URL ?>">
     <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -179,7 +254,7 @@ $logroKeys = array_keys($catalogoLogros);
             </div>
             <div class="user-badge">
                 <?php if ($usuario['avatar']): ?>
-                    <img src="<?= htmlspecialchars($usuario['avatar']) ?>" alt="Foto" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--accent, #ff8c00);">
+                    <img src="<?= htmlspecialchars($usuario['avatar']) ?>" alt="Foto" class="avatar-img">
                 <?php else: ?>
                     <div class="avatar"><?php echo strtoupper(substr($usuario['nombre'], 0, 1)); ?></div>
                 <?php endif; ?>
@@ -191,10 +266,6 @@ $logroKeys = array_keys($catalogoLogros);
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                     Dashboard
                 </a>
-                <a href="perfil" class="active">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    Mi Perfil
-                </a>
                 <a href="cursos">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                     Explorar Cursos
@@ -202,6 +273,10 @@ $logroKeys = array_keys($catalogoLogros);
                 <a href="planes">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                     Planes
+                </a>
+                <a href="perfil" class="active">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Mi Perfil
                 </a>
                 <a href="logout">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
@@ -274,6 +349,7 @@ $logroKeys = array_keys($catalogoLogros);
                 <div class="lg:col-span-2 bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl p-6">
                     <h3 class="font-['Orbitron'] text-white text-sm font-bold mb-4"><i class="fa-solid fa-user-gear mr-2" style="color:var(--accent);"></i>Editar Mis Datos</h3>
                     <form method="POST" class="space-y-4">
+                        <input type="hidden" name="accion" value="datos">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="text-[10px] uppercase text-stone-500 font-mono block mb-1">Nombre completo</label>
@@ -305,23 +381,27 @@ $logroKeys = array_keys($catalogoLogros);
 
                 <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl p-6">
                     <h3 class="font-['Orbitron'] text-white text-sm font-bold mb-4"><i class="fa-solid fa-image mr-2" style="color:var(--accent);"></i>Foto de Perfil</h3>
-                    <?php if ($usuario['avatar']): ?>
-                    <img src="<?= htmlspecialchars($usuario['avatar']) ?>" alt="Avatar" class="w-24 h-24 rounded-2xl object-cover border-2 border-[var(--accent)] mx-auto mb-3">
-                    <?php endif; ?>
-                    <form method="POST" enctype="multipart/form-data" class="space-y-3">
-                        <input type="file" name="avatar" accept="image/*" class="w-full text-xs text-stone-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-accent file:text-black file:font-bold file:text-xs hover:file:bg-orange-600 transition-all">
-                        <p class="text-stone-600 text-[10px] font-mono">JPG, PNG, WEBP o GIF · Máx 2 MB</p>
+                    <form method="POST" enctype="multipart/form-data" class="space-y-3" id="avatarForm">
+                        <input type="hidden" name="accion" value="avatar">
+                        <div class="relative w-24 h-24 mx-auto mb-3">
+                            <img id="avatarPreview" alt="Vista previa" class="w-24 h-24 rounded-2xl object-cover border-2 border-[var(--accent)] hidden">
+                            <?php if ($usuario['avatar']): ?>
+                            <img src="<?= htmlspecialchars($usuario['avatar']) ?>" alt="Avatar" id="avatarActual" class="w-24 h-24 rounded-2xl object-cover border-2 border-[var(--accent)]">
+                            <?php endif; ?>
+                        </div>
+                        <input type="file" name="avatar" id="avatarInput" accept="image/*" class="w-full text-xs text-stone-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-accent file:text-black file:font-bold file:text-xs hover:file:bg-orange-600 transition-all">
+                        <p class="text-stone-600 text-[10px] font-mono">JPG, PNG, WEBP o GIF · Se comprime a WebP automáticamente</p>
                         <button type="submit" class="btn-explorar" style="width:100%;">SUBIR IMAGEN</button>
                     </form>
                 </div>
             </div>
 
-            <!-- Experiencia y logros estilo videojuego -->
+            <!-- Logros y experiencia -->
             <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl p-6 mb-6">
                 <div class="flex items-center justify-between flex-wrap gap-3 mb-4">
-                    <h3 class="font-['Orbitron'] text-white text-sm font-bold"><i class="fa-solid fa-gamepad mr-2" style="color:var(--accent);"></i>Experiencia en E-Books (Estilo Videojuego)</h3>
+                    <h3 class="font-['Orbitron'] text-white text-sm font-bold"><i class="fa-solid fa-trophy mr-2" style="color:var(--accent);"></i>Logros y Experiencia</h3>
                     <?php if (count($ebookProgresos) > 0): ?>
-                    <span class="text-stone-500 text-[10px] font-mono"><?php echo count($ebookProgresos); ?> e-book(s) sincronizado(s)</span>
+                    <span class="text-stone-500 text-[10px] font-mono"><?php echo count($ebookProgresos); ?> e-book(s) leído(s)</span>
                     <?php endif; ?>
                 </div>
 
@@ -355,12 +435,15 @@ $logroKeys = array_keys($catalogoLogros);
                 <?php endif; ?>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="logros-grid">
-                    <?php foreach ($logroKeys as $key): $l = $catalogoLogros[$key]; $ganado = in_array($key, $logrosGanados); ?>
-                    <div class="rounded-xl p-4 border transition flex items-center gap-3 <?php echo $ganado ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-black/30 border-white/5 opacity-40'; ?>">
-                        <span class="text-2xl"><?php echo $l['icono']; ?></span>
+                    <?php foreach ($logroKeys as $key): $l = $catalogoLogros[$key]; $ganado = in_array($key, $logrosGanados); $regla = $l['regla']; $valor = $stats[$regla['clave']] ?? 0; ?>
+                    <div class="rounded-xl p-4 border transition flex items-center gap-3 <?php echo $ganado ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-black/30 border-white/5 opacity-60'; ?>">
+                        <span class="text-xl <?php echo $ganado ? 'text-accent' : 'text-stone-600'; ?>"><i class="<?php echo $l['icono']; ?>"></i></span>
                         <div class="flex-1">
                             <p class="font-['Orbitron'] text-xs font-bold <?php echo $ganado ? 'text-yellow-400' : 'text-stone-500'; ?>"><?php echo $l['nombre']; ?></p>
                             <p class="font-['Fira Code'] text-[10px] <?php echo $ganado ? 'text-stone-400' : 'text-stone-600'; ?>"><?php echo $l['desc']; ?></p>
+                            <?php if (!$ganado && !is_bool($valor)): ?>
+                            <p class="text-[10px] font-mono text-accent mt-1">Progreso: <?php echo $valor; ?>/<?php echo $regla['min']; ?></p>
+                            <?php endif; ?>
                         </div>
                         <?php if ($ganado): ?><span class="text-green-400 text-sm"><i class="fa-solid fa-lock-open"></i></span><?php else: ?><span class="text-stone-600 text-sm"><i class="fa-solid fa-lock"></i></span><?php endif; ?>
                     </div>
@@ -433,5 +516,50 @@ $logroKeys = array_keys($catalogoLogros);
     </div>
 
     <script src="js/matrix-rain.js"></script>
+    <script>
+        (function () {
+            var input = document.getElementById('avatarInput');
+            var preview = document.getElementById('avatarPreview');
+            var actual = document.getElementById('avatarActual');
+            if (!input || !preview) return;
+
+            input.addEventListener('change', function () {
+                var file = input.files && input.files[0];
+                if (!file || file.type.indexOf('image/') !== 0) return;
+
+                var url = URL.createObjectURL(file);
+                var img = new Image();
+                img.onload = function () {
+                    try {
+                        var max = 480;
+                        var w = img.width, h = img.height;
+                        var r = Math.min(1, max / w, max / h);
+                        if (r < 1) { w = Math.round(w * r); h = Math.round(h * r); }
+                        var canvas = document.createElement('canvas');
+                        canvas.width = w;
+                        canvas.height = h;
+                        var ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, w, h);
+                        ctx.drawImage(img, 0, 0, w, h);
+                        canvas.toBlob(function (blob) {
+                            if (blob && window.DataTransfer) {
+                                var dt = new DataTransfer();
+                                dt.items.add(new File([blob], 'avatar.webp', { type: 'image/webp' }));
+                                input.files = dt.files;
+                            }
+                            preview.src = url;
+                            preview.classList.remove('hidden');
+                            if (actual) actual.classList.add('hidden');
+                        }, 'image/webp', 0.82);
+                    } catch (e) {
+                        preview.src = url;
+                        preview.classList.remove('hidden');
+                        if (actual) actual.classList.add('hidden');
+                    }
+                };
+                img.src = url;
+            });
+        })();
+    </script>
 </body>
 </html>

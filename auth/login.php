@@ -38,6 +38,7 @@ try {
     $_SESSION['usuario_email'] = $usuario['email'];
     $_SESSION['usuario_rol'] = $usuario['rol'];
     $_SESSION['usuario_plan'] = $usuario['plan'];
+    $_SESSION['usuario_avatar'] = $usuario['avatar'];
     $_SESSION['suscripcion_expira'] = $usuario['suscripcion_expira'];
 
     $redirect = ($usuario['rol'] === 'profesor') ? BASE_URL . 'profesor' : BASE_URL . 'dashboard';
