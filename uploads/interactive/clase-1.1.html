@@ -718,6 +718,23 @@ function loadState() {
 
 function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+  syncEbook();
+}
+
+function syncEbook() {
+  try {
+    fetch('../../api/ebook_sync.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ebook_key: 'clase-1.1',
+        xp: state.xp,
+        level: state.level,
+        logros: state.achievements,
+        quiz_aciertos: state.quizzes.length
+      })
+    }).catch(() => {});
+  } catch(e) {}
 }
 
 function addXP(amount) {
