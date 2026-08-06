@@ -200,18 +200,22 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
                         }
                         // Una sub-clase tiene número decimal (Clase 1.1, Clase 2.3, etc.)
                         $esSubclase = ($claseNum !== '' && strpos($claseNum, '.') !== false);
-
-                        $ebookPath = 'uploads/ebooks/clase-' . $claseNum . '.pdf';
-                        $diapoPath = 'uploads/diapositivas/clase-' . $claseNum . '.html';
-                        $interactivePath = 'uploads/interactive/clase-' . $claseNum . '.html';
+                        // Las sub-clases heredan el E-Book Interactivo de su clase madre (Clase 1.1 -> clase-1.html)
+                        $clasePadre = $esSubclase ? explode('.', $claseNum)[0] : $claseNum;
 
                         if ($esSubclase):
-                            // Sub-clases: no PDF ni Diapositivas; E-Book Interactivo siempre visible.
+                            // Sub-clases: no PDF ni Diapositivas; E-Book Interactivo de la clase madre.
+                            $ebookPath = '';
+                            $diapoPath = '';
+                            $interactivePath = $clasePadre !== '' ? 'uploads/interactive/clase-' . $clasePadre . '.html' : '';
                             $tieneEbook = false;
                             $tieneDiapo = false;
-                            $tieneInteractive = true;
+                            $tieneInteractive = $interactivePath !== '';
                         else:
                             // Maestras (Clase N): PDF, Diapositivas e Interactivo siempre visibles.
+                            $ebookPath = $claseNum !== '' ? 'uploads/ebooks/clase-' . $claseNum . '.pdf' : '';
+                            $diapoPath = $claseNum !== '' ? 'uploads/diapositivas/clase-' . $claseNum . '.html' : '';
+                            $interactivePath = $claseNum !== '' ? 'uploads/interactive/clase-' . $claseNum . '.html' : '';
                             $tieneEbook = $claseNum !== '';
                             $tieneDiapo = $claseNum !== '';
                             $tieneInteractive = $claseNum !== '';
@@ -348,6 +352,7 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
     </div>
 
     <!-- Modal E-Book -->
+    <?php if ($tieneEbook): ?>
     <div id="ebook-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.9);backdrop-filter:blur(5px);">
         <div class="relative w-full max-w-4xl h-[90vh] bg-[#111] rounded-2xl border border-accent/40 overflow-hidden flex flex-col">
             <div class="flex justify-between items-center p-4 border-b border-white/10">
@@ -359,8 +364,10 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
     <!-- Modal E-Book Interactivo (pantalla completa) -->
+    <?php if ($tieneInteractive): ?>
     <div id="interactive-modal" class="hidden fixed inset-0 z-50" style="background:rgba(0,0,0,1);">
         <div class="relative w-full h-full flex flex-col">
             <div class="flex justify-between items-center p-3 bg-black border-b border-white/10 z-10">
@@ -372,8 +379,10 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
     <!-- Modal Diapositivas -->
+    <?php if ($tieneDiapo): ?>
     <div id="diapo-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.9);backdrop-filter:blur(5px);">
         <div class="relative w-full max-w-5xl h-[90vh] bg-[#111] rounded-2xl border border-accent/40 overflow-hidden flex flex-col">
             <div class="flex justify-between items-center p-4 border-b border-white/10">
@@ -385,6 +394,7 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
     <script>
     function abrirModal(id) {
