@@ -171,3 +171,88 @@ HTML;
         $html
     );
 }
+
+/**
+ * Plantilla HTML de notificación interna para el equipo SalvaTechnology.
+ * Mismo sistema visual #0a0a0a / #ff8c00 / Orbitron + Roboto Mono.
+ * $lineas = [[label, valor], ...]
+ */
+function correoNotificacionHtml($titulo, $subtitulo, array $lineas, $mensaje = '') {
+    $filas = '';
+    foreach ($lineas as [$label, $valor]) {
+        $filas .= '<tr>'
+            . '<td style="padding:7px 0;font-family:\'Roboto Mono\',monospace;font-size:11px;color:#777777;white-space:nowrap;">' . htmlspecialchars($label) . '</td>'
+            . '<td style="padding:7px 0 7px 14px;font-family:\'Roboto Mono\',monospace;font-size:12px;color:#ffffff;word-break:break-all;">' . htmlspecialchars($valor) . '</td>'
+            . '</tr>';
+    }
+
+    $html = <<<'HTML'
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+        <title>{TITULO}</title>
+    </head>
+    <body style="margin:0;padding:0;background:#0a0a0a;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;">
+            <tr>
+                <td align="center" style="padding:36px 16px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#0f0f0f;border:1px solid rgba(255,140,0,0.15);border-radius:16px;overflow:hidden;">
+                        <tr>
+                            <td style="background:linear-gradient(90deg,#ff8c00 0%,#ffb55a 50%,#ff8c00 100%);height:3px;font-size:0;line-height:0;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="background:#0a0a0a;padding:28px 32px 18px 32px;border-bottom:1px solid rgba(255,140,0,0.12);">
+                                <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:#ff8c00;letter-spacing:3px;text-transform:uppercase;">&gt; SALVA·TECHNOLOGY · NOTIFICACIÓN INTERNA</div>
+                                <div style="margin:12px 0 0 0;font-family:'Orbitron',Arial,sans-serif;font-size:20px;font-weight:900;color:#ffffff;">{TITULO}</div>
+                                <div style="margin:6px 0 0 0;font-family:'Roboto Mono',monospace;font-size:11px;color:#9a9a9a;">{SUBTITULO}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:24px 32px;">
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;border:1px solid rgba(255,140,0,0.15);border-radius:12px;">
+                                    {FILAS}
+                                </table>
+                                {MENSAJE}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="background:#0a0a0a;border-top:1px solid rgba(255,140,0,0.12);padding:18px 32px;text-align:center;font-family:'Roboto Mono',monospace;font-size:10px;color:#777777;line-height:1.9;">
+                                Generado automáticamente por la plataforma · {YEAR}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+HTML;
+
+    $mensajeHtml = $mensaje !== ''
+        ? '<p style="margin:16px 0 0 0;padding:12px 14px;background:#0a0a0a;border:1px solid rgba(255,140,0,0.15);border-radius:10px;font-family:\'Roboto Mono\',monospace;font-size:11px;color:#e0e0e0;line-height:1.7;">' . htmlspecialchars($mensaje) . '</p>'
+        : '';
+
+    return str_replace(
+        ['{TITULO}', '{SUBTITULO}', '{FILAS}', '{MENSAJE}', '{YEAR}'],
+        [htmlspecialchars($titulo), htmlspecialchars($subtitulo), $filas, $mensajeHtml, date('Y')],
+        $html
+    );
+}
+
+/**
+ * Envía una notificación al coordinador de la academia.
+ * $paraDeDefecto: correo por defecto si no se define $NOTIFICAR_EMAIL en keys.local.php.
+ */
+function notificarAdmin($titulo, $subtitulo, array $lineas, $mensaje = '', $para = 'salvatoreberticci19@gmail.com') {
+    $configFile = __DIR__ . '/../config/keys.local.php';
+    if (file_exists($configFile)) {
+        require $configFile;
+        if (!empty($NOTIFICAR_EMAIL)) { $para = $NOTIFICAR_EMAIL; }
+    }
+    if (empty($para)) return ['ok' => false, 'error' => 'Sin destinatario de notificaciones'];
+    $asunto = '[' . $subtitulo . '] ' . $titulo;
+    return enviarCorreo($para, 'Administrador SalvaTech', $asunto, correoNotificacionHtml($titulo, $subtitulo, $lineas, $mensaje));
+}

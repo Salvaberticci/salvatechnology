@@ -23,6 +23,10 @@ $MAIL_FROM_NAME = 'Salva Technology';
 // URL pública de la app (se usa para el link "INGRESAR A MI CUENTA" del correo)
 $APP_URL    = 'https://academy.salvatechnology.online';
 
+// Correo donde llegan las notificaciones de pagos y actividades.
+// Si no se define, se usa salvatoreberticci19@gmail.com por defecto.
+$NOTIFICAR_EMAIL = 'tu-correo@dominio.tld';
+
 // ------------------------------------------------------------
 // Claves de API de IA (chatbot SALVA AI — Gemini y Groq)
 // ------------------------------------------------------------

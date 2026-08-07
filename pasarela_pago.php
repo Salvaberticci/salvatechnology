@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/app.php';
+require_once __DIR__ . '/helpers/correo.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
     header('Location: academia');
@@ -88,6 +89,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$usuarioId, $esSuscripcion ? null : $cursoId, $precio, $tipoPago, $metodo, $referencia, $notas, $comprobanteUrl]);
             }
             $success = true;
+
+            // Notificar al coordinador por correo
+            $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
+            $stmt->execute([$usuarioId]);
+            $usuario = $stmt->fetch();
+
+            $detalles = [
+                ['Estudiante', $usuario['nombre'] ?? '—'],
+                ['Email', $usuario['email'] ?? '—'],
+                ['Concepto', $titulo],
+                ['Monto', '$' . number_format($precio, 2)],
+                ['Método de pago', strtoupper($metodo)],
+                ['Referencia', $referencia],
+                ['Comprobante', $comprobanteUrl ? BASE_URL . $comprobanteUrl : 'Sin comprobante'],
+                ['Notas del estudiante', $notas !== '' ? $notas : '—'],
+            ];
+            if ($esSuscripcion) {
+                $detalles[] = ['Tipo', 'Suscripción ' . $planData['label']];
+            } else {
+                $detalles[] = ['Tipo', 'Compra de curso individual'];
+            }
+
+            $resNotif = notificarAdmin(
+                'NUEVO PAGO RECIBIDO',
+                'Pago pendiente de revisión',
+                $detalles,
+                'Revisa el comprobante y activa el acceso del estudiante desde el panel de profesor.'
+            );
+            if (!$resNotif['ok']) {
+                error_log('[Notificación pago] falló: ' . ($resNotif['error'] ?? 'desconocido'));
+            }
         }
     }
 }

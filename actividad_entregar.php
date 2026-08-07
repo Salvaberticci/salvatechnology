@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/app.php';
+require_once __DIR__ . '/helpers/correo.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
     header('Location: academia');
@@ -53,6 +54,38 @@ if ($entregaExistente) {
 } else {
     $stmt = $pdo->prepare("INSERT INTO entregas (actividad_id, usuario_id, archivo_url, respuesta_texto, link_url, estado) VALUES (?, ?, ?, ?, ?, 'pendiente')");
     $stmt->execute([$actividadId, $usuarioId, $archivoUrl, $respuestaTexto, $linkUrl]);
+}
+
+// Notificar al coordinador por correo
+$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
+$stmt->execute([$usuarioId]);
+$usuario = $stmt->fetch();
+
+$stmt = $pdo->prepare("SELECT l.titulo AS leccion_titulo FROM lecciones l WHERE l.id = ?");
+$stmt->execute([$actividad['leccion_id']]);
+$leccionInfo = $stmt->fetch();
+
+$detalles = [
+    ['Estudiante', $usuario['nombre'] ?? '—'],
+    ['Email', $usuario['email'] ?? '—'],
+    ['Actividad', $actividad['titulo']],
+    ['Lección', $leccionInfo['leccion_titulo'] ?? '—'],
+    ['Tipo de entrega', strtoupper($actividad['tipo'])],
+    ['Vinculada desde', $linkUrl ?? '—'],
+    ['Archivo', $archivoUrl ? BASE_URL . $archivoUrl : '—'],
+];
+if ($respuestaTexto !== null) {
+    $detalles[] = ['Respuesta', mb_strimwidth($respuestaTexto, 0, 300, '…')];
+}
+
+$resNotif = notificarAdmin(
+    'NUEVA ENTREGA DE ACTIVIDAD',
+    'Actividad pendiente de revisión',
+    $detalles,
+    'Revisa y califica la entrega del estudiante desde el panel de profesor.'
+);
+if (!$resNotif['ok']) {
+    error_log('[Notificación entrega] falló: ' . ($resNotif['error'] ?? 'desconocido'));
 }
 
 header('Location: ' . BASE_URL . 'curso/' . $cursoId . '/leccion/' . $actividad['leccion_id']);
