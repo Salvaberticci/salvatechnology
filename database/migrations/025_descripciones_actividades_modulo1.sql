@@ -11,16 +11,14 @@
 -- ============================================================
 
 UPDATE lecciones
-SET descripcion = '¿Qué se verá en esta clase? El mapa completo del oficio de Ingeniero de Software: la jerarquía Dato → Información → Sistema, el Modelo Cliente-Servidor, la diferencia entre RAM y Persistencia, las 3 plataformas (Web/Desktop/Mobile) y el mindset de desarrollador asistido por IA con la metodología ADD. Objetivo final: que entiendas dónde vive cada pieza de un sistema real y domines la visión end-to-end antes de escribir tu primera línea de código.'
+SET descripcion = '¿Qué se verá en esta clase? El mapa completo del oficio de Ingeniero de Software: la jerarquía Dato → Información → Sistema (el dato crudo aislado, el dato con contexto y la automatización con reglas de negocio), el Modelo Cliente-Servidor (cliente que pide, servidor que decide, base de datos que recuerda), la diferencia entre RAM (volátil, rápida) y Persistencia (disco, duradera, Single Source of Truth), las 3 plataformas (Web/Desktop/Mobile) con sus recursos, ventanas y contextos de uso, y el mindset de desarrollador asistido por IA con la metodología ADD (Análisis → Diseño → Desarrollo) como disciplina para iterar con asistencia de la IA. Objetivo final: que entiendas dónde vive cada pieza de un sistema real y domines la visión end-to-end —de la interfaz al disco— antes de escribir tu primera línea de código.'
 WHERE curso_id = 1
-  AND titulo REGEXP '^Clase[[:space:]]+1[[:space:]]*:'
-  AND CHAR_LENGTH(descripcion) < 400;
+  AND titulo REGEXP '^Clase[[:space:]]+1[[:space:]]*:';
 
 UPDATE lecciones
-SET descripcion = '¿Qué se verá en esta clase? La diferencia entre "picar código" y hacer ingeniería, y los 3 pilares: Dato (unidad mínima aislada), Información (dato con contexto) y Sistema (automatización con reglas de negocio). Objetivo final: que aprendas a clasificar cualquier elemento de una app real —un número, un mensaje, un algoritmo— como Dato, Información o Sistema, porque toda la arquitectura posterior se construye sobre esa clasificación.'
+SET descripcion = '¿Qué se verá en esta clase? La diferencia entre "picar código" y hacer ingeniería, y los 3 pilares con ejemplos concretos: Dato (unidad mínima aislada, sin significado propio — el número 12.50 por sí solo), Información (dato con contexto que responde una pregunta — "12.50 es el precio del combo en oferta"), y Sistema (información + regla de negocio + automatización — "si el stock baja de 5 unidades, reordenar automáticamente y notificar"). Objetivo final: que aprendas a clasificar cualquier elemento de una app real —un número, un mensaje, un algoritmo— como Dato, Información o Sistema y a identificar la regla de negocio que lo automatiza, porque toda la arquitectura posterior se construye sobre esa clasificación.'
 WHERE curso_id = 1
-  AND titulo REGEXP '^Clase[[:space:]]+1[[:space:]]*\.1[[:space:]]*:'
-  AND CHAR_LENGTH(descripcion) < 400;
+  AND titulo REGEXP '^Clase[[:space:]]+1[[:space:]]*\.1[[:space:]]*:';
 
 UPDATE lecciones
 SET descripcion = '¿Qué se verá en esta clase? Cómo se divide el software en cliente, servidor y base de datos, y cómo viajan las peticiones y respuestas a través de la red con el Modelo Cliente-Servidor, incluyendo la regla de oro de la arquitectura: nunca confiar en el Frontend. Objetivo final: que puedas trazar el viaje completo de una acción del usuario —desde el clic hasta la respuesta pintada en pantalla— identificando en qué capa ocurre cada paso.'
