@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../helpers/correo.php';
 
 header('Content-Type: application/json');
 
@@ -43,6 +44,25 @@ try {
     $_SESSION['usuario_email'] = $email;
     $_SESSION['usuario_rol'] = 'estudiante';
     $_SESSION['usuario_plan'] = 'gratuito';
+
+    $appUrl = 'https://salvatechnology.online';
+    $configFile = __DIR__ . '/../config/keys.local.php';
+    if (file_exists($configFile)) {
+        require $configFile;
+        if (!empty($APP_URL)) { $appUrl = $APP_URL; }
+    }
+    $loginUrl = rtrim($appUrl, '/') . '/academia';
+    $envio = enviarCorreo(
+        $email,
+        $nombre,
+        '¡Bienvenido a Salvatechnology Academy!',
+        correoBienvenidaHtml($nombre, $email, $appUrl, $loginUrl),
+        '',
+        __DIR__ . '/../img/logo.png'
+    );
+    if (!$envio['ok']) {
+        error_log('[Correo de bienvenida] falló para ' . $email . ': ' . $envio['error']);
+    }
 
     echo json_encode(['status' => 'success', 'message' => 'Registro exitoso', 'redirect' => BASE_URL . 'dashboard']);
 } catch (PDOException $e) {
