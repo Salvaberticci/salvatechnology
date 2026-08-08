@@ -49,6 +49,86 @@ if ($plan === 'suscripcion' && $suscripcionExpira) {
         $planLabel = $mapaMeses[(int)$ultPago] ?? '';
     }
 }
+
+// ---------- Estadísticas rápidas ----------
+$stmt = $pdo->prepare("SELECT
+    (SELECT COUNT(*) FROM inscripciones i JOIN cursos c ON i.curso_id = c.id WHERE i.usuario_id = ? AND i.estado = 'activa' AND c.activo = 1) AS cursos_activos,
+    (SELECT COUNT(*) FROM progreso_lecciones WHERE usuario_id = ? AND completado = 1) AS clases_completadas,
+    (SELECT COUNT(*) FROM entregas WHERE usuario_id = ? AND estado = 'pendiente') AS tareas_pendientes,
+    (SELECT COUNT(*) FROM entregas WHERE usuario_id = ? AND estado <> 'pendiente' AND calificacion IS NOT NULL) AS entregas_calificadas");
+$stmt->execute([$usuarioId, $usuarioId, $usuarioId, $usuarioId]);
+$stats = $stmt->fetch();
+
+// XP total igual que en perfil.php
+$stmt = $pdo->prepare("SELECT * FROM ebook_progreso WHERE usuario_id = ?");
+$stmt->execute([$usuarioId]);
+$xpEbooks = 0; $quizAciertosTotal = 0;
+foreach ($stmt->fetchAll() as $ep) {
+    $xpEbooks += (int)$ep['xp'];
+    $quizAciertosTotal += (int)$ep['quiz_aciertos'];
+}
+$entregasAprobadas = (int)$stats['entregas_calificadas'];
+$xpTotal = $xpEbooks + (int)$stats['clases_completadas'] * 10 + $entregasAprobadas * 20 + $quizAciertosTotal * 5;
+$nivel = floor($xpTotal / 100) + 1;
+
+// ---------- Continuar donde quedaste (primera lección sin completar de cada curso) ----------
+$stmt = $pdo->prepare("SELECT c.id AS curso_id, c.titulo AS curso_titulo, l.id AS leccion_id, l.titulo AS leccion_titulo, l.orden,
+    pl.ultimo_acceso,
+    (SELECT COUNT(*) FROM lecciones WHERE curso_id = c.id) AS total_lecciones,
+    (SELECT COUNT(*) FROM progreso_lecciones pl2 JOIN lecciones l2 ON pl2.leccion_id = l2.id WHERE l2.curso_id = c.id AND pl2.usuario_id = ? AND pl2.completado = 1) AS completadas
+    FROM inscripciones i
+    JOIN cursos c ON i.curso_id = c.id AND i.estado = 'activa' AND c.activo = 1
+    JOIN lecciones l ON l.curso_id = c.id
+    LEFT JOIN progreso_lecciones pl ON pl.leccion_id = l.id AND pl.usuario_id = ?
+    WHERE COALESCE(pl.completado, 0) = 0
+    ORDER BY i.fecha_inscripcion DESC, l.orden ASC");
+$stmt->execute([$usuarioId, $usuarioId]);
+$porContinuar = [];
+foreach ($stmt->fetchAll() as $pc) {
+    if (!isset($porContinuar[$pc['curso_id']])) {
+        $porContinuar[$pc['curso_id']] = $pc;
+    }
+}
+
+// ---------- Actividades pendientes (quests/minis sin entregar o en revisión) ----------
+$stmt = $pdo->prepare("SELECT a.id AS actividad_id, a.titulo AS actividad_titulo, l.id AS leccion_id, l.titulo AS leccion_titulo,
+    l.orden, c.id AS curso_id, c.titulo AS curso_titulo,
+    COALESCE(e.estado, 'sin_entrega') AS entrega_estado, e.fecha_entrega, e.calificacion,
+    (SELECT COUNT(*) FROM lecciones WHERE curso_id = c.id AND orden <= l.orden) AS clase_actual
+    FROM inscripciones i
+    JOIN cursos c ON i.curso_id = c.id AND i.estado = 'activa' AND c.activo = 1
+    JOIN lecciones l ON l.curso_id = c.id
+    JOIN actividades a ON a.leccion_id = l.id
+    LEFT JOIN entregas e ON e.actividad_id = a.id AND e.usuario_id = ?
+    LEFT JOIN progreso_lecciones pl ON pl.leccion_id = l.id AND pl.usuario_id = ?
+    WHERE COALESCE(pl.completado, 0) = 0
+    ORDER BY c.id, l.orden, a.id
+    LIMIT 6");
+$stmt->execute([$usuarioId, $usuarioId]);
+$actividadesPendientes = $stmt->fetchAll();
+
+// ---------- Últimas calificaciones del profesor ----------
+$stmt = $pdo->prepare("SELECT e.calificacion, e.comentario_profesor, e.fecha_revision, e.estado,
+    a.titulo AS actividad_titulo, l.titulo AS leccion_titulo, c.titulo AS curso_titulo, c.id AS curso_id, l.id AS leccion_id
+    FROM entregas e
+    JOIN actividades a ON e.actividad_id = a.id
+    JOIN lecciones l ON a.leccion_id = l.id
+    JOIN cursos c ON l.curso_id = c.id
+    WHERE e.usuario_id = ? AND e.estado <> 'pendiente' AND e.calificacion IS NOT NULL
+    ORDER BY e.fecha_revision DESC
+    LIMIT 5");
+$stmt->execute([$usuarioId]);
+$calificaciones = $stmt->fetchAll();
+
+// ---------- Barra de progreso promedio ----------
+$progresoPromedio = 0;
+if (!empty($misCursos)) {
+    $suma = 0;
+    foreach ($misCursos as $pc) {
+        $suma += $pc['total_lecciones'] > 0 ? ($pc['lecciones_completadas'] / $pc['total_lecciones']) * 100 : 0;
+    }
+    $progresoPromedio = round($suma / count($misCursos));
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -158,8 +238,113 @@ if ($plan === 'suscripcion' && $suscripcionExpira) {
                     <?php endif; ?>
                 </div>
             </div>
+<?php endif; ?>
+
+            <!-- KPIs -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl p-4">
+                    <div class="text-[10px] uppercase tracking-widest text-stone-500 font-mono mb-2">Progreso promedio</div>
+                    <div class="text-2xl font-bold font-['Orbitron'] text-accent"><?php echo $progresoPromedio; ?>%</div>
+                    <div class="text-[10px] text-stone-600 font-mono mt-1"><?php echo count($misCursos); ?> curso(s) activos</div>
+                </div>
+                <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl p-4">
+                    <div class="text-[10px] uppercase tracking-widest text-stone-500 font-mono mb-1">Clases completadas</div>
+                    <div class="text-2xl font-bold font-['Orbitron'] text-white"><?php echo (int)$stats['clases_completadas']; ?></div>
+                    <div class="text-[10px] text-stone-600 font-mono mt-1">marca progreso en cada clase</div>
+                </div>
+                <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl p-4">
+                    <div class="text-[10px] uppercase tracking-widest text-stone-500 font-mono mb-1">Tareas pendientes</div>
+                    <div class="text-2xl font-bold font-['Orbitron'] text-yellow-400"><?php echo (int)$stats['tareas_pendientes']; ?></div>
+                    <div class="text-[10px] text-stone-600 font-mono mt-1">entregas en revisión</div>
+                </div>
+                <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl p-4">
+                    <div class="text-[10px] uppercase tracking-widest text-stone-500 font-mono mb-1">Nivel / XP</div>
+                    <div class="text-2xl font-bold font-['Orbitron'] text-green-400"><?php echo $nivel; ?> <span class="text-sm text-stone-500">· <?php echo number_format($xpTotal); ?> XP</span></div>
+                    <div class="mt-2"><div class="progress-bar-track" style="height:4px;"><div class="progress-bar-fill" style="width:<?php echo min(100, $xpTotal % 100); ?>%"></div></div></div>
+                </div>
+            </div>
+
+            <!-- Continuar donde quedaste -->
+            <?php if (!empty($porContinuar)): ?>
+            <div class="mb-6">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-['Orbitron'] text-white text-sm font-bold"><span class="text-accent">▶</span> CONTINÚA DONDE QUEDASTE</h3>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <?php foreach ($porContinuar as $pc): ?>
+                    <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl p-5 flex items-center justify-between gap-4">
+                        <div class="min-w-0">
+                            <div class="text-[10px] uppercase tracking-widest text-stone-500 font-mono mb-1"><?php echo htmlspecialchars($pc['curso_titulo']); ?></div>
+                            <div class="text-white text-sm font-bold truncate"><?php echo htmlspecialchars($pc['leccion_titulo']); ?></div>
+                            <div class="text-[10px] text-stone-600 font-mono mt-1">Siguiente clase disponible · <?php echo (int)$pc['completadas']; ?>/<?php echo (int)$pc['total_lecciones']; ?> completadas</div>
+                        </div>
+                        <a href="curso/<?php echo $pc['curso_id']; ?>/leccion/<?php echo $pc['leccion_id']; ?>" class="btn-explorar shrink-0" style="padding:0.5rem 1.1rem;font-size:0.6rem;">CONTINUAR</a>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
             <?php endif; ?>
 
+            <!-- Actividades pendientes por hacer -->
+            <?php if (!empty($actividadesPendientes)): ?>
+            <div class="mb-6">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-['Orbitron'] text-white text-sm font-bold"><span class="text-accent">🎯</span> ACTIVIDADES PENDIENTES POR HACER</h3>
+                </div>
+                <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl divide-y divide-white/5">
+                    <?php foreach ($actividadesPendientes as $ap):
+                        $badgeEstado = $ap['entrega_estado'] === 'pendiente' ? 'text-yellow-400' : 'text-stone-500';
+                        $etiqueta = $ap['entrega_estado'] === 'pendiente' ? 'EN REVISIÓN' : 'SIN ENTREGAR';
+                    ?>
+                    <div class="flex items-center justify-between gap-3 px-5 py-3">
+                        <div class="min-w-0">
+                            <div class="text-white text-xs font-bold truncate"><?php echo htmlspecialchars($ap['actividad_titulo']); ?></div>
+                            <div class="text-[10px] text-stone-500 font-mono mt-0.5 truncate"><?php echo htmlspecialchars($ap['curso_titulo']); ?> · <?php echo htmlspecialchars($ap['leccion_titulo']); ?></div>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <span class="text-[10px] font-mono <?php echo $badgeEstado; ?>"><?php echo $etiqueta; ?></span>
+                            <a href="curso/<?php echo $ap['curso_id']; ?>/leccion/<?php echo $ap['leccion_id']; ?>" class="text-accent hover:text-white text-[10px] font-mono transition-colors">IR →</a>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- Últimas calificaciones -->
+            <?php if (!empty($calificaciones)): ?>
+            <div class="mb-6">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-['Orbitron'] text-white text-sm font-bold"><span class="text-accent">🏆</span> ÚLTIMAS CALIFICACIONES</h3>
+                    <a href="perfil" class="text-[10px] font-mono text-stone-500 hover:text-accent transition-colors">VER TODO EL PROGRESO →</a>
+                </div>
+                <div class="bg-[var(--panel-bg)] border border-[var(--border-color)] rounded-xl divide-y divide-white/5">
+                    <?php foreach ($calificaciones as $cal): ?>
+                    <div class="px-5 py-3">
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <div class="text-white text-sm font-bold truncate"><?php echo htmlspecialchars($cal['actividad_titulo']); ?></div>
+                                <div class="text-[10px] text-stone-500 font-mono mt-0.5"><?php echo htmlspecialchars($cal['curso_titulo']); ?> · <?php echo date('d/m/Y', strtotime($cal['fecha_revision'])); ?></div>
+                            </div>
+                            <div class="text-lg font-bold font-['Orbitron'] text-green-400 shrink-0"><?php echo (float)$cal['calificacion']; ?></div>
+                        </div>
+                        <?php if (!empty($cal['comentario_profesor'])): ?>
+                        <div class="text-xs text-stone-400 font-mono mt-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+                            💬 <?php echo htmlspecialchars($cal['comentario_profesor']); ?>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <div class="flex items-center gap-3 mb-3">
+                <h3 class="font-['Orbitron'] text-white text-sm font-bold"><span class="text-accent">📚</span> TUS CURSOS</h3>
+                <?php if (count($misCursos) > 0): ?>
+                <span class="text-[10px] text-stone-600 font-mono">progreso general promedio: <?php echo $progresoPromedio; ?>%</span>
+                <?php endif; ?>
+            </div>
             <?php if (count($misCursos) > 0): ?>
             <div class="course-feed">
                 <?php foreach ($misCursos as $curso):
