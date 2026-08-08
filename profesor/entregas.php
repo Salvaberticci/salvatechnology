@@ -123,7 +123,7 @@ $entregas = $stmt->fetchAll();
                 <div class="flex gap-2">
                     <a href="profesor/entregas?filtro=pendientes" class="btn-explorar" style="padding:0.4rem 1rem;font-size:0.6rem;">PENDIENTES</a>
                     <a href="profesor/entregas?filtro=calificadas" class="btn-explorar" style="padding:0.4rem 1rem;font-size:0.6rem;">CALIFICADAS</a>
-                    <a href="profesor/entregas" class="btn-explorar" style="padding:0.4rem 1rem;font-size:0.6rem;">TODAS</a>
+                    <a href="profesor/entregas?filtro=todas" class="btn-explorar" style="padding:0.4rem 1rem;font-size:0.6rem;">TODAS</a>
                 </div>
             </div>
 
