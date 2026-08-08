@@ -24,7 +24,7 @@
     <div class="overlay">
         <header>
             <div class="logo">
-                <img src="img/logo.png" alt="Salva Technology Logo">
+                <img src="img/logo.webp" alt="Salva Technology Logo">
             </div>
         </header>
         <div class="main-content">

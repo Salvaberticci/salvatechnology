@@ -144,7 +144,7 @@ $arrCursos = $arrCursos->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil | Profesor</title>
     <base href="<?= BASE_URL ?>">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/webp" href="img/logo.webp">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -154,7 +154,7 @@ $arrCursos = $arrCursos->fetchAll();
     <div class="scanlines"></div>
     <div class="dashboard-layout">
         <aside class="dash-sidebar">
-            <div class="logo-side"><a href="./"><img src="img/logo.png" alt="Salva"></a></div>
+            <div class="logo-side"><a href="./"><img src="img/logo.webp" alt="Salva"></a></div>
             <div class="user-badge">
                 <?php if ($usuario['avatar']): ?>
                     <img src="<?= htmlspecialchars($usuario['avatar']) ?>" alt="Foto" class="avatar-img">

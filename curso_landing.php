@@ -70,7 +70,7 @@ if (strpos($cursoTituloLower, 'píldora') !== false || strpos($cursoTituloLower,
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($curso['titulo']); ?> | Salvatechnology Academy</title>
     <base href="<?= BASE_URL ?>">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/webp" href="img/logo.webp">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -105,7 +105,7 @@ if (strpos($cursoTituloLower, 'píldora') !== false || strpos($cursoTituloLower,
     <div class="dashboard-layout">
         <aside class="dash-sidebar">
             <div class="logo-side">
-                <a href="<?= BASE_URL ?>"><img src="img/logo.png" alt="Salva Technology"></a>
+                <a href="<?= BASE_URL ?>"><img src="img/logo.webp" alt="Salva Technology"></a>
             </div>
             <div class="user-badge">
                 <?php if (!empty($_SESSION['usuario_avatar'])): ?>
@@ -174,7 +174,7 @@ if (strpos($cursoTituloLower, 'píldora') !== false || strpos($cursoTituloLower,
             <div class="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8">
                 <div class="flex items-center gap-5 flex-wrap">
                     <div class="w-20 h-20 rounded-2xl bg-accent/20 border border-accent/40 flex items-center justify-center overflow-hidden shadow-[0_0_30px_rgba(255,140,0,0.2)]">
-                        <img src="img/salvatore.png" alt="<?php echo htmlspecialchars($profesorNombre); ?>" class="w-full h-full object-cover">
+                        <img src="img/salvatore.webp" alt="<?php echo htmlspecialchars($profesorNombre); ?>" class="w-full h-full object-cover">
                     </div>
                     <div class="flex-1 min-w-[200px]">
                         <h3 class="font-['Orbitron'] text-white text-lg font-bold"><?php echo htmlspecialchars($profesorNombre); ?></h3>

@@ -61,7 +61,7 @@ try {
         '¡Bienvenido a Salvatechnology Academy!',
         correoBienvenidaHtml($nombre, $email, $appUrl, $loginUrl),
         '',
-        __DIR__ . '/../img/logo.png'
+        __DIR__ . '/../img/logo.webp'
     );
     if (!$envio['ok']) {
         error_log('[Correo de bienvenida] falló para ' . $email . ': ' . $envio['error']);

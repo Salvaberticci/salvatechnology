@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guía Maestra: Sistemas Web | Salvatechnology</title>
     <base href="<?= BASE_URL ?>">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/webp" href="img/logo.webp">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -38,7 +38,7 @@
         <header class="mb-8">
             <div class="logo">
                 <a href="<?= BASE_URL ?>">
-                    <img src="img/logo.png" alt="Salva Technology Logo" class="h-12">
+                    <img src="img/logo.webp" alt="Salva Technology Logo" class="h-12">
                 </a>
             </div>
         </header>

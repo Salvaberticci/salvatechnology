@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso Academia | Salvatechnology</title>
     <base href="<?= BASE_URL ?>">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/webp" href="img/logo.webp">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/guia.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -76,7 +76,7 @@
             <div class="flex items-center gap-6">
                 <div class="logo">
                     <a href="<?= BASE_URL ?>">
-                        <img src="img/logo.png" alt="Salva Technology Logo" class="h-12 hover:scale-105 transition-transform">
+                        <img src="img/logo.webp" alt="Salva Technology Logo" class="h-12 hover:scale-105 transition-transform">
                     </a>
                 </div>
                 <a href="<?= BASE_URL ?>" class="text-accent hover:text-white transition-colors flex items-center gap-2 font-mono text-xs group">

@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pago | <?php echo htmlspecialchars($titulo); ?></title>
     <base href="<?= BASE_URL ?>">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/webp" href="img/logo.webp">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config={theme:{extend:{colors:{'accent':'#ff8c00','dark-bg':'#0a0a0a'}}}}</script>
@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="scanlines"></div>
     <div class="dashboard-layout">
         <aside class="dash-sidebar">
-            <div class="logo-side"><a href="<?= BASE_URL ?>"><img src="img/logo.png" alt="Salva Technology"></a></div>
+            <div class="logo-side"><a href="<?= BASE_URL ?>"><img src="img/logo.webp" alt="Salva Technology"></a></div>
             <div class="user-badge">
                 <?php if (!empty($_SESSION['usuario_avatar'])): ?>
                     <img src="<?= htmlspecialchars($_SESSION['usuario_avatar']) ?>" alt="Foto" class="avatar-img">

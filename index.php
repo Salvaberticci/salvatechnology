@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salvatechnology</title>
     <base href="<?= BASE_URL ?>">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/webp" href="img/logo.webp">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="overflow-hidden">
@@ -14,7 +14,7 @@
         <div class="loader-grid"></div>
         <div class="loader-content">
             <div class="loader-logo">
-                <img src="img/logo.png" alt="Salva Technology Logo">
+                <img src="img/logo.webp" alt="Salva Technology Logo">
             </div>
             <div class="loader-text">INICIALIZANDO SISTEMA...</div>
             <div class="loader-bar-container">
@@ -28,7 +28,7 @@
     <div class="overlay">
         <header>
             <div class="logo">
-                <img src="img/logo.png" alt="Salva Technology Logo">
+                <img src="img/logo.webp" alt="Salva Technology Logo">
             </div>
         </header>
         <div class="main-content">

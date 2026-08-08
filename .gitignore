@@ -50,3 +50,6 @@ Thumbs.db
 
 # Guiones de clases (contenido local de desarrollo, NO se sube)
 /.guiones/
+
+# Respaldo local de imágenes originales (PNG pesados reemplazados por webp)
+/img/img-high/

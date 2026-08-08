@@ -44,7 +44,7 @@ function enviarCorreo($para, $paraNombre, $asunto, $html, $texto = '', $logoPath
         $mail->setFrom($MAIL_FROM, $MAIL_FROM_NAME);
         $mail->addAddress($para, $paraNombre);
         if ($logoPath !== '' && file_exists($logoPath)) {
-            $mail->addEmbeddedImage($logoPath, 'logo_brand', 'logo.png', 'base64', 'image/png');
+            $mail->addEmbeddedImage($logoPath, 'logo_brand', 'logo.webp', 'base64', 'image/webp');
         }
         $mail->isHTML(true);
         $mail->Subject = $asunto;

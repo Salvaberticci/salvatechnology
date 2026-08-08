@@ -226,7 +226,7 @@ $logroKeys = array_keys($catalogoLogros);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil | Salvatechnology Academy</title>
     <base href="<?= BASE_URL ?>">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/webp" href="img/logo.webp">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -250,7 +250,7 @@ $logroKeys = array_keys($catalogoLogros);
     <div class="dashboard-layout">
         <aside class="dash-sidebar">
             <div class="logo-side">
-                <a href="<?= BASE_URL ?>"><img src="img/logo.png" alt="Salva Technology"></a>
+                <a href="<?= BASE_URL ?>"><img src="img/logo.webp" alt="Salva Technology"></a>
             </div>
             <div class="user-badge">
                 <?php if ($usuario['avatar']): ?>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marca Personal | Salvatechnology</title>
     <base href="<?= BASE_URL ?>">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/webp" href="img/logo.webp">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/guia.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -103,7 +103,7 @@
             <div class="flex items-center gap-6">
                 <div class="logo">
                     <a href="<?= BASE_URL ?>">
-                        <img src="img/logo.png" alt="Salva Technology Logo" class="h-12 hover:scale-105 transition-transform">
+                        <img src="img/logo.webp" alt="Salva Technology Logo" class="h-12 hover:scale-105 transition-transform">
                     </a>
                 </div>
                 <a href="<?= BASE_URL ?>academia" class="text-accent hover:text-white transition-colors flex items-center gap-2 font-mono text-xs group">
@@ -157,7 +157,7 @@
                     <div class="md:w-5/12 mb-8 md:mb-0 order-2 md:order-3">
                         <div onclick="openModal(2)" class="glass-panel overflow-hidden rounded-2xl border border-accent/30 hover:border-accent transition-all text-right md:text-left cursor-pointer">
                             <div class="h-32 overflow-hidden">
-                                <img src="img/roadmap_logic.png" alt="Contenido" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <img src="img/roadmap_logic.webp" alt="Contenido" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             </div>
                             <div class="p-6">
                                 <h3 class="text-xl font-bold text-accent mb-2">02. ESTRATEGIA DE CONTENIDO</h3>

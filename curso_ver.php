@@ -85,7 +85,7 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($leccionActual['titulo']); ?> | <?php echo htmlspecialchars($curso['titulo']); ?></title>
     <base href="<?= BASE_URL ?>">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/webp" href="img/logo.webp">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -115,7 +115,7 @@ $progresoTotal = count($lecciones) > 0 ? round((array_sum(array_map(function($l)
     <div class="dashboard-layout">
         <aside class="dash-sidebar">
             <div class="logo-side">
-                <a href="<?= BASE_URL ?>"><img src="img/logo.png" alt="Salva Technology"></a>
+                <a href="<?= BASE_URL ?>"><img src="img/logo.webp" alt="Salva Technology"></a>
             </div>
             <div class="user-badge">
                 <?php if (!empty($_SESSION['usuario_avatar']) && !$esProfesor): ?>
