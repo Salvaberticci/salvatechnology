@@ -1,6 +1,9 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
+# URLs malformadas de redirects relativos antiguos (ej. /curso/1/leccion/academia)
+RewriteRule ^.*/academia/?$ academia [L,R=301]
+
 # Specific parameterized routes (must be before -d check)
 RewriteRule ^curso/([0-9]+)/leccion/([0-9]+)/?$ curso_ver.php?id=$1&leccion=$2 [L,QSA]
 RewriteRule ^curso/([0-9]+)/?$ curso_ver.php?id=$1 [L,QSA]
