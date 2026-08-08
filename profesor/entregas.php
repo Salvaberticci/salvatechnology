@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../helpers/correo.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'profesor') {
     header('Location: ' . BASE_URL . 'academia');
@@ -15,6 +16,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['
 
     $stmt = $pdo->prepare("UPDATE entregas SET estado = ?, calificacion = ?, comentario_profesor = ?, fecha_revision = NOW() WHERE id = ?");
     $stmt->execute([$estado, $calificacion, $comentario, $entregaId]);
+
+    // Notificar al estudiante por correo con la revisión del profesor
+    $stmt = $pdo->prepare("SELECT e.*, a.titulo AS actividad_titulo, l.titulo AS leccion_titulo, l.id AS leccion_id, c.titulo AS curso_titulo, c.id AS curso_id, u.nombre AS estudiante_nombre, u.email AS estudiante_email
+        FROM entregas e
+        JOIN actividades a ON e.actividad_id = a.id
+        JOIN lecciones l ON a.leccion_id = l.id
+        JOIN cursos c ON l.curso_id = c.id
+        JOIN usuarios u ON e.usuario_id = u.id
+        WHERE e.id = ?");
+    $stmt->execute([$entregaId]);
+    $info = $stmt->fetch();
+
+    if ($info && !empty($info['estudiante_email'])) {
+        $verUrl = BASE_URL . 'curso/' . $info['curso_id'] . '/leccion/' . $info['leccion_id'];
+        $resCorreo = notificarEstudianteActividadCalificada(
+            $info['estudiante_email'],
+            $info['estudiante_nombre'],
+            $_SESSION['usuario_nombre'],
+            $info['actividad_titulo'],
+            $info['leccion_titulo'],
+            $info['curso_titulo'],
+            $calificacion,
+            $estado,
+            $comentario,
+            $verUrl
+        );
+        if (!$resCorreo['ok']) {
+            error_log('[Correo revisión actividad] falló: ' . ($resCorreo['error'] ?? 'desconocido'));
+        }
+    }
 
     header('Location: ' . BASE_URL . 'profesor/entregas');
     exit;

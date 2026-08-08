@@ -256,3 +256,148 @@ function notificarAdmin($titulo, $subtitulo, array $lineas, $mensaje = '', $para
     $asunto = '[' . $subtitulo . '] ' . $titulo;
     return enviarCorreo($para, 'Administrador SalvaTech', $asunto, correoNotificacionHtml($titulo, $subtitulo, $lineas, $mensaje));
 }
+
+/**
+ * Plantilla HTML del correo al ESTUDIANTE cuando el profesor revisa/califica su actividad.
+ * Mismo sistema visual #0a0a0a / #ff8c00 / Orbitron + Roboto Mono.
+ * $estado: 'aprobado' | 'rechazado'
+ */
+function correoActividadCalificadaHtml($estudianteNombre, $profesorNombre, $actividadTitulo, $leccionTitulo, $cursoTitulo, $calificacion, $estado, $comentario = '', $verUrl = '') {
+    $estadoUpper = strtoupper($estado);
+    $esAprobado  = $estado === 'aprobado';
+    $colorEstado = $esAprobado ? '#00ff41' : '#ff4444';
+    $iconoEstado = $esAprobado ? '&#10003;' : '&#10007;';
+    $calFormateada = is_numeric($calificacion) ? rtrim(rtrim(number_format((float)$calificacion, 1, '.', ''), '0'), '.') : '—';
+
+    $comentarioHtml = $comentario !== ''
+        ? '<tr><td style="padding:14px 18px 18px 18px;font-family:\'Roboto Mono\',monospace;font-size:12px;color:#e0e0e0;line-height:1.8;background:#0a0a0a;border:1px solid rgba(255,140,0,0.15);border-radius:0 0 12px 12px;"><strong style="color:#ff8c00;">Comentario del profesor:</strong><br>' . nl2br(htmlspecialchars($comentario)) . '</td></tr>'
+        : '';
+
+    $cta = $verUrl !== ''
+        ? '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:6px 0 4px 0;"><a href="' . htmlspecialchars($verUrl) . '" style="display:inline-block;background:#ff8c00;color:#0a0a0a;text-decoration:none;font-family:\'Orbitron\',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;padding:14px 32px;border-radius:10px;box-shadow:0 0 24px rgba(255,140,0,0.35);">VER MI ACTIVIDAD</a></td></tr></table>'
+        : '';
+
+    $html = <<<'HTML'
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="x-apple-disable-message-reformatting">
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+        <title>Tu actividad fue revisada</title>
+    </head>
+    <body style="margin:0;padding:0;background:#0a0a0a;">
+        <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">El profesor {PROFESOR} revisó tu actividad: {CALIFICACION}/100.</div>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;">
+            <tr>
+                <td align="center" style="padding:40px 16px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#0f0f0f;border:1px solid rgba(255,140,0,0.15);border-radius:16px;overflow:hidden;">
+
+                        <!-- TOP LINE -->
+                        <tr>
+                            <td style="background:linear-gradient(90deg,#ff8c00 0%,#ffb55a 50%,#ff8c00 100%);height:3px;font-size:0;line-height:0;">&nbsp;</td>
+                        </tr>
+
+                        <!-- HEADER -->
+                        <tr>
+                            <td align="center" style="background:#0a0a0a;padding:32px 32px 20px 32px;">
+                                <div style="font-family:'Orbitron',Arial,sans-serif;font-size:12px;color:#ff8c00;letter-spacing:5px;font-weight:700;text-transform:uppercase;">Academia · Revisión de Actividad</div>
+                                <div style="margin:16px 0 0 0;font-family:'Orbitron',Arial,sans-serif;font-size:24px;color:#ffffff;font-weight:900;">¡Tu actividad fue revisada!</div>
+                                <div style="width:64px;height:2px;background:#ff8c00;margin:16px auto 0 auto;border-radius:2px;"></div>
+                            </td>
+                        </tr>
+
+                        <!-- CUERPO -->
+                        <tr>
+                            <td style="background:#0f0f0f;padding:24px 40px 32px 40px;">
+                                <p style="margin:0 0 20px 0;font-family:'Orbitron',Arial,sans-serif;font-size:17px;line-height:1.4;color:#ffffff;font-weight:700;">Hola, <span style="color:#ff8c00;">{ESTUDIANTE}</span>.</p>
+                                <p style="margin:0 0 24px 0;font-family:'Roboto Mono',monospace;font-size:12px;line-height:1.8;color:#e0e0e0;">
+                                    El profesor <strong style="color:#00ff41;">{PROFESOR}</strong> revisó tu entrega de la actividad <strong style="color:#ffffff;">"{ACTIVIDAD}"</strong>.
+                                </p>
+
+                                <!-- NOTA -->
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;border:1px solid {COLOR_ESTADO};border-radius:12px;margin:0 0 16px 0;">
+                                    <tr>
+                                        <td align="center" style="padding:22px 18px 6px 18px;font-family:'Orbitron',Arial,sans-serif;font-size:10px;color:#777777;letter-spacing:3px;text-transform:uppercase;">Calificación</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="padding:4px 18px 8px 18px;font-family:'Orbitron',Arial,sans-serif;font-size:42px;font-weight:900;color:{COLOR_ESTADO};">{ICONO} {CALIFICACION}<span style="font-size:18px;color:#777777;">/100</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="padding:0 18px 20px 18px;font-family:'Orbitron',Arial,sans-serif;font-size:12px;font-weight:700;color:{COLOR_ESTADO};letter-spacing:3px;">{ESTADO}</td>
+                                    </tr>
+                                </table>
+
+                                <!-- DETALLE -->
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;border:1px solid rgba(255,140,0,0.15);border-radius:12px;margin:0 0 24px 0;">
+                                    <tr>
+                                        <td style="padding:14px 18px;font-family:'Roboto Mono',monospace;font-size:11px;color:#777777;white-space:nowrap;border-bottom:1px solid rgba(255,140,0,0.08);">ACTIVIDAD</td>
+                                        <td style="padding:14px 18px;font-family:'Roboto Mono',monospace;font-size:12px;color:#ffffff;word-break:break-word;border-bottom:1px solid rgba(255,140,0,0.08);">{ACTIVIDAD}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:14px 18px;font-family:'Roboto Mono',monospace;font-size:11px;color:#777777;white-space:nowrap;border-bottom:1px solid rgba(255,140,0,0.08);">LECCIÓN</td>
+                                        <td style="padding:14px 18px;font-family:'Roboto Mono',monospace;font-size:12px;color:#ffffff;word-break:break-word;border-bottom:1px solid rgba(255,140,0,0.08);">{LECCION}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:14px 18px;font-family:'Roboto Mono',monospace;font-size:11px;color:#777777;white-space:nowrap;border-bottom:1px solid rgba(255,140,0,0.08);">CURSO</td>
+                                        <td style="padding:14px 18px;font-family:'Roboto Mono',monospace;font-size:12px;color:#ffffff;word-break:break-word;border-bottom:1px solid rgba(255,140,0,0.08);">{CURSO}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:14px 18px;font-family:'Roboto Mono',monospace;font-size:11px;color:#777777;white-space:nowrap;">REVISADO POR</td>
+                                        <td style="padding:14px 18px;font-family:'Roboto Mono',monospace;font-size:12px;color:#00ff41;word-break:break-word;">{PROFESOR}</td>
+                                    </tr>
+                                </table>
+                                {COMENTARIO}
+
+                                <!-- CTA -->
+                                {CTA}
+
+                                <p style="margin:16px 0 0 0;text-align:center;font-family:'Roboto Mono',monospace;font-size:10px;color:#777777;">Sigue así: cada actividad te acerca a dominar la ingeniería de software.</p>
+                            </td>
+                        </tr>
+
+                        <!-- FOOTER -->
+                        <tr>
+                            <td style="background:#0a0a0a;border-top:1px solid rgba(255,140,0,0.15);padding:24px 40px;text-align:center;font-family:'Roboto Mono',monospace;font-size:10px;color:#777777;line-height:1.9;">
+                                © {YEAR} <span style="color:#ff8c00;">SALVA TECHNOLOGY</span> · Academia de Ingeniería de Software<br>
+                                Si no entregaste una actividad, ignora este mensaje.
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+HTML;
+
+    return str_replace(
+        ['{ESTUDIANTE}', '{PROFESOR}', '{ACTIVIDAD}', '{LECCION}', '{CURSO}', '{CALIFICACION}', '{ESTADO}', '{COLOR_ESTADO}', '{ICONO}', '{COMENTARIO}', '{CTA}', '{YEAR}'],
+        [
+            htmlspecialchars($estudianteNombre),
+            htmlspecialchars($profesorNombre),
+            htmlspecialchars($actividadTitulo),
+            htmlspecialchars($leccionTitulo),
+            htmlspecialchars($cursoTitulo),
+            $calFormateada,
+            $estadoUpper,
+            $colorEstado,
+            $iconoEstado,
+            $comentarioHtml,
+            $cta,
+            date('Y'),
+        ],
+        $html
+    );
+}
+
+/**
+ * Envía al estudiante el correo de actividad calificada por el profesor.
+ */
+function notificarEstudianteActividadCalificada($estudianteEmail, $estudianteNombre, $profesorNombre, $actividadTitulo, $leccionTitulo, $cursoTitulo, $calificacion, $estado, $comentario = '', $verUrl = '') {
+    if (empty($estudianteEmail)) return ['ok' => false, 'error' => 'Sin email del estudiante'];
+    $asunto = 'Tu actividad fue revisada: ' . $actividadTitulo . ' (' . $calificacion . '/100)';
+    return enviarCorreo($estudianteEmail, $estudianteNombre, $asunto, correoActividadCalificadaHtml($estudianteNombre, $profesorNombre, $actividadTitulo, $leccionTitulo, $cursoTitulo, $calificacion, $estado, $comentario, $verUrl));
+}
