@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/app.php';
+require_once __DIR__ . '/helpers/dolar_api.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
     header('Location: ' . BASE_URL . 'academia');
@@ -164,8 +165,13 @@ $planes = $config['planes'];
                     <?php endif; ?>
                     <div class="text-center mb-4">
                         <h3 class="font-['Orbitron'] text-white text-lg font-bold"><?php echo $planData['label']; ?></h3>
-                        <div class="mt-3">
+<div class="mt-3">
                             <span class="font-['Orbitron'] text-accent text-3xl font-black">$<?php echo $planData['precio']; ?></span>
+                            <?php $precioBs = usdABs($planData['precio']); ?>
+                            <?php if ($precioBs !== null): ?>
+                            <span class="font-['Orbitron'] text-white text-xl font-bold mx-2">≈</span>
+                            <span class="font-['Orbitron'] text-white text-xl font-bold"><?php echo formatoBs($precioBs); ?></span>
+                            <?php endif; ?>
                         </div>
                         <?php if ($planData['ahorro'] > 0): ?>
                         <span class="inline-block mt-2 bg-green-500/15 text-green-400 text-[10px] font-bold px-2 py-1 rounded-full font-mono">Ahorras $<?php echo $planData['ahorro']; ?></span>

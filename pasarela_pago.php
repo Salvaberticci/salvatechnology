@@ -2,6 +2,7 @@
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/app.php';
 require_once __DIR__ . '/helpers/correo.php';
+require_once __DIR__ . '/helpers/dolar_api.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
     header('Location: ' . BASE_URL . 'academia');
@@ -203,11 +204,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php if ($esSuscripcion): ?>
                         <span class="text-stone-500 text-xs font-mono"><?php echo $planData['label']; ?> · Acceso completo a todos los cursos</span>
                         <?php endif; ?>
-                        <div class="border-t border-white/10 mt-4 pt-4">
+<div class="border-t border-white/10 mt-4 pt-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-stone-400 text-xs">Total a pagar</span>
                                 <span class="font-['Orbitron'] text-accent text-xl font-black">$<?php echo number_format($precio, 2); ?></span>
                             </div>
+                            <?php $precioBs = usdABs($precio); ?>
+                            <?php if ($precioBs !== null): ?>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="text-stone-400 text-xs">Equivalente en bolívares</span>
+                                <span class="font-['Orbitron'] text-white text-base font-bold"><?php echo formatoBs($precioBs); ?></span>
+                            </div>
+                            <p class="text-stone-600 text-[10px] font-mono mt-2">Cotización Dólar Oficial BCV aplicada en la transferencia bancaria.</p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
