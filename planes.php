@@ -64,8 +64,9 @@ $pagoPendiente = $stmt->fetch();
                 <h2 class="font-['Orbitron'] text-white text-lg font-bold mb-2">La Matriz Oficial de Planes de Pago</h2>
                 <p class="text-stone-400 text-sm font-mono">Elige el plan que mejor se adapte a tu camino como AI-Driven Developer</p>
                 <?php if (!empty($cotizacion['promedio'])): ?>
-                <p class="text-stone-500 text-xs font-mono mt-3">💰 Dólar Oficial BCV: <strong class="text-accent">Bs. <?php echo number_format($cotizacion['promedio'], 2, ',', '.'); ?></strong>
+                <p class="text-stone-500 text-xs font-mono mt-3">💰 <strong class="text-accent">Dólar Oficial BCV: Bs. <?php echo number_format($cotizacion['promedio'], 2, ',', '.'); ?></strong>
                     <span class="text-stone-600"> · <?php echo date('d/m/Y', strtotime($cotizacion['fecha'])); ?></span></p>
+                <p class="text-stone-600 text-[10px] font-mono mt-1">Los precios están en dólares (USD). El equivalente en bolívares es solo referencial, calculado al promedio del día.</p>
                 <?php else: ?>
                 <p class="text-stone-600 text-xs font-mono mt-3">La cotización del dólar no está disponible en este momento.</p>
                 <?php endif; ?>
@@ -100,10 +101,10 @@ $pagoPendiente = $stmt->fetch();
                         <h3 class="font-['Orbitron'] text-white text-lg font-bold"><?php echo $plan['label']; ?></h3>
                         <div class="mt-3">
                             <span class="font-['Orbitron'] text-accent text-4xl font-black">$<?php echo $plan['precio']; ?></span>
+                            <span class="text-stone-500 text-xs font-mono">USD</span>
                             <?php $precioBs = usdABs($plan['precio']); ?>
                             <?php if ($precioBs !== null): ?>
-                            <span class="font-['Orbitron'] text-white text-2xl font-bold mx-2">≈</span>
-                            <span class="font-['Orbitron'] text-white text-2xl font-bold"><?php echo formatoBs($precioBs); ?></span>
+                            <span class="text-stone-600 text-[10px] font-mono block mt-1">≈ <?php echo formatoBs($precioBs); ?></span>
                             <?php endif; ?>
                             <span class="text-stone-500 text-xs font-mono block mt-1">pago único</span>
                         </div>

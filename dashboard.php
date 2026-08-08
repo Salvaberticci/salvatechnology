@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/app.php';
-require_once __DIR__ . '/helpers/dolar_api.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
     header('Location: ' . BASE_URL . 'academia');
@@ -132,7 +131,7 @@ if ($plan === 'suscripcion' && $suscripcionExpira) {
                 <div class="text-3xl">⏳</div>
                 <div>
                     <h3 class="font-['Orbitron'] text-yellow-400 text-sm font-bold">Tu suscripción está en revisión</h3>
-                    <p class="text-stone-400 text-xs font-mono mt-1">Realizaste un pago de <strong class="text-white">$<?php echo number_format($pagoPendiente['monto'], 2); ?></strong> <?php if (($montoBs = usdABs($pagoPendiente['monto'])) !== null): ?>(<strong class="text-white"><?php echo formatoBs($montoBs); ?></strong>)<?php endif; ?> por <?php echo htmlspecialchars($pagoPendiente['metodo_pago']); ?>. Un profesor lo revisará y activará tu plan.</p>
+                    <p class="text-stone-400 text-xs font-mono mt-1">Realizaste un pago de <strong class="text-white">$<?php echo number_format($pagoPendiente['monto'], 2); ?> USD</strong> por <?php echo htmlspecialchars($pagoPendiente['metodo_pago']); ?>. Un profesor lo revisará y activará tu plan.</p>
                 </div>
             </div>
             <?php elseif ($plan === 'suscripcion'): ?>

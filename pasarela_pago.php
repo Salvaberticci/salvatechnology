@@ -206,14 +206,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
 <div class="border-t border-white/10 mt-4 pt-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-stone-400 text-xs">Total a pagar</span>
+                                <span class="text-stone-400 text-xs">Total a pagar (USD)</span>
                                 <span class="font-['Orbitron'] text-accent text-xl font-black">$<?php echo number_format($precio, 2); ?></span>
                             </div>
                             <?php $precioBs = usdABs($precio); ?>
                             <?php if ($precioBs !== null): ?>
-                            <div class="flex justify-between items-center mt-2">
-                                <span class="text-stone-400 text-xs">Equivalente en bolívares</span>
-                                <span class="font-['Orbitron'] text-white text-base font-bold"><?php echo formatoBs($precioBs); ?></span>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-stone-600 text-[10px] font-mono">Ref. en bolívares</span>
+                                <span class="text-stone-500 text-[10px] font-mono"><?php echo formatoBs($precioBs); ?></span>
                             </div>
                             <p class="text-stone-600 text-[10px] font-mono mt-2">Cotización Dólar Oficial BCV aplicada en la transferencia bancaria.</p>
                             <?php endif; ?>

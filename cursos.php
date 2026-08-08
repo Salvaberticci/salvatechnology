@@ -167,10 +167,10 @@ $planes = $config['planes'];
                         <h3 class="font-['Orbitron'] text-white text-lg font-bold"><?php echo $planData['label']; ?></h3>
 <div class="mt-3">
                             <span class="font-['Orbitron'] text-accent text-3xl font-black">$<?php echo $planData['precio']; ?></span>
+                            <span class="text-stone-500 text-xs font-mono">USD</span>
                             <?php $precioBs = usdABs($planData['precio']); ?>
                             <?php if ($precioBs !== null): ?>
-                            <span class="font-['Orbitron'] text-white text-xl font-bold mx-2">≈</span>
-                            <span class="font-['Orbitron'] text-white text-xl font-bold"><?php echo formatoBs($precioBs); ?></span>
+                            <span class="text-stone-600 text-[10px] font-mono block mt-1">≈ <?php echo formatoBs($precioBs); ?></span>
                             <?php endif; ?>
                         </div>
                         <?php if ($planData['ahorro'] > 0): ?>
