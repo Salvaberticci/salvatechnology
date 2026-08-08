@@ -46,11 +46,17 @@ function esAdmin() {
     $email = strtolower(trim($_SESSION['usuario_email']));
     $adminsRaw = configSistema('admins', '');
 
-    // Fallback: si la tabla config_sistema no existe/no tiene admins,
+    // Fallback 1: si la tabla config_sistema no existe/no tiene admins,
     // usa la lista $ADMIN_EMAILS de config/keys.local.php
     if (trim($adminsRaw) === '') {
         @include_once __DIR__ . '/../config/keys.local.php';
         if (isset($ADMIN_EMAILS) && $ADMIN_EMAILS !== '') $adminsRaw = $ADMIN_EMAILS;
+    }
+
+    // Fallback 2: lista de emergencia versionada en git (funciona en producción
+    // aunque keys.local no tenga $ADMIN_EMAILS y la tabla no exista aún).
+    if (trim($adminsRaw) === '') {
+        $adminsRaw = 'salvatoreberticci19@gmail.com';
     }
 
     foreach (explode("\n", $adminsRaw) as $a) {
