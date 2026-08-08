@@ -16,6 +16,8 @@ RewriteRule ^profesor/cursos/?$ profesor/cursos.php [L]
 RewriteRule ^profesor/estudiantes/?$ profesor/estudiantes.php [L]
 RewriteRule ^profesor/entregas/?$ profesor/entregas.php [L]
 RewriteRule ^profesor/pagos/?$ profesor/pagos.php [L]
+RewriteRule ^profesor/perfil/?$ profesor/perfil.php [L]
+RewriteRule ^profesor/admin/?$ profesor/admin.php [L]
 RewriteRule ^profesor/?$ profesor/dashboard.php [L]
 
 # API routes

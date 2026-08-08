@@ -45,12 +45,15 @@ try {
     $_SESSION['usuario_rol'] = 'estudiante';
     $_SESSION['usuario_plan'] = 'gratuito';
 
-    $appUrl = 'https://salvatechnology.online';
-    $configFile = __DIR__ . '/../config/keys.local.php';
-    if (file_exists($configFile)) {
-        require $configFile;
-        if (!empty($APP_URL)) { $appUrl = $APP_URL; }
+    $appUrl = configSistema('app_url', '');
+    if ($appUrl === '') {
+        $configFile = __DIR__ . '/../config/keys.local.php';
+        if (file_exists($configFile)) {
+            require $configFile;
+            if (!empty($APP_URL)) { $appUrl = $APP_URL; }
+        }
     }
+    if ($appUrl === '') { $appUrl = 'https://salvatechnology.online'; }
     $loginUrl = rtrim($appUrl, '/') . '/academia';
     $envio = enviarCorreo(
         $email,

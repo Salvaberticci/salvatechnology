@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../libs/phpmailer/autoload.php';
+require_once __DIR__ . '/config_sistema.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -14,6 +15,15 @@ function enviarCorreo($para, $paraNombre, $asunto, $html, $texto = '', $logoPath
         return ['ok' => false, 'error' => 'config/keys.local.php no existe'];
     }
     require $configFile;
+
+    // Configuración del sistema (panel admin) con prioridad sobre keys.local.php
+    $SMTP_HOST     = configSistema('smtp_host', $SMTP_HOST ?? '');
+    $SMTP_PORT     = (int)configSistema('smtp_port', $SMTP_PORT ?? 465);
+    $SMTP_SECURE   = configSistema('smtp_secure', $SMTP_SECURE ?? 'ssl');
+    $SMTP_USER     = configSistema('smtp_user', $SMTP_USER ?? '');
+    $SMTP_PASS     = configSistema('smtp_pass', $SMTP_PASS ?? '');
+    $MAIL_FROM     = configSistema('mail_from', $MAIL_FROM ?? '');
+    $MAIL_FROM_NAME = configSistema('mail_from_name', $MAIL_FROM_NAME ?? '');
 
     if (empty($SMTP_PASS) || strpos($SMTP_PASS, 'PON_AQUI') !== false) {
         return ['ok' => false, 'error' => 'SMTP sin contraseña configurada'];
@@ -252,6 +262,8 @@ function notificarAdmin($titulo, $subtitulo, array $lineas, $mensaje = '', $para
         require $configFile;
         if (!empty($NOTIFICAR_EMAIL)) { $para = $NOTIFICAR_EMAIL; }
     }
+    $paraConfig = configSistema('email_notificacion', '');
+    if ($paraConfig !== '') { $para = $paraConfig; }
     if (empty($para)) return ['ok' => false, 'error' => 'Sin destinatario de notificaciones'];
     $asunto = '[' . $subtitulo . '] ' . $titulo;
     return enviarCorreo($para, 'Administrador SalvaTech', $asunto, correoNotificacionHtml($titulo, $subtitulo, $lineas, $mensaje));
