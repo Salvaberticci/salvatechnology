@@ -43,8 +43,16 @@ function esAdmin() {
     if (!isset($_SESSION['usuario_email'])) return false;
     if (($_SESSION['usuario_rol'] ?? '') === 'admin') return true;
 
-    $adminsRaw = configSistema('admins', '');
     $email = strtolower(trim($_SESSION['usuario_email']));
+    $adminsRaw = configSistema('admins', '');
+
+    // Fallback: si la tabla config_sistema no existe/no tiene admins,
+    // usa la lista $ADMIN_EMAILS de config/keys.local.php
+    if (trim($adminsRaw) === '') {
+        @include_once __DIR__ . '/../config/keys.local.php';
+        if (isset($ADMIN_EMAILS) && $ADMIN_EMAILS !== '') $adminsRaw = $ADMIN_EMAILS;
+    }
+
     foreach (explode("\n", $adminsRaw) as $a) {
         if (strtolower(trim($a)) === $email) return true;
     }
