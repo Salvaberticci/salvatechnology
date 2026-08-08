@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/app.php';
 require_once __DIR__ . '/helpers/correo.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
-    header('Location: academia');
+    header('Location: ' . BASE_URL . 'academia');
     exit;
 }
 
@@ -34,11 +34,11 @@ if ($esSuscripcion) {
     $curso = $stmt->fetch();
 
     if (!$curso) die("Curso no encontrado");
-    if ($curso['precio'] <= 0) { header('Location: inscribir/' . $cursoId); exit; }
+    if ($curso['precio'] <= 0) { header('Location: ' . BASE_URL . 'inscribir/' . $cursoId); exit; }
 
     $stmt = $pdo->prepare("SELECT id FROM inscripciones WHERE usuario_id = ? AND curso_id = ? AND estado = 'activa'");
     $stmt->execute([$usuarioId, $cursoId]);
-    if ($stmt->fetch()) { header('Location: curso/' . $cursoId); exit; }
+    if ($stmt->fetch()) { header('Location: ' . BASE_URL . 'curso/' . $cursoId); exit; }
 
     $stmt = $pdo->prepare("SELECT * FROM pagos WHERE usuario_id = ? AND curso_id = ? AND estado = 'pendiente'");
     $stmt->execute([$usuarioId, $cursoId]);
@@ -51,7 +51,7 @@ if ($esSuscripcion) {
     $itemLabel = $curso['titulo'];
     $successMsg = 'Tu comprobante de pago ha sido enviado. Un profesor revisará tu pago y activará tu acceso al curso.';
 } else {
-    header('Location: cursos');
+    header('Location: ' . BASE_URL . 'cursos');
     exit;
 }
 

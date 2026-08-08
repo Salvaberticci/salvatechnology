@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/app.php';
 require_once __DIR__ . '/helpers/correo.php';
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'estudiante') {
-    header('Location: academia');
+    header('Location: ' . BASE_URL . 'academia');
     exit;
 }
 
