@@ -64,6 +64,22 @@ try {
         error_log('[Correo de bienvenida] falló para ' . $email . ': ' . $envio['error']);
     }
 
+    $resNotif = notificarAdmin(
+        'NUEVO ESTUDIANTE REGISTRADO',
+        'Registro en la academia',
+        [
+            ['Nombre', $nombre],
+            ['Email', $email],
+            ['Teléfono', $telefono !== '' ? $telefono : '—'],
+            ['País', $pais !== '' ? $pais : '—'],
+            ['Plan', 'Gratuito'],
+        ],
+        'Un nuevo estudiante acaba de registrarse en la academia. Revisa su perfil y dale la bienvenida al programa.'
+    );
+    if (!$resNotif['ok']) {
+        error_log('[Notificación registro] falló: ' . ($resNotif['error'] ?? 'desconocido'));
+    }
+
     echo json_encode(['status' => 'success', 'message' => 'Registro exitoso', 'redirect' => BASE_URL . 'dashboard']);
 } catch (PDOException $e) {
     echo json_encode(['status' => 'error', 'message' => 'Error al registrar: ' . $e->getMessage()]);

@@ -246,7 +246,7 @@ HTML;
  * Envía una notificación al coordinador de la academia.
  * $paraDeDefecto: correo por defecto si no se define $NOTIFICAR_EMAIL en keys.local.php.
  */
-function notificarAdmin($titulo, $subtitulo, array $lineas, $mensaje = '', $para = 'salvatoreberticci19@gmail.com') {
+function notificarAdmin($titulo, $subtitulo, array $lineas, $mensaje = '', $para = 'salvatechnologyacademy@gmail.com') {
     $configFile = __DIR__ . '/../config/keys.local.php';
     if (file_exists($configFile)) {
         require $configFile;
