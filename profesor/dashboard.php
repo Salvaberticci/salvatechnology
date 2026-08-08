@@ -66,7 +66,7 @@ $pagosPendientes = $pdo->query("SELECT COUNT(*) FROM pagos WHERE estado = 'pendi
                 <a href="profesor/perfil">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Mi Perfil
                 </a>
-                <a href="profesor/admin">
+                <a href="profesor/admin.php">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.8 0-3 .6-3 1.5v.2c0 .5.3 1 .8 1.3.5.3 1.2.4 2 .4h.2c.8 0 1.5-.1 2-.4.5-.3.8-.8.8-1.3v-.2C15 8.6 13.8 8 12 8zm0 6c-2.5 0-4.5-1-4.5-3.5 0-2.5 2-3.8 4.5-3.8s4.5 1.3 4.5 3.8C16.5 13 14.5 14 12 14zm5 4.5c0-2.2-2.2-4-5-4s-5 1.8-5 4H17z"/></svg>Panel Admin
                 </a>
                 <a href="logout">
