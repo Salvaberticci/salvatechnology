@@ -29,7 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['
     $info = $stmt->fetch();
 
     if ($info && !empty($info['estudiante_email'])) {
-        $verUrl = BASE_URL . 'curso/' . $info['curso_id'] . '/leccion/' . $info['leccion_id'];
+        $appUrl = 'https://academy.salvatechnology.online';
+        $configFile = __DIR__ . '/../config/keys.local.php';
+        if (file_exists($configFile)) {
+            require $configFile;
+            if (!empty($APP_URL)) { $appUrl = $APP_URL; }
+        }
+        $verUrl = rtrim($appUrl, '/') . '/curso/' . $info['curso_id'] . '/leccion/' . $info['leccion_id'];
         $resCorreo = notificarEstudianteActividadCalificada(
             $info['estudiante_email'],
             $info['estudiante_nombre'],
