@@ -56,7 +56,7 @@ function esAdmin() {
     // Fallback 2: lista de emergencia versionada en git (funciona en producción
     // aunque keys.local no tenga $ADMIN_EMAILS y la tabla no exista aún).
     if (trim($adminsRaw) === '') {
-        $adminsRaw = 'salvatoreberticci19@gmail.com';
+        $adminsRaw = 'salvatore@salvatechnology.com';
     }
 
     foreach (explode("\n", $adminsRaw) as $a) {
